@@ -1,0 +1,898 @@
+[
+  {
+    "id": "legacy-rescinded-1",
+    "orderNumber": "11246",
+    "dateSigned": "1965-09-24",
+    "title": "Equal Employment Opportunity",
+    "administration": "Johnson",
+    "createdAt": "2026-09-02T22:05:06.167618Z"
+  },
+  {
+    "id": "legacy-rescinded-2",
+    "orderNumber": "11991",
+    "dateSigned": "1977-05-24",
+    "title": "Environmental Impact Statements",
+    "administration": "Carter",
+    "createdAt": "2026-09-02T22:05:06.167638Z"
+  },
+  {
+    "id": "legacy-rescinded-3",
+    "orderNumber": "12072",
+    "dateSigned": "1978-08-16",
+    "title": "Federal Space Management",
+    "administration": "Carter",
+    "createdAt": "2026-09-02T22:05:06.167645Z"
+  },
+  {
+    "id": "legacy-rescinded-4",
+    "orderNumber": "12898",
+    "dateSigned": "1994-02-11",
+    "title": "Federal Actions to Address Environmental Justice in Minority Populations and Low-Income Populations",
+    "administration": "Clinton",
+    "createdAt": "2026-09-02T22:05:06.167652Z"
+  },
+  {
+    "id": "legacy-rescinded-5",
+    "orderNumber": "13006",
+    "dateSigned": "1996-05-21",
+    "title": "Locating Federal Facilities on Historic Properties in our Nation's Central Cities",
+    "administration": "Clinton",
+    "createdAt": "2026-09-02T22:05:06.167704Z"
+  },
+  {
+    "id": "legacy-rescinded-6",
+    "orderNumber": "13166",
+    "dateSigned": "2000-08-11",
+    "title": "Improving Access to Services for Persons with Limited English Proficiency",
+    "administration": "Bush",
+    "createdAt": "2026-09-02T22:05:06.167718Z"
+  },
+  {
+    "id": "legacy-rescinded-7",
+    "orderNumber": "13583",
+    "dateSigned": "2011-08-18",
+    "title": "Establishing a Coordinated Government-wide Initiative to Promote Diversity and Inclusion in the Federal Workforce",
+    "administration": "Obama",
+    "createdAt": "2026-09-02T22:05:06.167726Z"
+  },
+  {
+    "id": "legacy-rescinded-8",
+    "orderNumber": "13672",
+    "dateSigned": "2014-07-21",
+    "title": "Further Amendments to Executive Order 11478, Equal Employment Opportunity in the Federal Government, and Executive Order 11246, Equal Employment Opportunity",
+    "administration": "Obama",
+    "createdAt": "2026-09-02T22:05:06.167736Z"
+  },
+  {
+    "id": "legacy-rescinded-9",
+    "orderNumber": "13824",
+    "dateSigned": "2018-02-26",
+    "title": "President’s Council on Sports, Fitness, and Nutrition",
+    "administration": "Trump",
+    "createdAt": "2026-09-02T22:05:06.167745Z"
+  },
+  {
+    "id": "legacy-rescinded-10",
+    "orderNumber": "13985",
+    "dateSigned": "2021-01-20",
+    "title": "Advancing Racial Equity and Support for Underserved Communities Through the Federal Government",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167759Z"
+  },
+  {
+    "id": "legacy-rescinded-11",
+    "orderNumber": "13986",
+    "dateSigned": "2021-01-20",
+    "title": "Ensuring a Lawful and Accurate Enumeration and Apportionment Pursuant to the Decennial Census",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167767Z"
+  },
+  {
+    "id": "legacy-rescinded-12",
+    "orderNumber": "13987",
+    "dateSigned": "2021-01-20",
+    "title": "Organizing and Mobilizing the United States Government To Provide a Unified and Effective Response To Combat COVID-19 and To Provide United States Leadership on Global Health and Security",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167774Z"
+  },
+  {
+    "id": "legacy-rescinded-13",
+    "orderNumber": "13988",
+    "dateSigned": "2021-01-20",
+    "title": "Preventing and Combating Discrimination on the Basis of Gender Identity or Sexual Orientation",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167782Z"
+  },
+  {
+    "id": "legacy-rescinded-14",
+    "orderNumber": "13989",
+    "dateSigned": "2021-01-20",
+    "title": "Ethics Commitments by Executive Branch Personnel",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167788Z"
+  },
+  {
+    "id": "legacy-rescinded-15",
+    "orderNumber": "13990",
+    "dateSigned": "2021-01-20",
+    "title": "Protecting Public Health and the Environment and Restoring Science To Tackle the Climate Crisis",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167795Z"
+  },
+  {
+    "id": "legacy-rescinded-16",
+    "orderNumber": "13992",
+    "dateSigned": "2021-01-20",
+    "title": "Revocation of Certain Executive Orders Concerning Federal Regulation",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167802Z"
+  },
+  {
+    "id": "legacy-rescinded-17",
+    "orderNumber": "13993",
+    "dateSigned": "2021-01-20",
+    "title": "Revision of Civil Immigration Enforcement Policies and Priorities",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167809Z"
+  },
+  {
+    "id": "legacy-rescinded-18",
+    "orderNumber": "13994",
+    "dateSigned": "2021-01-21",
+    "title": "Ensuring a Data-Driven Response to COVID-19 and Future High-Consequence Public Health Threats",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167815Z"
+  },
+  {
+    "id": "legacy-rescinded-19",
+    "orderNumber": "13995",
+    "dateSigned": "2021-01-21",
+    "title": "Ensuring an Equitable Pandemic Response and Recovery",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167822Z"
+  },
+  {
+    "id": "legacy-rescinded-20",
+    "orderNumber": "13996",
+    "dateSigned": "2021-01-21",
+    "title": "Establishing the COVID-19 Pandemic Testing Board and Ensuring a Sustainable Public Health Workforce for COVID-19 and Other Biological Threats",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167828Z"
+  },
+  {
+    "id": "legacy-rescinded-21",
+    "orderNumber": "13997",
+    "dateSigned": "2021-01-21",
+    "title": "Improving and Expanding Access to Care and Treatments for COVID-19",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167834Z"
+  },
+  {
+    "id": "legacy-rescinded-22",
+    "orderNumber": "13999",
+    "dateSigned": "2021-01-21",
+    "title": "Protecting Worker Health and Safety",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167840Z"
+  },
+  {
+    "id": "legacy-rescinded-23",
+    "orderNumber": "14000",
+    "dateSigned": "2021-01-21",
+    "title": "Supporting the Reopening and Continuing Operation of Schools and Early Childhood Education Providers",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167846Z"
+  },
+  {
+    "id": "legacy-rescinded-24",
+    "orderNumber": "14002",
+    "dateSigned": "2021-01-22",
+    "title": "Economic Relief Related to the COVID-19 Pandemic",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167853Z"
+  },
+  {
+    "id": "legacy-rescinded-25",
+    "orderNumber": "14003",
+    "dateSigned": "2021-01-22",
+    "title": "Protecting the Federal Workforce",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167859Z"
+  },
+  {
+    "id": "legacy-rescinded-26",
+    "orderNumber": "14004",
+    "dateSigned": "2021-01-25",
+    "title": "Enabling All Qualified Americans To Serve Their Country in Uniform",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167870Z"
+  },
+  {
+    "id": "legacy-rescinded-27",
+    "orderNumber": "14006",
+    "dateSigned": "2021-01-26",
+    "title": "Reforming Our Incarceration System To Eliminate the Use of Privately Operated Criminal Detention Facilities",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167877Z"
+  },
+  {
+    "id": "legacy-rescinded-28",
+    "orderNumber": "14007",
+    "dateSigned": "2021-01-27",
+    "title": "President’s Council of Advisors on Science and Technology",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167883Z"
+  },
+  {
+    "id": "legacy-rescinded-29",
+    "orderNumber": "14008",
+    "dateSigned": "2021-01-27",
+    "title": "Tackling the Climate Crisis at Home and Abroad",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167890Z"
+  },
+  {
+    "id": "legacy-rescinded-30",
+    "orderNumber": "14009",
+    "dateSigned": "2021-01-28",
+    "title": "Strengthening Medicaid and the Affordable Care Act",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167896Z"
+  },
+  {
+    "id": "legacy-rescinded-31",
+    "orderNumber": "14010",
+    "dateSigned": "2021-02-02",
+    "title": "Creating a Comprehensive Regional Framework To Address the Causes of Migration, To Manage Migration Throughout North and Central America, and To Provide Safe and Orderly Processing of Asylum Seekers at the United States Border",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167906Z"
+  },
+  {
+    "id": "legacy-rescinded-32",
+    "orderNumber": "14011",
+    "dateSigned": "2021-02-02",
+    "title": "Establishment of Interagency Task Force on the Reunification of Families",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167913Z"
+  },
+  {
+    "id": "legacy-rescinded-33",
+    "orderNumber": "14012",
+    "dateSigned": "2021-02-02",
+    "title": "Restoring Faith in Our Legal Immigration Systems and Strengthening Integration and Inclusion Efforts for New Americans",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167921Z"
+  },
+  {
+    "id": "legacy-rescinded-34",
+    "orderNumber": "14013",
+    "dateSigned": "2021-02-04",
+    "title": "Rebuilding and Enhancing Programs To Resettle Refugees and Planning for the Impact of Climate Change on Migration",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167928Z"
+  },
+  {
+    "id": "legacy-rescinded-35",
+    "orderNumber": "14015",
+    "dateSigned": "2021-02-14",
+    "title": "Establishment of the White House Office of Faith-Based and Neighborhood Partnerships",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167938Z"
+  },
+  {
+    "id": "legacy-rescinded-36",
+    "orderNumber": "14018",
+    "dateSigned": "2021-02-24",
+    "title": "Revocation of Certain Presidential Actions",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167943Z"
+  },
+  {
+    "id": "legacy-rescinded-37",
+    "orderNumber": "14019",
+    "dateSigned": "2021-03-07",
+    "title": "Promoting Access to Voting",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167950Z"
+  },
+  {
+    "id": "legacy-rescinded-38",
+    "orderNumber": "14020",
+    "dateSigned": "2021-03-08",
+    "title": "Establishment of the White House Gender Policy Council",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167956Z"
+  },
+  {
+    "id": "legacy-rescinded-39",
+    "orderNumber": "14021",
+    "dateSigned": "2021-03-08",
+    "title": "Guaranteeing an Educational Environment Free From Discrimination on the Basis of Sex, Including Sexual Orientation or Gender Identity",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167962Z"
+  },
+  {
+    "id": "legacy-rescinded-40",
+    "orderNumber": "14022",
+    "dateSigned": "2021-04-01",
+    "title": "Termination of Emergency With Respect to the International Criminal Court",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167969Z"
+  },
+  {
+    "id": "legacy-rescinded-41",
+    "orderNumber": "14023",
+    "dateSigned": "2021-04-09",
+    "title": "Establishment of the Climate Change Support Office",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167976Z"
+  },
+  {
+    "id": "legacy-rescinded-42",
+    "orderNumber": "14026",
+    "dateSigned": "2021-04-27",
+    "title": "Increasing the Minimum Wage for Federal Contractors",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167982Z"
+  },
+  {
+    "id": "legacy-rescinded-43",
+    "orderNumber": "14029",
+    "dateSigned": "2021-05-14",
+    "title": "Revocation of Certain Presidential Actions and Technical Amendment",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167989Z"
+  },
+  {
+    "id": "legacy-rescinded-44",
+    "orderNumber": "14030",
+    "dateSigned": "2021-05-20",
+    "title": "Climate-Related Financial Risk",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.167995Z"
+  },
+  {
+    "id": "legacy-rescinded-45",
+    "orderNumber": "14031",
+    "dateSigned": "2021-05-28",
+    "title": "Advancing Equity, Justice, and Opportunity for Asian Americans, Native Hawaiians, and Pacific Islanders",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168001Z"
+  },
+  {
+    "id": "legacy-rescinded-46",
+    "orderNumber": "14035",
+    "dateSigned": "2021-06-25",
+    "title": "Diversity, Equity, Inclusion, and Accessibility in the Federal Workforce",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168008Z"
+  },
+  {
+    "id": "legacy-rescinded-47",
+    "orderNumber": "14036",
+    "dateSigned": "2021-07-09",
+    "title": "Promoting Competition in the American Economy",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168017Z"
+  },
+  {
+    "id": "legacy-rescinded-48",
+    "orderNumber": "14037",
+    "dateSigned": "2021-08-05",
+    "title": "Strengthening American Leadership in Clean Cars and Trucks",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168023Z"
+  },
+  {
+    "id": "legacy-rescinded-49",
+    "orderNumber": "14041",
+    "dateSigned": "2021-09-03",
+    "title": "White HouseInitiative on Advancing Educational Equity, Excellence, and Economic Opportunity Through Historically Black Colleges and Universities",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168029Z"
+  },
+  {
+    "id": "legacy-rescinded-50",
+    "orderNumber": "14042",
+    "dateSigned": "2021-09-09",
+    "title": "Ensuring Adequate COVID Safety Protocols for Federal Contractors)",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168036Z"
+  },
+  {
+    "id": "legacy-rescinded-51",
+    "orderNumber": "14043",
+    "dateSigned": "2021-09-09",
+    "title": "Requiring Coronavirus Disease 2019 Vaccination for Federal Employees",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168041Z"
+  },
+  {
+    "id": "legacy-rescinded-52",
+    "orderNumber": "14044",
+    "dateSigned": "2021-09-13",
+    "title": "Amending Executive Order 14007",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168047Z"
+  },
+  {
+    "id": "legacy-rescinded-53",
+    "orderNumber": "14045",
+    "dateSigned": "2021-09-13",
+    "title": "White House Initiative on Advancing Educational Equity, Excellence, and Economic Opportunity for Hispanics",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168053Z"
+  },
+  {
+    "id": "legacy-rescinded-54",
+    "orderNumber": "14049",
+    "dateSigned": "2021-10-11",
+    "title": "White House Initiative on Advancing Educational Equity, Excellence, and Economic Opportunity for Native Americans and Strengthening Tribal Colleges and Universities",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168062Z"
+  },
+  {
+    "id": "legacy-rescinded-55",
+    "orderNumber": "10450",
+    "dateSigned": "2021-10-19",
+    "title": "White House Initiative on Advancing Educational Equity, Excellence, and Economic Opportunity for Black Americans",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168071Z"
+  },
+  {
+    "id": "legacy-rescinded-56",
+    "orderNumber": "14052",
+    "dateSigned": "2021-11-15",
+    "title": "Implementation of the Infrastructure Investment and Jobs Act",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168079Z"
+  },
+  {
+    "id": "legacy-rescinded-57",
+    "orderNumber": "14055",
+    "dateSigned": "2021-11-18",
+    "title": "Nondisplacement of Qualified Workers Under Service Contracts)",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168086Z"
+  },
+  {
+    "id": "legacy-rescinded-58",
+    "orderNumber": "14057",
+    "dateSigned": "2021-12-08",
+    "title": "Catalyzing Clean Energy Industries and Jobs Through Federal Sustainability",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168092Z"
+  },
+  {
+    "id": "legacy-rescinded-59",
+    "orderNumber": "14060",
+    "dateSigned": "2021-12-15",
+    "title": "Establishing the United States Council on Transnational Organized Crime",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168099Z"
+  },
+  {
+    "id": "legacy-rescinded-60",
+    "orderNumber": "14067",
+    "dateSigned": "2022-03-09",
+    "title": "Ensuring Responsible Development of Digital Assets",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168106Z"
+  },
+  {
+    "id": "legacy-rescinded-61",
+    "orderNumber": "14069",
+    "dateSigned": "2022-03-15",
+    "title": "Advancing Economy, Efficiency, and Effectiveness in Federal Contracting by Promoting Pay Equity and Transparency",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168112Z"
+  },
+  {
+    "id": "legacy-rescinded-62",
+    "orderNumber": "14070",
+    "dateSigned": "2022-04-05",
+    "title": "Continuing To Strengthen Americans’ Access to Affordable, Quality Health Coverage",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168119Z"
+  },
+  {
+    "id": "legacy-rescinded-63",
+    "orderNumber": "14074",
+    "dateSigned": "2022-05-25",
+    "title": "Advancing Effective, Accountable Policing and Criminal Justice Practices To Enhance Public Trust and Public Safety",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168125Z"
+  },
+  {
+    "id": "legacy-rescinded-64",
+    "orderNumber": "14075",
+    "dateSigned": "2022-06-15",
+    "title": "Advancing Equality for Lesbian, Gay, Bisexual, Transgender, Queer, and Intersex Individuals",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168132Z"
+  },
+  {
+    "id": "legacy-rescinded-65",
+    "orderNumber": "14076",
+    "dateSigned": "2022-07-08",
+    "title": "Protecting Access to Reproductive Healthcare Services",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168138Z"
+  },
+  {
+    "id": "legacy-rescinded-66",
+    "orderNumber": "14079",
+    "dateSigned": "2022-08-03",
+    "title": "Securing Access to Reproductive and Other Healthcare Services",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168146Z"
+  },
+  {
+    "id": "legacy-rescinded-67",
+    "orderNumber": "14081",
+    "dateSigned": "2022-09-12",
+    "title": "Advancing Biotechnology and Biomanufacturing Innovation for a Sustainable, Safe, and Secure American Bioeconomy",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168152Z"
+  },
+  {
+    "id": "legacy-rescinded-68",
+    "orderNumber": "14082",
+    "dateSigned": "2022-09-12",
+    "title": "Implementation of the Energy and Infrastructure Provisions of the Inflation Reduction Act of 2022",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168162Z"
+  },
+  {
+    "id": "legacy-rescinded-69",
+    "orderNumber": "14084",
+    "dateSigned": "2022-09-30",
+    "title": "Promoting the Arts, the Humanities, and Museum and Library Services",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168168Z"
+  },
+  {
+    "id": "legacy-rescinded-70",
+    "orderNumber": "14087",
+    "dateSigned": "2022-10-14",
+    "title": "Lowering Prescription Drug Costs for Americans",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168174Z"
+  },
+  {
+    "id": "legacy-rescinded-71",
+    "orderNumber": "14089",
+    "dateSigned": "2022-12-13",
+    "title": "Establishing the President’s Advisory Council on African Diaspora Engagement in the United States",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168180Z"
+  },
+  {
+    "id": "legacy-rescinded-72",
+    "orderNumber": "14091",
+    "dateSigned": "2023-02-16",
+    "title": "Further Advancing Racial Equity and Support for Underserved Communities Through the Federal Government",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168186Z"
+  },
+  {
+    "id": "legacy-rescinded-73",
+    "orderNumber": "14094",
+    "dateSigned": "2023-04-06",
+    "title": "Modernizing Regulatory Review",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168192Z"
+  },
+  {
+    "id": "legacy-rescinded-74",
+    "orderNumber": "14096",
+    "dateSigned": "2023-04-21",
+    "title": "Revitalizing Our Nation’s Commitment to Environmental Justice for All",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168201Z"
+  },
+  {
+    "id": "legacy-rescinded-75",
+    "orderNumber": "14099",
+    "dateSigned": "2023-05-09",
+    "title": "Moving Beyond COVID-19 Vaccination Requirements for Federal Workers",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168207Z"
+  },
+  {
+    "id": "legacy-rescinded-76",
+    "orderNumber": "14110",
+    "dateSigned": "2023-10-30",
+    "title": "Safe, Secure, and Trustworthy Development and Use of Artificial Intelligence",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168214Z"
+  },
+  {
+    "id": "legacy-rescinded-77",
+    "orderNumber": "14112",
+    "dateSigned": "2023-12-06",
+    "title": "Reforming Federal Funding and Support for Tribal Nations to Better Embrace Our Trust Responsibilities and Promote the Next Era of Tribal Self-Determination",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168220Z"
+  },
+  {
+    "id": "legacy-rescinded-78",
+    "orderNumber": "14115",
+    "dateSigned": "2024-02-01",
+    "title": "Imposing Certain Sanctions on Persons Undermining Peace, Security, and Stability in the West Bank",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168227Z"
+  },
+  {
+    "id": "legacy-rescinded-79",
+    "orderNumber": "14119",
+    "dateSigned": "2024-03-06",
+    "title": "Scaling and Expanding the Use of Registered Apprenticeships in Industries and the Federal Government and Promoting Labor-Management Forums",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168233Z"
+  },
+  {
+    "id": "legacy-rescinded-80",
+    "orderNumber": "14124",
+    "dateSigned": "2024-07-17",
+    "title": "White House Initiative on Advancing Educational Equity, Excellence, and Economic Opportunity Through Hispanic-Serving Institutions",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168239Z"
+  },
+  {
+    "id": "legacy-rescinded-81",
+    "orderNumber": "14126",
+    "dateSigned": "2024-09-06",
+    "title": "Investing in America and Investing in American Workers",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168245Z"
+  },
+  {
+    "id": "legacy-rescinded-82",
+    "orderNumber": "14134",
+    "dateSigned": "2025-01-03",
+    "title": "Providing an Order of Succession Within the Department of Agriculture",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168256Z"
+  },
+  {
+    "id": "legacy-rescinded-83",
+    "orderNumber": "14135",
+    "dateSigned": "2025-01-03",
+    "title": "Providing an Order of Succession Within the Department of Homeland Security",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168318Z"
+  },
+  {
+    "id": "legacy-rescinded-84",
+    "orderNumber": "14136",
+    "dateSigned": "2025-01-03",
+    "title": "Providing an Order of Succession Within the Department of Justice",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168328Z"
+  },
+  {
+    "id": "legacy-rescinded-85",
+    "orderNumber": "14137",
+    "dateSigned": "2025-01-03",
+    "title": "Providing an Order of Succession Within the Department of the Treasury",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168334Z"
+  },
+  {
+    "id": "legacy-rescinded-86",
+    "orderNumber": "14138",
+    "dateSigned": "2025-01-03",
+    "title": "Providing an Order of Succession Within the Office of Management and Budget",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168341Z"
+  },
+  {
+    "id": "legacy-rescinded-87",
+    "orderNumber": "14139",
+    "dateSigned": "2025-01-03",
+    "title": "Providing an Order of Succession Within the Office of the National Cyber Director",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168347Z"
+  },
+  {
+    "id": "legacy-rescinded-88",
+    "orderNumber": "14143",
+    "dateSigned": "2025-01-16",
+    "title": "Providing for the Appointment of Alumni of AmeriCorps to the Competitive Service",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168353Z"
+  },
+  {
+    "id": "legacy-rescinded-89",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2016-10-05",
+    "title": "Promoting Diversity and Inclusion in the National Security Workforce",
+    "administration": "Obama",
+    "createdAt": "2026-09-02T22:05:06.168375Z"
+  },
+  {
+    "id": "legacy-rescinded-90",
+    "orderNumber": "NSM 3",
+    "dateSigned": "2021-02-04",
+    "title": "Revitalizing America’s Foreign Policy and National Security Workforce, Institutions, and Partnerships",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168383Z"
+  },
+  {
+    "id": "legacy-rescinded-91",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2021-02-04",
+    "title": "Advancing the Human Rights of Lesbian, Gay, Bisexual, Transgender, Queer, and Intersex Persons Around the World",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168390Z"
+  },
+  {
+    "id": "legacy-rescinded-92",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2022-03-31",
+    "title": "Finding of a Severe Energy Supply Interruption",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168397Z"
+  },
+  {
+    "id": "legacy-rescinded-93",
+    "orderNumber": "Pres. Determ.",
+    "dateSigned": "2022-05-18",
+    "title": "Delegating Authority Under the Defense Production Act to Ensure an Adequate Supply of Infant Formula",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168408Z"
+  },
+  {
+    "id": "legacy-rescinded-94",
+    "orderNumber": "Pres. Determ.",
+    "dateSigned": "2022-06-06",
+    "title": "Presidential Determination Pursuant to Section 303 of the Defense Production Act of 1950, as amended, on Solar Photovoltaic Modules and Module Components",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168415Z"
+  },
+  {
+    "id": "legacy-rescinded-95",
+    "orderNumber": "Pres. Determ.",
+    "dateSigned": "2022-06-06",
+    "title": "Presidential Determination Pursuant to Section 303 of the Defense Production Act of 1950, as amended, on Insulation",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168423Z"
+  },
+  {
+    "id": "legacy-rescinded-96",
+    "orderNumber": "Pres. Determ.",
+    "dateSigned": "2022-06-06",
+    "title": "Presidential Determination Pursuant to Section 303 of the Defense Production Act of 1950, as amended, on Electrolyzers, Fuel Cells, and Platinum Group Metals",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168430Z"
+  },
+  {
+    "id": "legacy-rescinded-97",
+    "orderNumber": "Pres. Determ.",
+    "dateSigned": "2022-06-06",
+    "title": "Presidential Determination Pursuant to Section 303 of the Defense Production Act of 1950, as amended, on Electric Heat Pumps",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168437Z"
+  },
+  {
+    "id": "legacy-rescinded-98",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2023-01-17",
+    "title": "Delegation of Authority Under Section 6501(b)(2) of the National Defense Authorization Act for Fiscal Year 2022",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168445Z"
+  },
+  {
+    "id": "legacy-rescinded-99",
+    "orderNumber": "NSM 18",
+    "dateSigned": "2023-02-23",
+    "title": "United States Conventional Arms Transfer Policy",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168452Z"
+  },
+  {
+    "id": "legacy-rescinded-100",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2023-02-27",
+    "title": "Presidential Waiver of Statutory Requirements Pursuant to Section 303 of the Defense Production Act of 1950, as amended, on Department of Defense Supply Chains Resilience",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168460Z"
+  },
+  {
+    "id": "legacy-rescinded-101",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2023-03-13",
+    "title": "Withdrawal of Certain Areas off the United States Arctic Coast of the Outer Continental Shelf from Oil or Gas Leasing)",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168467Z"
+  },
+  {
+    "id": "legacy-rescinded-102",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2023-11-16",
+    "title": "Advancing Worker Empowerment, Rights, and High Labor Standards Globally",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168475Z"
+  },
+  {
+    "id": "legacy-rescinded-103",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2025-01-03",
+    "title": "Designation of Officials of the Council on Environmental Quality to Act as Chairman",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168482Z"
+  },
+  {
+    "id": "legacy-rescinded-104",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2025-01-03",
+    "title": "Designation of Officials of the Office of Personnel Management to Act as Director",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168490Z"
+  },
+  {
+    "id": "legacy-rescinded-105",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2025-01-03",
+    "title": "Designation of Officials of the Office of Science and Technology Policy to Act as Director",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168498Z"
+  },
+  {
+    "id": "legacy-rescinded-106",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2025-01-03",
+    "title": "Designation of Officials of the United States Agency for Global Media to Act as Chief Executive Officer",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168505Z"
+  },
+  {
+    "id": "legacy-rescinded-107",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2025-01-03",
+    "title": "Designation of Officials of the United States Agency for International Development to Act as Administrator",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168515Z"
+  },
+  {
+    "id": "legacy-rescinded-108",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2025-01-03",
+    "title": "Designation of Officials of the United States International Development Finance Corporation to Act as Chief Executive Officer",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168522Z"
+  },
+  {
+    "id": "legacy-rescinded-109",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2025-01-06",
+    "title": "Withdrawal of Certain Areas of the United States Outer Continental Shelf from Oil or Natural Gas Leasing",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168530Z"
+  },
+  {
+    "id": "legacy-rescinded-110",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2025-01-14",
+    "title": "Certification of Rescission of Cuba’s Designation as a State Sponsor of Terrorism",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168537Z"
+  },
+  {
+    "id": "legacy-rescinded-111",
+    "orderNumber": "Pres. Memo.",
+    "dateSigned": "2025-01-14",
+    "title": "Revocation of National Security Presidential Memorandum 5",
+    "administration": "Biden",
+    "createdAt": "2026-09-02T22:05:06.168544Z"
+  },
+  {
+    "id": "legacy-rescinded-112",
+    "orderNumber": "EO",
+    "dateSigned": "2025-06-30",
+    "title": "Providing for the Revocation of Syria Sanctions: Rescinds EOs  13338, 13399, 13460, 13572, 13573, 13582",
+    "administration": "Trump",
+    "createdAt": "2026-09-02T22:05:06.168555Z"
+  }
+]

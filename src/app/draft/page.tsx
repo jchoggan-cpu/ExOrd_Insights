@@ -1,6 +1,6 @@
-import { getExecutiveOrders, isUsingSampleData } from "@/lib/data";
+import { getExecutiveOrders, isUsingLocalData } from "@/lib/data";
 import { ContentDrafter } from "@/components/content-drafter";
-import { SampleDataBanner } from "@/components/sample-data-banner";
+import { LocalDataBanner } from "@/components/local-data-banner";
 
 export default async function DraftPage({
   searchParams,
@@ -9,11 +9,11 @@ export default async function DraftPage({
 }) {
   const { eoId } = await searchParams;
   const orders = await getExecutiveOrders();
-  const usingSampleData = isUsingSampleData();
+  const usingLocalData = isUsingLocalData();
 
   return (
     <main className="flex flex-1 flex-col">
-      {usingSampleData && <SampleDataBanner />}
+      {usingLocalData && <LocalDataBanner />}
       <div className="mx-auto w-full max-w-4xl flex-1 px-6 py-8">
         <div className="mb-6">
           <h1 className="font-display text-3xl font-semibold text-foreground">

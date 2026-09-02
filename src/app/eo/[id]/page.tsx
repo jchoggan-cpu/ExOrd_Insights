@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getExecutiveOrderById, isUsingSampleData } from "@/lib/data";
+import { getExecutiveOrderById, isUsingLocalData } from "@/lib/data";
 import { StatusBadge } from "@/components/status-badge";
 import { TagPill } from "@/components/tag-pill";
-import { SampleDataBanner } from "@/components/sample-data-banner";
+import { LocalDataBanner } from "@/components/local-data-banner";
 
 function formatDate(iso: string | undefined) {
   if (!iso) return "—";
@@ -30,11 +30,11 @@ export default async function EoDetailPage({
   const eo = await getExecutiveOrderById(id);
   if (!eo) notFound();
 
-  const usingSampleData = isUsingSampleData();
+  const usingLocalData = isUsingLocalData();
 
   return (
     <main className="flex flex-1 flex-col">
-      {usingSampleData && <SampleDataBanner />}
+      {usingLocalData && <LocalDataBanner />}
       <div className="mx-auto w-full max-w-4xl px-6 py-8">
         <Link href="/" className="text-sm text-link hover:underline">
           ← Back to tracker
@@ -42,7 +42,7 @@ export default async function EoDetailPage({
 
         <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="font-mono text-xs text-muted">{eo.eoNumber}</p>
+            <p className="font-mono text-xs text-muted">{eo.eoNumber ?? eo.actionType ?? "—"}</p>
             <h1 className="font-display mt-1 text-2xl font-semibold text-foreground">
               {eo.title}
             </h1>

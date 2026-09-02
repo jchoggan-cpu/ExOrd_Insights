@@ -24,7 +24,7 @@ export function EoTable({ orders }: { orders: ExecutiveOrder[] }) {
     const q = search.trim().toLowerCase();
     return orders.filter((eo) => {
       if (q) {
-        const haystack = [eo.title, eo.eoNumber, eo.aiSummary, ...eo.subjectArea]
+        const haystack = [eo.title, eo.eoNumber, eo.actionType, eo.aiSummary, ...eo.subjectArea]
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
@@ -102,7 +102,9 @@ export function EoTable({ orders }: { orders: ExecutiveOrder[] }) {
           <tbody>
             {filtered.map((eo) => (
               <tr key={eo.id} className="border-b border-border last:border-0 hover:bg-background/50">
-                <td className="px-4 py-3 align-top font-mono text-xs text-muted">{eo.eoNumber}</td>
+                <td className="px-4 py-3 align-top font-mono text-xs text-muted">
+                  {eo.eoNumber ?? eo.actionType ?? "—"}
+                </td>
                 <td className="px-4 py-3 align-top">
                   <Link href={`/eo/${eo.id}`} className="font-medium text-link hover:underline">
                     {eo.title}

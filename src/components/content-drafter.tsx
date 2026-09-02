@@ -115,7 +115,9 @@ export function ContentDrafter({
                 className="mt-0.5"
               />
               <span>
-                <span className="font-mono text-xs text-muted">{eo.eoNumber}</span>{" "}
+                <span className="font-mono text-xs text-muted">
+                  {eo.eoNumber ?? eo.actionType ?? "—"}
+                </span>{" "}
                 <span className="font-medium">{eo.title}</span>
               </span>
             </label>

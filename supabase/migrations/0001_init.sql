@@ -23,7 +23,15 @@ create table if not exists profiles (
 -- ---------------------------------------------------------------------------
 create table if not exists executive_orders (
   id uuid primary key default gen_random_uuid(),
-  eo_number text not null unique,
+  -- Present only for true Executive Orders (e.g. "EO 14351"); null for
+  -- Proclamations, Memoranda, and other action types. action_type holds the
+  -- source spreadsheet's "Type/Number" text split apart (see action_type).
+  -- Intentionally NOT unique: the imported legacy data has a handful of
+  -- EO numbers appearing on two rows with different content (see README
+  -- "Known data quality issues") — reconcile against the Federal Register
+  -- once Phase 2 ingestion is live rather than enforcing uniqueness here.
+  eo_number text,
+  action_type text,
   title text not null,
   federal_register_url text,
   date_signed date,
@@ -55,6 +63,38 @@ create index if not exists executive_orders_date_signed_idx on executive_orders 
 create index if not exists executive_orders_practice_areas_idx on executive_orders using gin (practice_areas);
 create index if not exists executive_orders_industries_idx on executive_orders using gin (industries);
 create index if not exists executive_orders_subject_area_idx on executive_orders using gin (subject_area);
+
+-- ---------------------------------------------------------------------------
+-- rescinded_prior_orders: pre-2025 executive orders the current
+-- administration has rescinded (imported from the firm's "Rescinded Exec
+-- Actions" tracker sheet). Reference data — not part of the current
+-- administration's own EO count.
+-- ---------------------------------------------------------------------------
+create table if not exists rescinded_prior_orders (
+  id uuid primary key default gen_random_uuid(),
+  order_number text,
+  date_signed date,
+  title text not null,
+  administration text not null,
+  created_at timestamptz not null default now()
+);
+
+-- ---------------------------------------------------------------------------
+-- agency_actions: non-EO agency-level actions (memos, guidance) tracked
+-- alongside executive orders (imported from the firm's "Select Agency
+-- Actions" tracker sheet). Not a comprehensive list — curated highlights.
+-- ---------------------------------------------------------------------------
+create table if not exists agency_actions (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  issuing_agency text not null,
+  key_date date,
+  other_agencies_impacted text[] not null default '{}',
+  legal_challenges jsonb not null default '[]',
+  available_analysis text,
+  related_eo_number text,
+  created_at timestamptz not null default now()
+);
 
 -- ---------------------------------------------------------------------------
 -- content_drafts: generated blog posts / client alerts / talking points /
@@ -92,6 +132,8 @@ create table if not exists ingestion_runs (
 -- ---------------------------------------------------------------------------
 alter table profiles enable row level security;
 alter table executive_orders enable row level security;
+alter table rescinded_prior_orders enable row level security;
+alter table agency_actions enable row level security;
 alter table content_drafts enable row level security;
 alter table ingestion_runs enable row level security;
 
@@ -122,6 +164,17 @@ create policy "eo: admin inserts" on executive_orders
   for insert with check (is_admin());
 create policy "eo: admin deletes" on executive_orders
   for delete using (is_admin());
+
+-- rescinded_prior_orders / agency_actions: read-all-authenticated, admin edits.
+create policy "rescinded: read all authenticated" on rescinded_prior_orders
+  for select using (auth.role() = 'authenticated');
+create policy "rescinded: admin writes" on rescinded_prior_orders
+  for all using (is_admin()) with check (is_admin());
+
+create policy "agency_actions: read all authenticated" on agency_actions
+  for select using (auth.role() = 'authenticated');
+create policy "agency_actions: admin writes" on agency_actions
+  for all using (is_admin()) with check (is_admin());
 
 -- content_drafts: any signed-in user can read all drafts (shared team
 -- recordkeeping) and create their own; only the author or an admin can edit.

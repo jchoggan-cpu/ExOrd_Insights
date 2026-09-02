@@ -39,7 +39,10 @@ export interface NewsMention {
 
 export interface ExecutiveOrder {
   id: string;
-  eoNumber: string;
+  /** Present only for true Executive Orders (e.g. "EO 14351"); null for Proclamations, Memoranda, etc. */
+  eoNumber?: string;
+  /** e.g. "Executive Order", "Proclamation", "Memorandum" — the source spreadsheet's "Type/Number" field split apart. */
+  actionType?: string;
   title: string;
   federalRegisterUrl?: string;
   dateSigned: string; // ISO date
@@ -84,4 +87,27 @@ export interface Profile {
   email: string;
   role: UserRole;
   receivesDigest: boolean;
+}
+
+/** A pre-2025 executive order the current administration rescinded (from the "Rescinded Exec Actions" sheet). */
+export interface RescindedPriorOrder {
+  id: string;
+  orderNumber?: string;
+  dateSigned?: string; // ISO date
+  title: string;
+  administration: string; // e.g. "Carter", "Clinton", "Biden"
+  createdAt: string;
+}
+
+/** A non-EO agency-level action (memo, guidance, rule) tracked alongside the EOs (from the "Select Agency Actions" sheet). */
+export interface AgencyAction {
+  id: string;
+  title: string;
+  issuingAgency: string;
+  keyDate?: string; // ISO date
+  otherAgenciesImpacted: string[];
+  legalChallenges: LegalChallenge[];
+  availableAnalysis?: string;
+  relatedEoNumber?: string;
+  createdAt: string;
 }

@@ -32,7 +32,7 @@ const DEFAULT_STYLE_GUIDE =
 
 function formatEoForPrompt(eo: ExecutiveOrder): string {
   const lines = [
-    `EO Number: ${eo.eoNumber}`,
+    eo.eoNumber ? `EO Number: ${eo.eoNumber}` : `Action Type: ${eo.actionType ?? "Unspecified"}`,
     `Title: ${eo.title}`,
     `Status: ${eo.status}`,
     `Date Signed: ${eo.dateSigned || "unknown"}`,
@@ -86,7 +86,7 @@ export interface GenerateContentResult {
 }
 
 function buildStubDraft(orders: ExecutiveOrder[], contentType: ContentType): string {
-  const titles = orders.map((eo) => `${eo.eoNumber} — ${eo.title}`).join("; ");
+  const titles = orders.map((eo) => `${eo.eoNumber ?? eo.actionType ?? "Action"} — ${eo.title}`).join("; ");
   return [
     `[Stub draft — ${CONTENT_TYPE_LABELS[contentType]}]`,
     "",

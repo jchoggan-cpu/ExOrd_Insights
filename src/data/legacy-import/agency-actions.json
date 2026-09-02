@@ -1,0 +1,534 @@
+[
+  {
+    "id": "legacy-agency-action-1",
+    "title": "Enforcement Actions in or Near Protected Areas",
+    "issuingAgency": "DHS",
+    "keyDate": "2025-01-20",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [
+      {
+        "caseName": "Philadelphia Yearly Meetings of the Religious Society of Friends et al v. DHS",
+        "court": "D. Md.",
+        "status": "complaint filed 1/27/25",
+        "summary": "complaint filed 1/27/25"
+      },
+      {
+        "caseName": "Mennonite Church USA et al v. DHS",
+        "court": "D.D.C.",
+        "status": "complaint filed 2/11/25",
+        "summary": "complaint filed 2/11/25"
+      }
+    ],
+    "availableAnalysis": "Article - Religious Groups Sue To Bar ICE Raids In Houses Of Worship",
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169656Z"
+  },
+  {
+    "id": "legacy-agency-action-2",
+    "title": "Statement from a DHS Spokesperson on Directives Expanding Law Enforcement and Ending the Abuse of Humanitarian Parole",
+    "issuingAgency": "DHS",
+    "keyDate": "2025-01-21",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169749Z"
+  },
+  {
+    "id": "legacy-agency-action-3",
+    "title": "DHS Reinstates Migrant Protection Protocols, Allowing Officials to Return Applicants to Neighboring Countries",
+    "issuingAgency": "DHS",
+    "keyDate": "2025-01-21",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169776Z"
+  },
+  {
+    "id": "legacy-agency-action-4",
+    "title": "Interim Policy Changes Regarding Charging, Sentencing, and Immigration Enforcement",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-01-21",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169793Z"
+  },
+  {
+    "id": "legacy-agency-action-5",
+    "title": "Policy Statement Regarding Intent to Suspend Enforcement\nof Contractual DEI Terms in Existing Agreements",
+    "issuingAgency": "GSA",
+    "keyDate": "2025-01-22",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169807Z"
+  },
+  {
+    "id": "legacy-agency-action-6",
+    "title": "Guidance Regarding How to Exercise Enforcement Discretion",
+    "issuingAgency": "DHS",
+    "keyDate": "2025-01-23",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169819Z"
+  },
+  {
+    "id": "legacy-agency-action-7",
+    "title": "Designating Aliens for Expedited Removal",
+    "issuingAgency": "DHS",
+    "keyDate": "2025-01-24",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169828Z"
+  },
+  {
+    "id": "legacy-agency-action-8",
+    "title": "PRM Stop Work Letter to Resettlement Agency",
+    "issuingAgency": "State",
+    "keyDate": "2025-01-24",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [
+      {
+        "caseName": "Pacito v. Trump",
+        "court": "W.D. Wash",
+        "status": "See summary",
+        "summary": "Pacito v. Trump (W.D. Wash)"
+      },
+      {
+        "caseName": "United States Conference of Catholic Bishops v. Department of State et al.",
+        "court": "D.D.C.",
+        "status": "See summary",
+        "summary": "United States Conference of Catholic Bishops v. Department of State et al. (D.D.C.)"
+      }
+    ],
+    "availableAnalysis": null,
+    "relatedEoNumber": "Reevaluating and Realigning United States Foreign Aid, Ending Radical and Wasteful Government DEI Programs and Preferencing",
+    "createdAt": "2026-09-02T22:05:06.169840Z"
+  },
+  {
+    "id": "legacy-agency-action-9",
+    "title": "OMB - Temporary Pause of Agency Grant, Loan, and Other Financial Assistance Programs (Rescinded 1/29/25)",
+    "issuingAgency": "OMB",
+    "keyDate": "2025-01-27",
+    "otherAgenciesImpacted": [
+      "All"
+    ],
+    "legalChallenges": [
+      {
+        "caseName": "National Council of Nonprofits et al v. OMB et al",
+        "court": "1-25-cv-239",
+        "status": "complaint",
+        "summary": "complaint"
+      },
+      {
+        "caseName": "Legal challenge",
+        "court": "",
+        "status": "See summary",
+        "summary": "Update - TRO issued on 1/28/25"
+      },
+      {
+        "caseName": "New York et al v. Trump et al",
+        "court": "D. R.I.",
+        "status": "See summary",
+        "summary": "New York et al v. Trump et al (D. R.I.)"
+      },
+      {
+        "caseName": "Shapiro et al. v. Department of Interior et al.",
+        "court": "E.D. Pa.",
+        "status": "See summary",
+        "summary": "Shapiro et al. v. Department of Interior et al. (E.D. Pa.)"
+      }
+    ],
+    "availableAnalysis": null,
+    "relatedEoNumber": "Protecting the American People Against Invasion (Jan. 20, 2025), Reevaluating and Realigning United States Foreign Aid (Jan. 20, 2025), Putting America First in International Environmental Agreements (Jan. 20, 2025), Unleashing American Energy (Jan. 20, 2025), Ending Radical and Wasteful Government DEI Programs and Preferencing (Jan. 20, 2025), Defending Women from Gender Ideology Extremism and Restoring Biological Truth to the Federal Government (Jan. 20, 2025), and Enforcing the Hyde Amendment (Jan. 24, 2025).",
+    "createdAt": "2026-09-02T22:05:06.169860Z"
+  },
+  {
+    "id": "legacy-agency-action-10",
+    "title": "[Hyde Amendment] Statement from Dr. Dorothy Fink, Acting Secretary of the U.S. Department of Health and Human Services",
+    "issuingAgency": "HHS",
+    "keyDate": "2025-01-27",
+    "otherAgenciesImpacted": [
+      "Department of State"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169892Z"
+  },
+  {
+    "id": "legacy-agency-action-11",
+    "title": "Implementation of Executive Orders Addressing Energy, Climate Change, Diversity, and Gender -- updated on 2/7/25 by this DOT Order",
+    "issuingAgency": "DOT",
+    "keyDate": null,
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": "Initial Recessions of Harmful Executive Orders and Actions; Ending Radical and Wasteful Government DEI Programs and Preferencing; Unleashing American Energy; Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+    "createdAt": "2026-09-02T22:05:06.169902Z"
+  },
+  {
+    "id": "legacy-agency-action-12",
+    "title": "Initial Guidance Regarding President Trump’s Executive Order Defending \nWomen",
+    "issuingAgency": "OPM",
+    "keyDate": "2025-01-29",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [
+      {
+        "caseName": "Doctors for America v. OPM",
+        "court": "D.D.C",
+        "status": "filed 2/4/25",
+        "summary": "filed 2/4/25"
+      }
+    ],
+    "availableAnalysis": null,
+    "relatedEoNumber": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+    "createdAt": "2026-09-02T22:05:06.169912Z"
+  },
+  {
+    "id": "legacy-agency-action-13",
+    "title": "HHS’ Civil Rights Office Acts Swiftly to Combat Anti-Semitism",
+    "issuingAgency": "HHS",
+    "keyDate": "2025-02-03",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": "Executive Order on Additional Measures to Combat Anti-Semitism",
+    "createdAt": "2026-09-02T22:05:06.169927Z"
+  },
+  {
+    "id": "legacy-agency-action-14",
+    "title": "Sanctuary Jurisdiction Directives",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-02-05",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [
+      {
+        "caseName": "City and County of San Francisco v. Trump et al",
+        "court": "N.D. Cal",
+        "status": "complaint filed 2/7/25",
+        "summary": "complaint filed 2/7/25"
+      }
+    ],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169936Z"
+  },
+  {
+    "id": "legacy-agency-action-15",
+    "title": "Total Elimination of Cartels and Transnational Criminal Organizations",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-02-05",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169949Z"
+  },
+  {
+    "id": "legacy-agency-action-16",
+    "title": "General Policy Regarding Charging, Plea Negotiations, and Sentencing",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-02-05",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169958Z"
+  },
+  {
+    "id": "legacy-agency-action-17",
+    "title": "Designating Aliens for Expedited Removal",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-02-05",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169969Z"
+  },
+  {
+    "id": "legacy-agency-action-18",
+    "title": "General Policy Regarding Zealous Advocacy on Behalf of the United States",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-02-05",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169977Z"
+  },
+  {
+    "id": "legacy-agency-action-19",
+    "title": "Establishment of Joint Task Force October 7",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-02-05",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.169986Z"
+  },
+  {
+    "id": "legacy-agency-action-20",
+    "title": "Eliminating Internal Discriminatory Practices",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-02-05",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": "Ending Illegal Discrimination and Restoring Merit-Based Opportunity",
+    "createdAt": "2026-09-02T22:05:06.169994Z"
+  },
+  {
+    "id": "legacy-agency-action-21",
+    "title": "Reviving the Death Penalty",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-02-05",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.170005Z"
+  },
+  {
+    "id": "legacy-agency-action-22",
+    "title": "Termination of the October 3, 2023 Designation of Venezuela for\nTemporary Protected Status",
+    "issuingAgency": "DHS",
+    "keyDate": "2025-02-05",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [
+      {
+        "caseName": "National TPS Alliance et al. v. Noem",
+        "court": "N.D. Cal.",
+        "status": "filed 2/19/25",
+        "summary": "filed 2/19/25"
+      },
+      {
+        "caseName": "Casa, Inc. and Make the Road New York v. Noem",
+        "court": "D. Md.",
+        "status": "filed 2/20/25",
+        "summary": "filed 2/20/25"
+      },
+      {
+        "caseName": "Haitian Americans United Inc. v. Trump",
+        "court": "D. Mass.",
+        "status": "filed 3/3/25",
+        "summary": "filed 3/3/25"
+      }
+    ],
+    "availableAnalysis": null,
+    "relatedEoNumber": "Executive Order 14157 (Designating Cartels and Other Organizations as Foreign Terrorist Organizations and Specially Designated \nGlobal Terrorists),  Executive Order 14150 (America First Policy Directive to the Secretary of State)",
+    "createdAt": "2026-09-02T22:05:06.170013Z"
+  },
+  {
+    "id": "legacy-agency-action-23",
+    "title": "Ending Illegal DEI and DEIA Discrimination and Preferences",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-02-05",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": "Attorney General Pam Bondi’s Ending Illegal DEI and DEIA Discrimination and Preferences Memo",
+    "relatedEoNumber": "Ending Illegal Discrimination and Restoring Merit-Based Opportunity",
+    "createdAt": "2026-09-02T22:05:06.170033Z"
+  },
+  {
+    "id": "legacy-agency-action-24",
+    "title": "Suspending Approval of State Electric Vehicle Infrastructure Deployment Plans",
+    "issuingAgency": "DOT, Federal Highway Administration",
+    "keyDate": "2025-02-06",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.170042Z"
+  },
+  {
+    "id": "legacy-agency-action-25",
+    "title": "Ensuring Reliance Upon Sound Economic Analysis in Department of Transportation Policies, Programs and Activities",
+    "issuingAgency": "DOT",
+    "keyDate": "2025-02-07",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.170050Z"
+  },
+  {
+    "id": "legacy-agency-action-26",
+    "title": "Supplemental Guidance to the 2024 NIH Grants Policy Statement: Indirect Cost Rates",
+    "issuingAgency": "NIH",
+    "keyDate": "2025-02-07",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [
+      {
+        "caseName": "Commonwealth of Massachusetts v. NIH",
+        "court": "D. Mass.",
+        "status": "filed 2/10/25",
+        "summary": "filed 2/10/25"
+      },
+      {
+        "caseName": "Association of American Universities et al v. HHS",
+        "court": "D. Mass.",
+        "status": "filed 2/10/25",
+        "summary": "filed 2/10/25"
+      },
+      {
+        "caseName": "Association of American Medical Colleges v. NIH",
+        "court": "D. Mass",
+        "status": "filed 2/10/25",
+        "summary": "filed 2/10/25"
+      }
+    ],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.170060Z"
+  },
+  {
+    "id": "legacy-agency-action-27",
+    "title": "“Dear Colleague Letter” banning DEI-related programming",
+    "issuingAgency": "Education",
+    "keyDate": "2025-02-14",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [
+      {
+        "caseName": "American Federation of Teachers v. U.S. Department of Education",
+        "court": "D. Md.",
+        "status": "See summary",
+        "summary": "American Federation of Teachers v. U.S. Department of Education (D. Md.)"
+      },
+      {
+        "caseName": "National Education Association v. US Department of Education",
+        "court": "D.N.H.",
+        "status": "See summary",
+        "summary": "National Education Association v. US Department of Education (D.N.H.)"
+      }
+    ],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.170079Z"
+  },
+  {
+    "id": "legacy-agency-action-28",
+    "title": "Rescission of Certain General Counsel Memoranda",
+    "issuingAgency": "NLRB",
+    "keyDate": "2025-02-14",
+    "otherAgenciesImpacted": [
+      "n/a"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": "Acting General Counsel of NLRB Issues First GC Memorandum, Rescinding Controversial Pro-Labor Memoranda",
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.170094Z"
+  },
+  {
+    "id": "legacy-agency-action-29",
+    "title": "Guidance on Agency RIF and Reorganization Plans Requested by \nImplementing The President’s “Department of Government \nEfficiency” Workforce Optimization Initiative",
+    "issuingAgency": "OMB, OPM",
+    "keyDate": "2025-02-26",
+    "otherAgenciesImpacted": [
+      "All"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": "Implementing The President’s \n“Department of Government Efficiency” Workforce Optimization Initiative (Workforce \nOptimization)",
+    "createdAt": "2026-09-02T22:05:06.170103Z"
+  },
+  {
+    "id": "legacy-agency-action-30",
+    "title": "Accelerating Federal Use of AI through Innovation, Governance, and Public Trust",
+    "issuingAgency": "OMB",
+    "keyDate": "2025-04-03",
+    "otherAgenciesImpacted": [
+      "All"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.170111Z"
+  },
+  {
+    "id": "legacy-agency-action-31",
+    "title": "Driving Efficient Acquisition of Artificial Intelligence in Government",
+    "issuingAgency": "OMB",
+    "keyDate": "2025-04-03",
+    "otherAgenciesImpacted": [
+      "All"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.170118Z"
+  },
+  {
+    "id": "legacy-agency-action-32",
+    "title": "Implementaion of Executive Order No. 14,224: Designating English as the Official Language of the United States of America",
+    "issuingAgency": "DOJ",
+    "keyDate": "2025-07-14",
+    "otherAgenciesImpacted": [
+      "All"
+    ],
+    "legalChallenges": [],
+    "availableAnalysis": null,
+    "relatedEoNumber": null,
+    "createdAt": "2026-09-02T22:05:06.170126Z"
+  }
+]
