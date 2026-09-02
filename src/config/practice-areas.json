@@ -1,0 +1,33 @@
+[
+  { "name": "Antitrust and Competition" },
+  { "name": "Appellate" },
+  { "name": "Bankruptcy and Restructuring" },
+  { "name": "Commercial Finance" },
+  { "name": "Corporate" },
+  { "name": "Entertainment, Technology and Advertising" },
+  { "name": "Global Reach" },
+  { "name": "Governmental" },
+  { "name": "Intellectual Property" },
+  { "name": "Labor and Employment" },
+  { "name": "Land Use" },
+  {
+    "name": "Litigation",
+    "subPractices": [
+      "Bankruptcy Litigation & Distressed Loan Workouts",
+      "Brand and Reputation Management",
+      "Class Action Defense",
+      "False Claims Act",
+      "Financial Services Litigation",
+      "International Arbitration",
+      "Securities Enforcement",
+      "Securities Litigation"
+    ]
+  },
+  { "name": "Privacy and Cybersecurity" },
+  { "name": "Private Client Services" },
+  { "name": "Private Equity" },
+  { "name": "Private Wealth and Fiduciary Litigation" },
+  { "name": "Real Estate" },
+  { "name": "Tax" },
+  { "name": "White Collar Defense and Investigations" }
+]

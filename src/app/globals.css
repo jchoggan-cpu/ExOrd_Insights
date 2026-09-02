@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/*
+ * Approximated Sheppard-style theme: warm neutral background, ink-navy text,
+ * a muted taupe/gold accent, serif display headings over a clean sans body.
+ * This is a placeholder palette inferred from the public site — swap these
+ * values (and the logo in src/components/site-header.tsx) once real brand
+ * assets (hex codes, logo file, font names) are available.
+ */
+:root {
+  --background: #fbfaf7;
+  --surface: #ffffff;
+  --foreground: #1c2430;
+  --muted: #6b6f76;
+  --border: #e4e1d9;
+  --accent: #8a7355;
+  --accent-strong: #6b5842;
+  --link: #33507a;
+  --danger: #a4392f;
+  --success: #3d6b4f;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-link: var(--link);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
