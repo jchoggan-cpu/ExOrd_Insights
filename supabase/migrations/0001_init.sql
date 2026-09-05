@@ -107,6 +107,11 @@ create table if not exists content_drafts (
   title text,
   draft_text text not null,
   created_by uuid references profiles (id),
+  -- Set when a user confirms "I have reviewed this draft for accuracy" in the
+  -- UI (see src/components/content-drafter.tsx) — export is gated on this
+  -- client-side today; once drafts are persisted (Phase 4), enforce it here too.
+  reviewed_at timestamptz,
+  reviewed_by uuid references profiles (id),
   created_at timestamptz not null default now()
 );
 

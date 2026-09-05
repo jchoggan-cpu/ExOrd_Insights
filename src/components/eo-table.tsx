@@ -6,6 +6,7 @@ import type { ExecutiveOrder } from "@/lib/types";
 import { PRACTICE_AREA_NAMES, INDUSTRIES } from "@/lib/taxonomy";
 import { StatusBadge } from "@/components/status-badge";
 import { TagPill } from "@/components/tag-pill";
+import { NeedsReviewBadge } from "@/components/needs-review-badge";
 
 function formatDate(iso: string | undefined) {
   if (!iso) return "—";
@@ -109,6 +110,11 @@ export function EoTable({ orders }: { orders: ExecutiveOrder[] }) {
                   <Link href={`/eo/${eo.id}`} className="font-medium text-link hover:underline">
                     {eo.title}
                   </Link>
+                  {eo.needsReview && (
+                    <div className="mt-1">
+                      <NeedsReviewBadge reason={eo.needsReviewReason} />
+                    </div>
+                  )}
                   {eo.subjectArea.length > 0 && (
                     <div className="mt-1 flex flex-wrap gap-1">
                       {eo.subjectArea.map((s) => (

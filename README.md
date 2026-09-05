@@ -16,7 +16,8 @@ with automation (Phases 2–5) still to come.
 |---|---|
 | Tracker table + EO detail pages | ✅ Working, showing real imported data (see below) |
 | Content-drafting UI (all 4 content types, single & multi-EO) | ✅ Working UI; generates **stub text** until `ANTHROPIC_API_KEY` is set |
-| Copy / .docx / markdown export | ✅ Working |
+| Copy / .docx / markdown export | ✅ Working, gated behind a "reviewed for accuracy" confirmation |
+| Interim shared-password access gate | ✅ Working (`SITE_PASSWORD` env var) — see "Interim access" below |
 | Firm spreadsheet import | ✅ Done — 340 executive actions imported (see below) |
 | Supabase data model (schema + RLS) | ✅ Written (`supabase/migrations/0001_init.sql`), not yet connected to a live project |
 | Supabase bulk-import script | ✅ Written (`npm run import:supabase`), not yet run against a live project |
@@ -68,6 +69,9 @@ won't silently overwrite them.
   tracker. Both rows were preserved as-is rather than guessing which is correct; the
   database schema deliberately does **not** enforce uniqueness on `eo_number` because of
   this. Worth reconciling against the Federal Register once Phase 2 ingestion is live.
+  These records are flagged with a visible "⚠ Needs review" badge in the UI
+  (`flagDuplicateEoNumbers` in `src/lib/data.ts`, computed fresh on every fetch — it
+  self-corrects once the underlying duplicates are fixed).
 - A few rows have ambiguous type/number text (e.g. a bare EO number with no "EO" prefix,
   "not posted to Fed. Reg. yet") — handled with best-effort parsing in the import script;
   spot-check `actionType`/`eoNumber` on those if precision matters for your use case.
@@ -87,6 +91,10 @@ SUPABASE_SERVICE_ROLE_KEY=
 ANTHROPIC_API_KEY=
 # Optional: override the model used for content generation (defaults to claude-opus-5)
 EO_TRACKER_MODEL=
+
+# Optional: gates the whole app behind a single shared password (see "Interim
+# access before real auth" below). Leave unset for local development.
+SITE_PASSWORD=
 ```
 
 ### Setting up Supabase
@@ -102,6 +110,16 @@ EO_TRACKER_MODEL=
    run it against an empty table).
 5. Restart the dev server — the tracker now reads/writes Supabase instead of the local
    JSON files.
+
+### Interim access before real auth
+
+There's no user accounts system yet (that's Phase 5). If you want a few colleagues to try
+the tool before then, set `SITE_PASSWORD` in the deployment's environment variables — the
+whole app (via `src/proxy.ts`) redirects anyone without the right cookie to `/gate`, a
+single shared-password prompt. This is **not** a real accounts system — no per-user
+identity, no roles — just enough to keep a deployed URL from being fully open. Leave it
+unset for local development. Remove `src/proxy.ts`, `src/app/gate/`, `src/app/api/gate/`,
+and `src/lib/site-auth.ts` once Supabase Auth ships.
 
 ## Firm-specific tagging lists
 

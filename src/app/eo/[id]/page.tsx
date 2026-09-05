@@ -4,6 +4,7 @@ import { getExecutiveOrderById, isUsingLocalData } from "@/lib/data";
 import { StatusBadge } from "@/components/status-badge";
 import { TagPill } from "@/components/tag-pill";
 import { LocalDataBanner } from "@/components/local-data-banner";
+import { NeedsReviewBadge } from "@/components/needs-review-badge";
 
 function formatDate(iso: string | undefined) {
   if (!iso) return "—";
@@ -49,6 +50,7 @@ export default async function EoDetailPage({
             <div className="mt-2 flex items-center gap-3">
               <StatusBadge status={eo.status} />
               <span className="text-sm text-muted">Signed {formatDate(eo.dateSigned)}</span>
+              {eo.needsReview && <NeedsReviewBadge reason={eo.needsReviewReason} />}
             </div>
           </div>
           <Link
@@ -70,6 +72,12 @@ export default async function EoDetailPage({
             <TagPill key={i} label={i} kind="industry" />
           ))}
         </div>
+
+        {eo.needsReview && (
+          <div className="mt-4 rounded-md border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
+            ⚠ {eo.needsReviewReason}
+          </div>
+        )}
 
         <div className="mt-2">
           <Section title="Summary">

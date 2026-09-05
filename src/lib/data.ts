@@ -78,11 +78,35 @@ function normalizeLegacyOrder(raw: (typeof legacyExecutiveOrders)[number]): Exec
   };
 }
 
-const LOCAL_EXECUTIVE_ORDERS: ExecutiveOrder[] = (
-  legacyExecutiveOrders as (typeof legacyExecutiveOrders)[number][]
-)
-  .map(normalizeLegacyOrder)
-  .sort((a, b) => (a.dateSigned < b.dateSigned ? 1 : -1));
+/**
+ * Flags any executive order whose eoNumber is shared with another order in
+ * the list — a known data-quality issue inherited from the source
+ * spreadsheet (see README "Known data quality issues"), not something to
+ * silently trust. Computed fresh on every fetch rather than stored, so it
+ * self-corrects once the underlying duplicates are reconciled.
+ */
+function flagDuplicateEoNumbers(orders: ExecutiveOrder[]): ExecutiveOrder[] {
+  const counts = new Map<string, number>();
+  for (const eo of orders) {
+    if (eo.eoNumber) counts.set(eo.eoNumber, (counts.get(eo.eoNumber) ?? 0) + 1);
+  }
+  return orders.map((eo) => {
+    if (eo.eoNumber && (counts.get(eo.eoNumber) ?? 0) > 1) {
+      return {
+        ...eo,
+        needsReview: true,
+        needsReviewReason: `${eo.eoNumber} appears on more than one record in the source data — likely a data-entry error in the original tracker. Verify against the Federal Register before relying on this number.`,
+      };
+    }
+    return eo;
+  });
+}
+
+const LOCAL_EXECUTIVE_ORDERS: ExecutiveOrder[] = flagDuplicateEoNumbers(
+  (legacyExecutiveOrders as (typeof legacyExecutiveOrders)[number][])
+    .map(normalizeLegacyOrder)
+    .sort((a, b) => (a.dateSigned < b.dateSigned ? 1 : -1)),
+);
 
 /**
  * Fetches all executive orders, newest-signed first.
@@ -109,7 +133,7 @@ export async function getExecutiveOrders(): Promise<ExecutiveOrder[]> {
     return LOCAL_EXECUTIVE_ORDERS;
   }
 
-  return (data as ExecutiveOrderRow[]).map(mapRow);
+  return flagDuplicateEoNumbers((data as ExecutiveOrderRow[]).map(mapRow));
 }
 
 export async function getExecutiveOrderById(id: string): Promise<ExecutiveOrder | null> {

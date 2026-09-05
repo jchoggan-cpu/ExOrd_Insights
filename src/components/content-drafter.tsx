@@ -33,6 +33,7 @@ export function ContentDrafter({
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [reviewed, setReviewed] = useState(false);
 
   function toggleSelected(id: string) {
     setSelectedIds((prev) => {
@@ -51,6 +52,7 @@ export function ContentDrafter({
     setGenerating(true);
     setError(null);
     setCopied(false);
+    setReviewed(false);
     try {
       const res = await fetch("/api/generate-content", {
         method: "POST",
@@ -177,25 +179,40 @@ export function ContentDrafter({
             rows={16}
             className="mt-3 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm leading-relaxed outline-none focus:border-link"
           />
+          <label className="mt-3 flex cursor-pointer items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={reviewed}
+              onChange={(e) => setReviewed(e.target.checked)}
+              className="mt-0.5"
+            />
+            <span>
+              I have reviewed this draft for accuracy and it is ready to use. AI-generated
+              content can contain errors — export is disabled until this is checked.
+            </span>
+          </label>
           <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
               onClick={handleCopy}
-              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-accent"
+              disabled={!reviewed}
+              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-accent disabled:cursor-not-allowed disabled:opacity-40"
             >
               {copied ? "Copied!" : "Copy to clipboard"}
             </button>
             <button
               type="button"
               onClick={handleExportDocx}
-              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-accent"
+              disabled={!reviewed}
+              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-accent disabled:cursor-not-allowed disabled:opacity-40"
             >
               Export as .docx
             </button>
             <button
               type="button"
               onClick={handleExportMarkdown}
-              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-accent"
+              disabled={!reviewed}
+              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-accent disabled:cursor-not-allowed disabled:opacity-40"
             >
               Export as text/markdown
             </button>

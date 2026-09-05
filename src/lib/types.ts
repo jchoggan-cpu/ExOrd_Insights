@@ -66,6 +66,15 @@ export interface ExecutiveOrder {
 
   manuallyEditedFields: string[];
 
+  /**
+   * Set at read-time (see flagDuplicateEoNumbers in src/lib/data.ts) when this
+   * record's eoNumber is shared with another record — a known data-quality
+   * issue inherited from the source spreadsheet, not something to silently
+   * trust. Not stored in the database; recomputed on every fetch.
+   */
+  needsReview?: boolean;
+  needsReviewReason?: string;
+
   createdAt: string;
   updatedAt: string;
 }
