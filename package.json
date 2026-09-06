@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "import:legacy": "python3 scripts/import_legacy_tracker.py",
     "import:supabase": "tsx scripts/import-to-supabase.ts"
