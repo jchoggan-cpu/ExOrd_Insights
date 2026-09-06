@@ -2,32 +2,38 @@
   "name": "exord-insights",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "24.19.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
     "import:legacy": "python3 scripts/import_legacy_tracker.py",
     "import:supabase": "tsx scripts/import-to-supabase.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.123.0",
-    "@supabase/supabase-js": "^2.114.0",
-    "docx": "^9.7.1",
+    "@anthropic-ai/sdk": "0.123.0",
+    "@supabase/supabase-js": "2.114.0",
+    "docx": "9.7.1",
     "next": "16.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "dotenv": "^17.4.2",
-    "eslint": "^9",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "20.19.43",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "dotenv": "17.4.2",
+    "eslint": "9.39.5",
     "eslint-config-next": "16.3.4",
-    "tailwindcss": "^4",
-    "tsx": "^4.23.13",
-    "typescript": "^5"
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.13",
+    "typescript": "5.9.3",
+    "vitest": "3.2.6"
   }
 }

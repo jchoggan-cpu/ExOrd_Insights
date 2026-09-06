@@ -85,7 +85,7 @@ function normalizeLegacyOrder(raw: (typeof legacyExecutiveOrders)[number]): Exec
  * silently trust. Computed fresh on every fetch rather than stored, so it
  * self-corrects once the underlying duplicates are reconciled.
  */
-function flagDuplicateEoNumbers(orders: ExecutiveOrder[]): ExecutiveOrder[] {
+export function flagDuplicateEoNumbers(orders: ExecutiveOrder[]): ExecutiveOrder[] {
   const counts = new Map<string, number>();
   for (const eo of orders) {
     if (eo.eoNumber) counts.set(eo.eoNumber, (counts.get(eo.eoNumber) ?? 0) + 1);
