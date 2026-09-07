@@ -21,8 +21,9 @@ with automation (Phases 2–5) still to come.
 | Firm spreadsheet import | ✅ Done — 340 executive actions imported (see below) |
 | Supabase data model (schema + RLS) | ✅ Written (`supabase/migrations/0001_init.sql`), not yet connected to a live project |
 | Supabase bulk-import script | ✅ Written (`npm run import:supabase`), not yet run against a live project |
-| Federal Register ingestion (automated EO discovery) | ❌ Not built yet (Phase 2) |
-| AI tagging pipeline (Subject Area / Practice Areas / Industries) | ❌ Not built yet (Phase 2) — schema and fixed lists are in place |
+| Federal Register ingestion (automated EO/Proclamation/Memorandum discovery) | ✅ Built (Phase 2) — see "Federal Register ingestion" below. Not yet run against a live project (waiting on Supabase connection above) |
+| AI tagging pipeline (Subject Area / Practice Areas / Industries) | ✅ Built as part of Phase 2's enrich job — decoupled from ingestion, its own schedule |
+| Content-drafter quote verification | ✅ Built — flags any quoted text in a generated draft that doesn't appear verbatim in the source order(s) |
 | Litigation / news sweep (CourtListener + free news search) | ❌ Not built yet (Phase 3) |
 | Email digest | ❌ Not built yet (Phase 5) |
 | Auth / admin vs. general user roles | ❌ Not built yet (Phase 5) — RLS policies for it already exist in the schema |
@@ -95,9 +96,19 @@ EO_TRACKER_MODEL=
 # Optional: gates the whole app behind a single shared password (see "Interim
 # access before real auth" below). Leave unset for local development.
 SITE_PASSWORD=
+
+# Required in production once the /api/cron/* jobs are scheduled (see
+# "Federal Register ingestion" below) — generate with `openssl rand -hex 32`.
+CRON_SECRET=
 ```
 
 ### Setting up Supabase
+
+**Before step 5 below**, read CLAUDE.md's "Known blocking issue — RLS will
+silently break every anon-client read" and resolve it. As written today, the
+tracker/EO-detail/Needs-Attention pages will silently show nothing or stale
+data the moment Supabase is connected — not a bug in the ingestion pipeline,
+a pre-existing RLS policy gap this surfaced.
 
 1. Create a free project at [supabase.com](https://supabase.com).
 2. In the SQL Editor, run `supabase/migrations/0001_init.sql` — this creates the
@@ -121,6 +132,54 @@ identity, no roles — just enough to keep a deployed URL from being fully open.
 unset for local development. Remove `src/proxy.ts`, `src/app/gate/`, `src/app/api/gate/`,
 and `src/lib/site-auth.ts` once Supabase Auth ships.
 
+## Federal Register ingestion
+
+Once Supabase is connected, three independent jobs keep `executive_orders` in
+sync with [federalregister.gov's API](https://www.federalregister.gov/developers/documentation/api/v1)
+(no key required — see `src/lib/federal-register/`):
+
+- **`ingest`** (daily, `/api/cron/ingest`) — re-checks the trailing 90-day
+  publication window for new documents and corrections. "New" is
+  existence-based (an unseen `document_number`), not date-based — the window
+  just keeps each run's query cheap.
+- **`enrich`** (daily, `/api/cron/enrich`) — fully decoupled from ingestion.
+  Summarizes and tags ~20 orders per run (conservative, to control Anthropic
+  cost), verifying any quoted text against the order's stored `full_text` in
+  code before saving — a summary with an unverifiable quote is never saved;
+  the row is flagged for review instead.
+- **`reconcile`** (weekly, `/api/cron/reconcile`) — a cheap
+  `document_number`-only diff against the API over the *full*
+  administration-to-date range, so a gap older than the daily job's window
+  doesn't silently persist. Logged as its own run type so a completeness gap
+  is never confused with an ingestion failure.
+
+All three are Vercel Cron jobs (see `vercel.json`), authenticated via
+`CRON_SECRET` (see `.env.example`) — never open endpoints.
+
+**Corrections** are merged into the row they correct (matched via the
+correction's `correction_of` field, falling back to `eo_number` for
+multi-hop correction chains), never inserted as a new row. If a correction
+would change a field already in `manually_edited_fields`, it's left alone
+and the row is flagged instead — an attorney's correction is never silently
+overwritten by a government correction.
+
+**One-time historical backfill** (`npm run backfill:federal-register`, run
+locally — never as a Vercel Cron endpoint, since it has no timeout to
+respect) pulls everything from January 20, 2025 through today, reconciling
+the 340 legacy rows by `eo_number` (flagging, not guessing, when a match
+doesn't line up confidently — see `KNOWN_DUPLICATE_EO_NUMBERS` in the
+script for the 4 rows never auto-reconciled).
+
+**Needs Attention** (`/needs-attention` in the app) shows every flagged row
+and recent run history — the only place any of this is actually visible
+day to day.
+
+**A note on source reliability**: FederalRegister.gov states its own text is
+["not an official legal edition"](https://www.federalregister.gov/reader-aids/government-policy-and-ofr-procedures/about-this-site#legal-status) —
+the official version is the linked govinfo.gov PDF (`federal_register_url`
+on each order). Fine for summarization and drafting; anywhere content is
+asserted as authoritative, cite the PDF.
+
 ## Firm-specific tagging lists
 
 Sheppard's Practice Areas and Industries lists (used for AI tagging) live in:
@@ -137,25 +196,31 @@ to change.
 data/
   source/                   The firm's original tracker spreadsheet (checked in for provenance)
 scripts/
-  import_legacy_tracker.py  Extracts the spreadsheet into src/data/legacy-import/*.json
-  import-to-supabase.ts     One-time bulk load of that JSON into a connected Supabase project
+  import_legacy_tracker.py       Extracts the spreadsheet into src/data/legacy-import/*.json
+  import-to-supabase.ts          One-time bulk load of that JSON into a connected Supabase project
+  backfill-federal-register.ts   One-time Federal Register historical backfill (run locally)
 src/
   app/
-    page.tsx              Tracker dashboard (table + filters)
-    eo/[id]/page.tsx       EO detail page
-    draft/page.tsx         Content-drafting assistant
-    api/generate-content/  Content generation API route (stub or real, per ANTHROPIC_API_KEY)
-  components/              UI components (table, tags, status badges, drafter, header)
-  config/                  Fixed Practice Areas / Industries lists
-  data/legacy-import/      Extracted spreadsheet data (generated — see scripts/ above)
+    page.tsx                Tracker dashboard (table + filters)
+    eo/[id]/page.tsx         EO detail page
+    draft/page.tsx           Content-drafting assistant
+    needs-attention/page.tsx Flagged rows + recent ingestion run history
+    api/generate-content/    Content generation API route (stub or real, per ANTHROPIC_API_KEY)
+    api/cron/                Federal Register ingest/enrich/reconcile jobs (Vercel Cron, CRON_SECRET-gated)
+  components/                UI components (table, tags, status badges, drafter, header)
+  config/                    Fixed Practice Areas / Industries lists
+  data/legacy-import/        Extracted spreadsheet data (generated — see scripts/ above)
   lib/
-    types.ts               Shared TypeScript types (mirrors the SQL schema)
-    supabase.ts             Supabase client factory (returns null if unconfigured)
-    data.ts                 Data access layer — Supabase if configured, else local JSON
-    taxonomy.ts              Typed accessors for the Practice Area / Industry config
-    content-generation.ts    Prompt construction + Claude API call for drafting
+    types.ts                 Shared TypeScript types (mirrors the SQL schema)
+    supabase.ts               Supabase client factories (anon; service-role for ingestion)
+    data.ts                   Data access layer — Supabase if configured, else local JSON
+    taxonomy.ts                Typed accessors for the Practice Area / Industry config
+    content-generation.ts      Prompt construction + Claude API call for drafting
+    cron-auth.ts                Verifies a request came from Vercel Cron (CRON_SECRET)
+    federal-register/           Federal Register API client, sync/ingest/enrich/reconcile logic
 supabase/
   migrations/0001_init.sql  Full schema, indexes, and RLS policies
+vercel.json                 Cron schedules for the three /api/cron/* jobs
 ```
 
 ## Next steps (in rough order)
@@ -164,10 +229,10 @@ supabase/
    Note: `src/app/page.tsx` is currently statically prerendered at build time since it
    has no dynamic data source yet — once real Supabase data is flowing, mark it dynamic
    (`export const dynamic = "force-dynamic"`, or add revalidation) so new EOs show up
-   without a full rebuild.
-2. Build the Federal Register ingestion job (Phase 2) and the AI tagging pipeline that
-   populates Subject Area / Practice Areas / Industries / summary on new EOs going
-   forward (the imported 340 already have firm-authored summaries and subject areas).
+   without a full rebuild. (`src/app/needs-attention/page.tsx` already does this.)
+2. Run `npm run backfill:federal-register` once against the freshly-connected database
+   (see "Federal Register ingestion" above), then set `CRON_SECRET` in Vercel so the
+   three scheduled jobs in `vercel.json` can authenticate.
 3. Build the CourtListener + news sweep (Phase 3).
 4. Add auth (Supabase Auth) with the admin/general role split the schema already
    supports, and the email digest (Phase 5).

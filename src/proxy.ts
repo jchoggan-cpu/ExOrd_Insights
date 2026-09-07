@@ -31,8 +31,11 @@ export const config = {
     /*
      * Match everything except:
      * - the gate page and its API route (or we'd redirect-loop)
+     * - /api/cron/* — Vercel Cron sends a plain GET expecting JSON, not a
+     *   redirect to an HTML gate page; those routes have their own
+     *   CRON_SECRET check (see src/lib/cron-auth.ts) instead
      * - Next.js internals and static assets
      */
-    "/((?!gate|api/gate|_next/static|_next/image|favicon.ico).*)",
+    "/((?!gate|api/gate|api/cron|_next/static|_next/image|favicon.ico).*)",
   ],
 };

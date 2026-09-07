@@ -30,6 +30,8 @@ export function ContentDrafter({
   const [contentType, setContentType] = useState<ContentType>("client_alert");
   const [draftText, setDraftText] = useState("");
   const [isStub, setIsStub] = useState(false);
+  const [unverifiedQuotes, setUnverifiedQuotes] = useState<string[]>([]);
+  const [quotesWereChecked, setQuotesWereChecked] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -53,6 +55,8 @@ export function ContentDrafter({
     setError(null);
     setCopied(false);
     setReviewed(false);
+    setUnverifiedQuotes([]);
+    setQuotesWereChecked(false);
     try {
       const res = await fetch("/api/generate-content", {
         method: "POST",
@@ -65,6 +69,8 @@ export function ContentDrafter({
       }
       setDraftText(data.draftText);
       setIsStub(Boolean(data.isStub));
+      setUnverifiedQuotes(Array.isArray(data.unverifiedQuotes) ? data.unverifiedQuotes : []);
+      setQuotesWereChecked(Boolean(data.quotesWereChecked));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to generate content.");
     } finally {
@@ -171,6 +177,25 @@ export function ContentDrafter({
             <p className="mt-2 rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-xs text-accent-strong">
               This is a placeholder stub draft — set ANTHROPIC_API_KEY to enable real AI-generated
               content (see README).
+            </p>
+          )}
+          {unverifiedQuotes.length > 0 && (
+            <div className="mt-2 rounded-md border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger">
+              <p className="font-medium">
+                {unverifiedQuotes.length} quoted passage{unverifiedQuotes.length > 1 ? "s" : ""} could not be
+                verified against the source order&apos;s text — check these carefully before relying on them:
+              </p>
+              <ul className="mt-1 list-disc pl-4">
+                {unverifiedQuotes.map((quote, i) => (
+                  <li key={i}>&ldquo;{quote}&rdquo;</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {!isStub && unverifiedQuotes.length === 0 && !quotesWereChecked && (
+            <p className="mt-2 rounded-md border border-border bg-surface px-3 py-2 text-xs text-muted">
+              Quote verification wasn&apos;t possible — the selected order(s) don&apos;t have stored source text
+              yet (pre-Federal Register ingestion). This is not a confirmation that any quotes are accurate.
             </p>
           )}
           <textarea

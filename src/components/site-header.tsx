@@ -3,6 +3,7 @@ import Link from "next/link";
 const NAV_LINKS = [
   { href: "/", label: "Tracker" },
   { href: "/draft", label: "Draft Content" },
+  { href: "/needs-attention", label: "Needs Attention" },
 ];
 
 export function SiteHeader() {

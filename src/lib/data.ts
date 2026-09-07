@@ -27,6 +27,14 @@ interface ExecutiveOrderRow {
   legal_challenges: ExecutiveOrder["legalChallenges"];
   news_mentions: ExecutiveOrder["newsMentions"];
   manually_edited_fields: string[];
+  document_number: string | null;
+  applied_correction_document_numbers: string[];
+  citation: string | null;
+  full_text: string | null;
+  source_notes: string | null;
+  needs_review: boolean;
+  review_reason: string | null;
+  federal_register_synced_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -53,6 +61,14 @@ function mapRow(row: ExecutiveOrderRow): ExecutiveOrder {
     legalChallenges: row.legal_challenges ?? [],
     newsMentions: row.news_mentions ?? [],
     manuallyEditedFields: row.manually_edited_fields ?? [],
+    documentNumber: row.document_number ?? undefined,
+    appliedCorrectionDocumentNumbers: row.applied_correction_document_numbers ?? [],
+    citation: row.citation ?? undefined,
+    fullText: row.full_text ?? undefined,
+    sourceNotes: row.source_notes ?? undefined,
+    ingestionFlagged: row.needs_review,
+    ingestionFlagReason: row.review_reason ?? undefined,
+    federalRegisterSyncedAt: row.federal_register_synced_at ?? undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -162,6 +178,61 @@ export async function getRescindedPriorOrders(): Promise<RescindedPriorOrder[]> 
     return legacyRescindedPriorOrders as RescindedPriorOrder[];
   }
   return data as RescindedPriorOrder[];
+}
+
+/** Orders needing human attention: the computed duplicate-eoNumber flag, or an ingestion-set flag (corrections blocked by a manual edit, an ambiguous legacy-row match). Powers the Needs Attention page. */
+export async function getFlaggedExecutiveOrders(): Promise<ExecutiveOrder[]> {
+  const orders = await getExecutiveOrders();
+  return orders.filter((eo) => eo.needsReview || eo.ingestionFlagged);
+}
+
+export interface IngestionRunSummary {
+  id: string;
+  runType: string;
+  status: string;
+  startedAt: string;
+  finishedAt: string | null;
+  newCount: number;
+  updatedCount: number;
+  errorMessage: string | null;
+}
+
+interface IngestionRunRow {
+  id: string;
+  run_type: string;
+  status: string;
+  started_at: string;
+  finished_at: string | null;
+  new_count: number;
+  updated_count: number;
+  error_message: string | null;
+}
+
+/** Most recent ingestion_runs entries, newest first. Empty (not an error) when Supabase isn't configured — there's nothing to log against local JSON data. */
+export async function getRecentIngestionRuns(limit = 20): Promise<IngestionRunSummary[]> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("ingestion_runs")
+    .select("id, run_type, status, started_at, finished_at, new_count, updated_count, error_message")
+    .order("started_at", { ascending: false })
+    .limit(limit);
+  if (error || !data) {
+    console.error("Failed to fetch ingestion runs:", error);
+    return [];
+  }
+
+  return (data as IngestionRunRow[]).map((row) => ({
+    id: row.id,
+    runType: row.run_type,
+    status: row.status,
+    startedAt: row.started_at,
+    finishedAt: row.finished_at,
+    newCount: row.new_count,
+    updatedCount: row.updated_count,
+    errorMessage: row.error_message,
+  }));
 }
 
 export async function getAgencyActions(): Promise<AgencyAction[]> {

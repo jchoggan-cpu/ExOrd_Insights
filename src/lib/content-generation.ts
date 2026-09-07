@@ -1,6 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { ContentType, ExecutiveOrder } from "@/lib/types";
 import { CONTENT_TYPE_LABELS } from "@/lib/types";
+import { findUnverifiedQuotes } from "@/lib/federal-register/quote-verify";
+import { extractTextBlock, getConfiguredModel } from "@/lib/ai-model";
 
 // Content-type-specific length guidance and an output-token ceiling. Kept
 // short since these are drafts a human will edit, not final copy.
@@ -83,6 +85,18 @@ export interface GenerateContentParams {
 export interface GenerateContentResult {
   draftText: string;
   isStub: boolean;
+  /**
+   * Quoted substrings in draftText that don't appear verbatim in the
+   * referenced order(s)' full_text. Only checked when full_text exists
+   * (Federal Register ingestion, Phase 2) — empty for orders imported
+   * before that, not because their quotes are verified. Surfaced to the
+   * attorney's review pass, never used to block generation: paraphrases
+   * aren't checked, only literal quoted material, since that's the only
+   * thing a string match can honestly verify.
+   */
+  unverifiedQuotes: string[];
+  /** False when none of the referenced orders have full_text yet — an empty unverifiedQuotes then means "not checked," not "verified clean," and the UI must not conflate the two. */
+  quotesWereChecked: boolean;
 }
 
 function buildStubDraft(orders: ExecutiveOrder[], contentType: ContentType): string {
@@ -111,7 +125,7 @@ export async function generateContent({
   }
 
   if (!process.env.ANTHROPIC_API_KEY) {
-    return { draftText: buildStubDraft(orders, contentType), isStub: true };
+    return { draftText: buildStubDraft(orders, contentType), isStub: true, unverifiedQuotes: [], quotesWereChecked: false };
   }
 
   const { instructions, maxTokens } = CONTENT_TYPE_GUIDANCE[contentType];
@@ -127,18 +141,30 @@ export async function generateContent({
   ].join("\n");
 
   const response = await client.messages.create({
-    model: process.env.EO_TRACKER_MODEL || "claude-opus-5",
+    model: getConfiguredModel(),
     max_tokens: maxTokens,
     system: buildSystemPrompt(styleGuide),
     messages: [{ role: "user", content: userPrompt }],
   });
 
-  const textBlock = response.content.find((b) => b.type === "text");
-  if (!textBlock || textBlock.type !== "text") {
-    throw new Error(
-      `Content generation did not return text (stop_reason: ${response.stop_reason}).`,
-    );
-  }
+  const draftText = extractTextBlock(response);
 
-  return { draftText: textBlock.text, isStub: false };
+  return {
+    draftText,
+    isStub: false,
+    ...computeUnverifiedQuotes(draftText, orders),
+  };
+}
+
+/** Checks draftText's quoted material against the concatenated full_text of every referenced order. */
+export function computeUnverifiedQuotes(
+  draftText: string,
+  orders: ExecutiveOrder[],
+): { unverifiedQuotes: string[]; quotesWereChecked: boolean } {
+  const combinedSourceText = orders
+    .map((eo) => eo.fullText)
+    .filter(Boolean)
+    .join("\n\n");
+  if (!combinedSourceText) return { unverifiedQuotes: [], quotesWereChecked: false };
+  return { unverifiedQuotes: findUnverifiedQuotes(draftText, combinedSourceText), quotesWereChecked: true };
 }

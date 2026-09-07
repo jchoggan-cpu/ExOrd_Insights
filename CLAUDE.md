@@ -53,12 +53,69 @@ without being asked again.
   **Status: accepted for now** (pre-production, one user). Revisit — build one
   E2E test of that exact journey — the moment a second real user depends on
   this tool.
-- **Only one unit test exists** (`src/lib/data.test.ts`, covering
-  `flagDuplicateEoNumbers`). Everything else written before this file
-  (Phase 1: tracker UI, content-drafting UI, data layer, import scripts) has
-  zero test coverage. Not being retrofitted en masse — rule 9 applies to code
+- **Phase 1 UI (tracker table, EO detail page, content-drafting UI) has zero
+  test coverage.** Not being retrofitted en masse — rule 9 applies to code
   written or touched from here forward; bring a file under test when you're
   already in it for another reason, not as a separate sweep.
+- **The three Federal Register job orchestration functions** (`ingest-job.ts`,
+  `enrich-job.ts`, `reconcile-job.ts`) are not integration-tested end to end —
+  doing so would mean mocking both the Federal Register API and Supabase
+  together, which is a lot of test-infrastructure weight for what's mostly
+  wiring. What each depends on **is** tested directly: `sync.ts` (the actual
+  insert/update/flag decisions, via `test-support/fake-supabase.ts`),
+  `clean-text.ts`, `parse-disposition.ts`, `quote-verify.ts`, `cron-auth.ts`,
+  and `summarize.ts`'s response validation, all against real captured API
+  samples (`fixtures/`). **Status: accepted for now** — revisit if a bug ever
+  turns up in the orchestration layer itself rather than in one of the
+  pieces it calls. `ingestion-run.ts`'s overlap guard is one specific piece
+  of that untested orchestration layer worth calling out — it's the thing
+  that prevents two overlapping cron invocations, and a regression there
+  wouldn't be caught by anything currently in the suite.
+- **`ingest-job.ts`/`enrich-job.ts`/`reconcile-job.ts` share a lot of
+  structural duplication** (a near-identical fetch/sync/tally loop, near-
+  identical result interfaces, near-identical try/catch/finishRun-on-failure
+  boilerplate) that an adversarial review pass flagged and a consolidation
+  would clean up. **Status: accepted for now** — deferred rather than risking
+  a rushed refactor across three files right before the first real run;
+  worth doing as its own follow-up once the pipeline has run live at least
+  once.
+
+## Known blocking issue — RLS will silently break every anon-client read
+
+Discovered during an adversarial review of the Federal Register ingestion
+work, and **pre-existing** (not introduced by that work — it affects the
+already-built tracker page too, not just anything new):
+
+`executive_orders`' and `ingestion_runs`' SELECT policies in
+`supabase/migrations/0001_init.sql` require `auth.role() = 'authenticated'`
+(or `is_admin()`) — but Supabase Auth (Phase 5) doesn't exist yet, so
+**there is currently no way for the anon-key client `getSupabaseClient()`
+uses to ever satisfy either policy.** Once Supabase is actually connected,
+every read through the anon client — the tracker page, the EO detail page,
+and the new Needs Attention page — will be silently RLS-denied and fall back
+to `[]` or stale local JSON, with no error surfaced anywhere. The only
+client that bypasses RLS today is the service-role client the ingestion jobs
+use — which means ingestion would appear to work (writes succeed via
+service-role) while every page reading that data through the anon client
+shows nothing or stale data.
+
+This needs a decision, not a fix Claude should make unilaterally: it changes
+a documented security boundary. The two live options —
+
+1. **Loosen the affected SELECT policies to `using (true)`** for the current
+   phase (matching the fact that the *actual* current security boundary is
+   `SITE_PASSWORD`, not per-user Supabase auth — RLS' `authenticated`-only
+   read policies are currently unreachable by design, not a deliberate
+   present-day restriction), tightening them again once Phase 5 ships real
+   accounts.
+2. **Have reads go through the service-role client too**, at least for
+   server-only pages like `/needs-attention` — defers the RLS question
+   entirely until Phase 5, but stretches "service-role" further than its
+   stated purpose ("automated jobs only").
+
+Confirm this is understood and resolved (either option, or another) **before
+connecting Supabase to a live project** — otherwise the very first thing
+that happens is the app looking broken with no error message explaining why.
 
 ## Manual-steps ledger
 
@@ -71,6 +128,8 @@ Steps that need a human, can't be automated away, and how to tell they're done:
 | Set `ANTHROPIC_API_KEY` (+ optional `EO_TRACKER_MODEL`) | `.env.local` / deployment env | Content drafts stop being stub text |
 | Set a monthly spending cap on the Anthropic API key | Anthropic Console | Cap visible in the Console's billing limits page |
 | Set `SITE_PASSWORD` if sharing a deployed URL pre-auth | deployment env vars | `/gate` prompts before the app loads |
+| Generate and set `CRON_SECRET` (`openssl rand -hex 32`) | `.env.local` + Vercel project env vars | `/api/cron/*` returns 401 without it, 200 with the matching Bearer token |
+| Run `npm run backfill:federal-register` once, after Supabase is connected | local machine | `/needs-attention` shows recent runs and the tracker's order count jumps to match the administration-to-date total |
 
 When this list passes ~5 items, review whether any can now be automated (per
 the source rule).

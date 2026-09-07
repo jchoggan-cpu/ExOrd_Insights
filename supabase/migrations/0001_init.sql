@@ -55,6 +55,29 @@ create table if not exists executive_orders (
 
   manually_edited_fields text[] not null default '{}',
 
+  -- Federal Register ingestion (Phase 2) ---------------------------------
+  -- document_number is Federal Register's own permanent ID (e.g.
+  -- "2026-17843") — the real upsert key for automated ingestion, unlike
+  -- eo_number above, which the legacy import already can't guarantee is
+  -- unique. Null on legacy rows until reconciled by the backfill script.
+  document_number text unique,
+  -- document_number of every Federal Register *correction* document merged
+  -- into this row (rather than inserted as its own row — see sync.ts).
+  -- Lets reconciliation account for corrections when diffing against the
+  -- API's own document list: a correction's document_number is expected to
+  -- appear here, not as another row's document_number.
+  applied_correction_document_numbers text[] not null default '{}',
+  citation text,                                -- e.g. "91 FR 55995"
+  full_text text,                                -- cleaned raw_text_url content; the ground truth AI quotes are checked against
+  source_notes text,                             -- raw disposition_notes/executive_order_notes, stored verbatim regardless of parse success
+  -- Set by ingestion when a Federal Register correction would overwrite a
+  -- manually_edited_fields entry, or when backfill can't confidently match
+  -- a legacy row to a Federal Register document. Never set by a human
+  -- directly — review_reason explains why it was set.
+  needs_review boolean not null default false,
+  review_reason text,
+  federal_register_synced_at timestamptz,        -- last time ingestion (not a manual edit) touched this row
+
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -63,6 +86,10 @@ create index if not exists executive_orders_date_signed_idx on executive_orders 
 create index if not exists executive_orders_practice_areas_idx on executive_orders using gin (practice_areas);
 create index if not exists executive_orders_industries_idx on executive_orders using gin (industries);
 create index if not exists executive_orders_subject_area_idx on executive_orders using gin (subject_area);
+-- Backs sync.ts's correction-target lookup (an array-contains check against
+-- applied_correction_document_numbers) — without this, every correction
+-- processed forces a sequential scan of the whole table.
+create index if not exists executive_orders_applied_corrections_idx on executive_orders using gin (applied_correction_document_numbers);
 
 -- ---------------------------------------------------------------------------
 -- rescinded_prior_orders: pre-2025 executive orders the current
@@ -121,7 +148,20 @@ create table if not exists content_drafts (
 -- ---------------------------------------------------------------------------
 create table if not exists ingestion_runs (
   id uuid primary key default gen_random_uuid(),
-  run_type text not null check (run_type in ('federal_register', 'litigation_news', 'digest_email')),
+  run_type text not null check (run_type in (
+    'federal_register',
+    -- Cheap document_number-only diff against the API over the full
+    -- administration-to-date range — catches gaps older than the daily
+    -- ingest job's trailing window, logged separately so a completeness
+    -- gap is never confused with an ingestion failure.
+    'federal_register_reconciliation',
+    -- AI summarization/tagging, decoupled from 'federal_register' ingestion
+    -- (see src/lib/federal-register/enrich-job.ts) — separate run type so a
+    -- failure here is never confused with an ingestion failure.
+    'federal_register_enrichment',
+    'litigation_news',
+    'digest_email'
+  )),
   started_at timestamptz not null default now(),
   finished_at timestamptz,
   status text not null default 'running' check (status in ('running', 'success', 'partial', 'failure')),

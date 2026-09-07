@@ -75,6 +75,28 @@ export interface ExecutiveOrder {
   needsReview?: boolean;
   needsReviewReason?: string;
 
+  // Federal Register ingestion (Phase 2) ------------------------------------
+  /** Federal Register's own permanent ID (e.g. "2026-17843") — the ingestion upsert key. Null on legacy rows until reconciled. */
+  documentNumber?: string;
+  /** document_number of every Federal Register correction merged into this row (see sync.ts) — lets reconciliation account for corrections. Empty/absent except on rows a correction has actually been applied to. */
+  appliedCorrectionDocumentNumbers?: string[];
+  citation?: string;
+  /** Cleaned raw_text_url content — the ground truth AI-generated quotes are checked against. */
+  fullText?: string;
+  /** Raw disposition_notes/executive_order_notes, verbatim, regardless of whether parseDispositionNotes recognized the format. */
+  sourceNotes?: string;
+  /**
+   * Stored, ingestion-set flag — distinct from the computed needsReview
+   * above. Set when a Federal Register correction would overwrite a
+   * manuallyEditedFields entry, or when backfill can't confidently match a
+   * legacy row to a Federal Register document. ingestionFlagReason explains
+   * why.
+   */
+  ingestionFlagged?: boolean;
+  ingestionFlagReason?: string;
+  /** Last time ingestion (not a manual edit) touched this row. */
+  federalRegisterSyncedAt?: string;
+
   createdAt: string;
   updatedAt: string;
 }
