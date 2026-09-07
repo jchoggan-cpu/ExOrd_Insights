@@ -104,17 +104,14 @@ CRON_SECRET=
 
 ### Setting up Supabase
 
-**Before step 5 below**, read CLAUDE.md's "Known blocking issue — RLS will
-silently break every anon-client read" and resolve it. As written today, the
-tracker/EO-detail/Needs-Attention pages will silently show nothing or stale
-data the moment Supabase is connected — not a bug in the ingestion pipeline,
-a pre-existing RLS policy gap this surfaced.
-
 1. Create a free project at [supabase.com](https://supabase.com).
-2. In the SQL Editor, run `supabase/migrations/0001_init.sql` — this creates the
+2. In the SQL Editor, run `supabase/migrations/0001_init.sql`, then
+   `0002_loosen_read_policies.sql`, **in that order** — this creates the
    `executive_orders`, `rescinded_prior_orders`, `agency_actions`, `content_drafts`,
-   `profiles`, and `ingestion_runs` tables along with row-level security policies for
-   the admin/general user split.
+   `profiles`, and `ingestion_runs` tables along with row-level security policies
+   (`0002` loosens the four tables the app's anon client reads directly to
+   `using (true)` for this pre-Phase-5 phase — see CLAUDE.md's "Resolved — RLS
+   anon-read gap" for why).
 3. Copy the project URL, anon key, and service role key into `.env.local` as above.
 4. Run `npm run import:supabase` **once** to load the real imported data into the fresh
    database (see the script's header comment — it inserts fresh rows every run, so only
@@ -220,6 +217,7 @@ src/
     federal-register/           Federal Register API client, sync/ingest/enrich/reconcile logic
 supabase/
   migrations/0001_init.sql  Full schema, indexes, and RLS policies
+  migrations/0002_loosen_read_policies.sql  Loosens anon-client SELECT policies (see CLAUDE.md)
 vercel.json                 Cron schedules for the three /api/cron/* jobs
 ```
 

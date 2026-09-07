@@ -80,42 +80,31 @@ without being asked again.
   worth doing as its own follow-up once the pipeline has run live at least
   once.
 
-## Known blocking issue — RLS will silently break every anon-client read
+## Resolved — RLS anon-read gap (was "Known blocking issue")
 
 Discovered during an adversarial review of the Federal Register ingestion
-work, and **pre-existing** (not introduced by that work — it affects the
-already-built tracker page too, not just anything new):
+work, pre-existing (it affected the already-built tracker page too, not
+just anything new): the SELECT policies on `executive_orders`,
+`ingestion_runs`, `rescinded_prior_orders`, and `agency_actions` in
+`supabase/migrations/0001_init.sql` all required `auth.role() =
+'authenticated'` or `is_admin()` — but Supabase Auth (Phase 5) doesn't exist
+yet, so no request through the anon-key client `getSupabaseClient()` uses
+could ever satisfy them. Every read through the anon client — tracker, EO
+detail, Needs Attention — would have been silently RLS-denied and fallen
+back to `[]` or stale local JSON, with no error surfaced anywhere.
 
-`executive_orders`' and `ingestion_runs`' SELECT policies in
-`supabase/migrations/0001_init.sql` require `auth.role() = 'authenticated'`
-(or `is_admin()`) — but Supabase Auth (Phase 5) doesn't exist yet, so
-**there is currently no way for the anon-key client `getSupabaseClient()`
-uses to ever satisfy either policy.** Once Supabase is actually connected,
-every read through the anon client — the tracker page, the EO detail page,
-and the new Needs Attention page — will be silently RLS-denied and fall back
-to `[]` or stale local JSON, with no error surfaced anywhere. The only
-client that bypasses RLS today is the service-role client the ingestion jobs
-use — which means ingestion would appear to work (writes succeed via
-service-role) while every page reading that data through the anon client
-shows nothing or stale data.
+**Decision (2026-09-07):** loosen those four tables' SELECT policies to
+`using (true)` — see `supabase/migrations/0002_loosen_read_policies.sql`.
+The actual security boundary today is `SITE_PASSWORD`
+(`src/lib/site-auth.ts`), not per-user Supabase auth, so the
+`authenticated`-only read policies were unreachable by design, not a
+deliberate present-day restriction. Write policies (insert/update/delete)
+are unchanged — still `is_admin()`-gated, still only reachable via the
+service-role key the automated jobs use.
 
-This needs a decision, not a fix Claude should make unilaterally: it changes
-a documented security boundary. The two live options —
-
-1. **Loosen the affected SELECT policies to `using (true)`** for the current
-   phase (matching the fact that the *actual* current security boundary is
-   `SITE_PASSWORD`, not per-user Supabase auth — RLS' `authenticated`-only
-   read policies are currently unreachable by design, not a deliberate
-   present-day restriction), tightening them again once Phase 5 ships real
-   accounts.
-2. **Have reads go through the service-role client too**, at least for
-   server-only pages like `/needs-attention` — defers the RLS question
-   entirely until Phase 5, but stretches "service-role" further than its
-   stated purpose ("automated jobs only").
-
-Confirm this is understood and resolved (either option, or another) **before
-connecting Supabase to a live project** — otherwise the very first thing
-that happens is the app looking broken with no error message explaining why.
+**Revisit at Phase 5**: once real per-user accounts ship, tighten these four
+SELECT policies back (e.g. to `auth.role() = 'authenticated'` or a
+role-aware policy) — `0002`'s own header comment says the same.
 
 ## Manual-steps ledger
 
@@ -123,7 +112,7 @@ Steps that need a human, can't be automated away, and how to tell they're done:
 
 | Step | Where | Done when |
 |---|---|---|
-| Create Supabase project + run `supabase/migrations/0001_init.sql` | supabase.com SQL Editor | Tables visible in Supabase's Table Editor |
+| Create Supabase project + run `supabase/migrations/0001_init.sql` then `0002_loosen_read_policies.sql`, in order | supabase.com SQL Editor | Tables visible in Supabase's Table Editor |
 | Paste Supabase URL/anon key/service role key into `.env.local` | local machine, per developer | `isUsingLocalData()` in `src/lib/data.ts` returns `false` |
 | Set `ANTHROPIC_API_KEY` (+ optional `EO_TRACKER_MODEL`) | `.env.local` / deployment env | Content drafts stop being stub text |
 | Set a monthly spending cap on the Anthropic API key | Anthropic Console | Cap visible in the Console's billing limits page |
