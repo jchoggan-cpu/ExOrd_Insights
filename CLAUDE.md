@@ -108,11 +108,14 @@ role-aware policy) — `0002`'s own header comment says the same.
 
 ## Supabase project is connected (2026-09-08)
 
-Project `tjnenceabzlvgozplpsp` ("EO Tracking Tool"). Both migrations are live
-(verified directly against `pg_policies`, not just the migration-history
-log). `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
-`SUPABASE_SERVICE_ROLE_KEY`, and `CRON_SECRET` are set in `.env.local` and in
-Vercel (Production/Preview/Development). `ANTHROPIC_API_KEY` and
+Project `tjnenceabzlvgozplpsp` ("EO Tracking Tool"). Migrations 0001-0004 are
+live — verified directly against `pg_policies`/`information_schema`/
+`pg_indexes`/`pg_constraint`, not just the migration-history log; that
+direct verification is what caught the two issues below, which the log
+alone would have missed. `NEXT_PUBLIC_SUPABASE_URL`,
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and
+`CRON_SECRET` are set in `.env.local` and in Vercel
+(Production/Preview/Development). `ANTHROPIC_API_KEY` and
 `EO_TRACKER_MODEL` were already set in Vercel (Production/Preview only) as
 of 6 days prior — not yet mirrored into local `.env.local` (Vercel won't let
 a Secret-type value be read back via CLI once set; get the value again from
@@ -127,6 +130,29 @@ apply step. A new migration file is no longer a "safe until manually run in
 the SQL Editor" change — **pushing it to this branch is the apply step.**
 Review migration SQL as carefully as you would a direct production change,
 before pushing, not after.
+
+**New rule: never edit an already-applied migration file in place.**
+`0001_init.sql` was edited across four commits as the schema grew (Phase 1
+→ legacy import → safety mitigations → Phase 2), instead of being extended
+via new migration files each time. Supabase's push/GitHub-integration
+tracking works by filename, not content — once "0001" was recorded as
+applied (against an early version of the file), every later edit to that
+same file silently never reached the live database, and `create table if
+not exists` masked it further by no-op'ing instead of erroring. This wasn't
+caught until the Federal Register backfill failed with a missing-column
+error — see `0004_reconcile_executive_orders_drift.sql` for the fix and the
+full diagnosis. Going forward: always add a new migration file for schema
+changes, even a small one, never edit a migration that may already be live.
+
+**Also discovered (0003)**: this project's `postgres` role had default
+table privileges for `anon`/`authenticated`/`service_role` missing
+`select`/`insert`/`update`/`delete` entirely — a genuine Postgres-level
+grant gap (not an RLS policy issue), most likely because the project was
+provisioned through Vercel's Marketplace integration rather than
+supabase.com directly, which appears to skip Supabase's usual
+default-privilege bootstrap. Fixed for existing tables and defaulted going
+forward; if this project is ever recreated from scratch the same gap should
+be expected and checked for.
 
 **Also present, from the Supabase↔Vercel marketplace integration, and
 unused by this app's code** (harmless clutter, not wired to anything):
