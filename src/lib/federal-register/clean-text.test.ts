@@ -25,6 +25,16 @@ describe("cleanFederalRegisterText", () => {
     expect(cleaned).toContain("THE WHITE HOUSE");
     // No leftover multi-space runs from the fixed-width typesetting.
     expect(cleaned).not.toMatch(/ {2,}/);
+    // This fixture is a real captured sample and contains literal NUL bytes
+    // around its masthead/page-break markers — Postgres/PostgREST can't
+    // store those in a text column at all ("unsupported Unicode escape
+    // sequence"), so none may survive cleaning.
+    expect(cleaned).not.toMatch(/[\x00-\x08\x0B\x0C\x0E-\x1F]/);
+  });
+
+  it("strips NUL and other C0 control characters, not just visible artifacts", () => {
+    const withNul = "Section 1. Purpose.\x00\x00 The order continues here.";
+    expect(cleanFederalRegisterText(withNul)).toBe("Section 1. Purpose. The order continues here.");
   });
 
   it("is a no-op on already-clean text", () => {
