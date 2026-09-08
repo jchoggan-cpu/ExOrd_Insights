@@ -106,19 +106,50 @@ service-role key the automated jobs use.
 SELECT policies back (e.g. to `auth.role() = 'authenticated'` or a
 role-aware policy) — `0002`'s own header comment says the same.
 
+## Supabase project is connected (2026-09-08)
+
+Project `tjnenceabzlvgozplpsp` ("EO Tracking Tool"). Both migrations are live
+(verified directly against `pg_policies`, not just the migration-history
+log). `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+`SUPABASE_SERVICE_ROLE_KEY`, and `CRON_SECRET` are set in `.env.local` and in
+Vercel (Production/Preview/Development). `ANTHROPIC_API_KEY` and
+`EO_TRACKER_MODEL` were already set in Vercel (Production/Preview only) as
+of 6 days prior — not yet mirrored into local `.env.local` (Vercel won't let
+a Secret-type value be read back via CLI once set; get the value again from
+wherever it was originally generated if local AI content generation is
+wanted).
+
+**Important workflow change**: the Supabase project's GitHub integration
+auto-deploys everything in `supabase/migrations/` on every push to
+`claude/eo-tracker-planning-z0unry` — confirmed by observing migration
+`0002` go live immediately after an ordinary `git push`, with no separate
+apply step. A new migration file is no longer a "safe until manually run in
+the SQL Editor" change — **pushing it to this branch is the apply step.**
+Review migration SQL as carefully as you would a direct production change,
+before pushing, not after.
+
+**Also present, from the Supabase↔Vercel marketplace integration, and
+unused by this app's code** (harmless clutter, not wired to anything):
+`NEXT_PUBLIC_JCHLQSUPABASE_URL`, `NEXT_PUBLIC_JCHLQSUPABASE_ANON_KEY`,
+`NEXT_PUBLIC_JCHLQSUPABASE_PUBLISHABLE_KEY`, `SUPABASE_PUBLISHABLE_KEY`,
+`SUPABASE_SECRET_KEY`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_URL`,
+`SUPABASE_ANON_KEY`, `SUPABASE_JWT_SECRET`, `POSTGRES_URL`,
+`POSTGRES_PRISMA_URL`, `POSTGRES_URL_NON_POOLING`, `POSTGRES_USER`,
+`POSTGRES_HOST`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE` — this app only
+ever reads the three `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+/ `SUPABASE_SERVICE_ROLE_KEY` names (see `src/lib/supabase.ts`). Safe to
+delete from the Vercel project if the clutter bothers you; not urgent.
+
 ## Manual-steps ledger
 
 Steps that need a human, can't be automated away, and how to tell they're done:
 
 | Step | Where | Done when |
 |---|---|---|
-| Create Supabase project + run `supabase/migrations/0001_init.sql` then `0002_loosen_read_policies.sql`, in order | supabase.com SQL Editor | Tables visible in Supabase's Table Editor |
-| Paste Supabase URL/anon key/service role key into `.env.local` | local machine, per developer | `isUsingLocalData()` in `src/lib/data.ts` returns `false` |
-| Set `ANTHROPIC_API_KEY` (+ optional `EO_TRACKER_MODEL`) | `.env.local` / deployment env | Content drafts stop being stub text |
+| Run `npm run import:supabase` once (loads the 340 legacy rows) — **not safe to re-run**, only after confirming the tables are empty | local machine, after `.env.local` has real Supabase keys | Rows visible in Supabase's Table Editor |
+| Run `npm run backfill:federal-register` once, after `import:supabase` | local machine | `/needs-attention` shows recent runs and the tracker's order count jumps to match the administration-to-date total |
 | Set a monthly spending cap on the Anthropic API key | Anthropic Console | Cap visible in the Console's billing limits page |
 | Set `SITE_PASSWORD` if sharing a deployed URL pre-auth | deployment env vars | `/gate` prompts before the app loads |
-| Generate and set `CRON_SECRET` (`openssl rand -hex 32`) | `.env.local` + Vercel project env vars | `/api/cron/*` returns 401 without it, 200 with the matching Bearer token |
-| Run `npm run backfill:federal-register` once, after Supabase is connected | local machine | `/needs-attention` shows recent runs and the tracker's order count jumps to match the administration-to-date total |
 
 When this list passes ~5 items, review whether any can now be automated (per
 the source rule).

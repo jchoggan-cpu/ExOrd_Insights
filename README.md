@@ -104,6 +104,14 @@ CRON_SECRET=
 
 ### Setting up Supabase
 
+**This project is already connected** (see CLAUDE.md's "Supabase project is
+connected" section for the live project ref, current env var state, and an
+important note: this project's GitHub integration auto-deploys
+`supabase/migrations/` on every push to the production branch — a new
+migration is applied the moment it's pushed, not when someone later runs it
+by hand). The steps below are what a fresh project setup looks like from
+scratch.
+
 1. Create a free project at [supabase.com](https://supabase.com).
 2. In the SQL Editor, run `supabase/migrations/0001_init.sql`, then
    `0002_loosen_read_policies.sql`, **in that order** — this creates the
