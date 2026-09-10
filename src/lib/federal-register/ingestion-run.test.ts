@@ -113,6 +113,105 @@ describe("startRun overlap guard", () => {
     expect(supabase.ingestionRuns[0].status).toBe("running");
   });
 
+  it("marks every stale running row of the same type as superseded, not just the first, before the new run starts", async () => {
+    const supabase = createFakeSupabase({
+      ingestionRuns: [
+        {
+          id: "abandoned-run-1",
+          run_type: "federal_register",
+          status: "running",
+          started_at: minutesAgoIso(STALE_RUN_THRESHOLD_MINUTES + 5),
+        },
+        {
+          id: "abandoned-run-2",
+          run_type: "federal_register",
+          status: "running",
+          started_at: minutesAgoIso(STALE_RUN_THRESHOLD_MINUTES + 1),
+        },
+      ],
+    });
+
+    const runId = await startRun(supabase, "federal_register");
+
+    expect(typeof runId).toBe("string");
+    expect(supabase.ingestionRuns).toHaveLength(3);
+    expect(supabase.ingestionRuns[0]).toMatchObject({ id: "abandoned-run-1", status: "failure" });
+    expect(supabase.ingestionRuns[0].error_message).toMatch(/stale/i);
+    expect(supabase.ingestionRuns[1]).toMatchObject({ id: "abandoned-run-2", status: "failure" });
+    expect(supabase.ingestionRuns[1].error_message).toMatch(/stale/i);
+    expect(supabase.ingestionRuns[2]).toMatchObject({ id: runId, run_type: "federal_register", status: "running" });
+  });
+
+  it("still blocks when one running row is stale and another is fresh, and marks neither as superseded", async () => {
+    const supabase = createFakeSupabase({
+      ingestionRuns: [
+        {
+          id: "abandoned-run",
+          run_type: "federal_register",
+          status: "running",
+          started_at: minutesAgoIso(STALE_RUN_THRESHOLD_MINUTES + 5),
+        },
+        { id: "run-in-flight", run_type: "federal_register", status: "running", started_at: minutesAgoIso(1) },
+      ],
+    });
+
+    await expect(startRun(supabase, "federal_register")).rejects.toThrow(/already in progress/);
+    // Neither the stale nor the fresh row should have been touched — the
+    // guard must refuse before superseding anything once any row is fresh.
+    expect(supabase.ingestionRuns).toHaveLength(2);
+    expect(supabase.ingestionRuns[0]).toMatchObject({ id: "abandoned-run", status: "running" });
+    expect(supabase.ingestionRuns[1]).toMatchObject({ id: "run-in-flight", status: "running" });
+  });
+
+  it("stops at the first failure to mark a stale row superseded when there are multiple stale rows", async () => {
+    const supabase = createFakeSupabase({
+      ingestionRuns: [
+        {
+          id: "abandoned-run-1",
+          run_type: "federal_register",
+          status: "running",
+          started_at: minutesAgoIso(STALE_RUN_THRESHOLD_MINUTES + 5),
+        },
+        {
+          id: "abandoned-run-2",
+          run_type: "federal_register",
+          status: "running",
+          started_at: minutesAgoIso(STALE_RUN_THRESHOLD_MINUTES + 1),
+        },
+      ],
+      failUpdate: { ingestion_runs: "network blip" },
+    });
+
+    await expect(startRun(supabase, "federal_register")).rejects.toThrow(/failed to mark it superseded/i);
+    // No new run gets inserted on top of a guard that couldn't be cleared.
+    expect(supabase.ingestionRuns).toHaveLength(2);
+    expect(supabase.ingestionRuns[0].status).toBe("running");
+    expect(supabase.ingestionRuns[1].status).toBe("running");
+  });
+
+  it("does not touch stale rows of a different run type while starting a run", async () => {
+    const supabase = createFakeSupabase({
+      ingestionRuns: [
+        {
+          id: "other-type-stale",
+          run_type: "federal_register_enrichment",
+          status: "running",
+          started_at: minutesAgoIso(STALE_RUN_THRESHOLD_MINUTES + 5),
+        },
+      ],
+    });
+
+    const runId = await startRun(supabase, "federal_register");
+
+    expect(typeof runId).toBe("string");
+    expect(supabase.ingestionRuns).toHaveLength(2);
+    expect(supabase.ingestionRuns[0]).toMatchObject({
+      id: "other-type-stale",
+      run_type: "federal_register_enrichment",
+      status: "running",
+    });
+  });
+
   it("surfaces a failed overlap check rather than silently starting a second run", async () => {
     const supabase = createFakeSupabase({ failSelect: { ingestion_runs: "connection lost" } });
 

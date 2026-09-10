@@ -19,40 +19,60 @@ const MS_PER_MINUTE = 60_000;
  * abandoned rather than in-flight — most likely a run whose own finishRun
  * write failed after doing its real work — and is marked "failed" as
  * superseded-by-stale so it stops jamming this guard (and the Needs
- * Attention report) for every run after it, forever.
+ * Attention report) for every run after it, forever. More than one
+ * "running" row of the same type can exist at once (see the race window
+ * noted above, or a platform timeout abandoning a run mid-flight); if even
+ * one of them is still fresh the new run is refused, otherwise every one of
+ * them — not just the first — is marked superseded before the new run starts.
  */
 export async function startRun(supabase: SupabaseClient, runType: RunType): Promise<string> {
-  const { data: alreadyRunning, error: checkError } = await supabase
+  // Selecting the plain array (rather than .maybeSingle()) matters here:
+  // .maybeSingle() throws if more than one "running" row of this type ever
+  // coexists — which is reachable (this function's own check-then-insert
+  // race window below, or a platform timeout abandoning a run mid-flight)
+  // — and that throw would jam the overlap guard permanently, defeating the
+  // whole point of the staleness self-heal. An array select degrades
+  // gracefully to any number of rows: 0, 1, or many.
+  const { data: runningRows, error: checkError } = await supabase
     .from("ingestion_runs")
     .select("id, started_at")
     .eq("run_type", runType)
-    .eq("status", "running")
-    .maybeSingle();
+    .eq("status", "running");
   if (checkError) throw new Error(`Failed to check for an in-progress ${runType} run: ${checkError.message}`);
 
-  if (alreadyRunning) {
-    const startedAt = alreadyRunning.started_at as string;
-    const ageMinutes = (Date.now() - new Date(startedAt).getTime()) / MS_PER_MINUTE;
+  const runningWithAge = (runningRows ?? []).map((row) => {
+    const startedAt = row.started_at as string;
+    return {
+      id: row.id as string,
+      startedAt,
+      ageMinutes: (Date.now() - new Date(startedAt).getTime()) / MS_PER_MINUTE,
+    };
+  });
 
-    if (ageMinutes < STALE_RUN_THRESHOLD_MINUTES) {
-      throw new Error(`A ${runType} run (id ${alreadyRunning.id}) is already in progress — skipping to avoid overlap.`);
-    }
+  const freshRun = runningWithAge.find((run) => run.ageMinutes < STALE_RUN_THRESHOLD_MINUTES);
+  if (freshRun) {
+    throw new Error(`A ${runType} run (id ${freshRun.id}) is already in progress — skipping to avoid overlap.`);
+  }
 
+  // None of the running rows are fresh, so every one of them is stale —
+  // mark all of them superseded, not just the first, or a left-behind
+  // sibling would re-jam this same guard on the very next invocation.
+  for (const staleRun of runningWithAge) {
     try {
-      await finishRun(supabase, alreadyRunning.id as string, {
+      await finishRun(supabase, staleRun.id, {
         status: "failure",
         newCount: 0,
         updatedCount: 0,
         errorMessage:
           `Superseded as stale: still "running" after more than ${STALE_RUN_THRESHOLD_MINUTES} minutes ` +
-          `(started at ${startedAt}) — most likely its own finishRun update failed.`,
+          `(started at ${staleRun.startedAt}) — most likely its own finishRun update failed.`,
       });
     } catch (err) {
       // Don't silently start a second run on top of a guard we couldn't
       // actually clear — if we can't even write the stale-supersession
       // marker, something is wrong with writes to ingestion_runs itself.
       throw new Error(
-        `Found a stale ${runType} run (id ${alreadyRunning.id}) but failed to mark it superseded: ${formatError(err)}`,
+        `Found a stale ${runType} run (id ${staleRun.id}) but failed to mark it superseded: ${formatError(err)}`,
       );
     }
   }
