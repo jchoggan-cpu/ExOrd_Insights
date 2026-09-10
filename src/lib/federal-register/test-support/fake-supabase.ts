@@ -3,8 +3,10 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 // A minimal in-memory stand-in for the Supabase client, supporting exactly
 // the query shapes this project's Federal Register code uses (sync.ts,
-// reconcile-legacy.ts, ingestion-run.ts, and the three job orchestrators).
-// Exists only so that logic can be unit tested without a real database —
+// reconcile-legacy.ts, ingestion-run.ts, and the three job orchestrators),
+// plus the list/detail/by-id executive-order reads in
+// src/lib/executive-orders.ts (data.test.ts). Exists only so that logic can
+// be unit tested without a real database —
 // the payoff of passing the client in as a parameter (dependency injection)
 // rather than reaching for it. Deliberately a much narrower shape than the
 // real SupabaseClient, cast below — this file is test-only and never
@@ -33,6 +35,7 @@ function parseOrFilter(filterString: string): Predicate {
 
 class FakeQueryBuilder {
   private predicates: Predicate[] = [];
+  private orderBy?: { column: string; ascending: boolean };
   constructor(
     private rows: Row[],
     private forcedError?: string,
@@ -40,6 +43,11 @@ class FakeQueryBuilder {
 
   eq(column: string, value: unknown) {
     this.predicates.push((row) => row[column] === value);
+    return this;
+  }
+
+  in(column: string, values: unknown[]) {
+    this.predicates.push((row) => values.includes(row[column]));
     return this;
   }
 
@@ -58,8 +66,23 @@ class FakeQueryBuilder {
     return this;
   }
 
+  /** Chained sort — mirrors real supabase-js's `.order(column, { ascending })`, applied before `.limit()`/the bare-awaited result. */
+  order(column: string, opts?: { ascending?: boolean }) {
+    this.orderBy = { column, ascending: opts?.ascending ?? true };
+    return this;
+  }
+
   private matching(): Row[] {
-    return this.rows.filter((row) => this.predicates.every((p) => p(row)));
+    const rows = this.rows.filter((row) => this.predicates.every((p) => p(row)));
+    if (!this.orderBy) return rows;
+    const { column, ascending } = this.orderBy;
+    return [...rows].sort((a, b) => {
+      const av = a[column];
+      const bv = b[column];
+      if (av === bv) return 0;
+      const cmp = (av as string | number) < (bv as string | number) ? -1 : 1;
+      return ascending ? cmp : -cmp;
+    });
   }
 
   async maybeSingle(): Promise<QueryResult<Row>> {

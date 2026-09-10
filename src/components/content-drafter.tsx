@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { ContentType, ExecutiveOrder } from "@/lib/types";
+import type { ContentType, ExecutiveOrderListItem } from "@/lib/types";
 import { CONTENT_TYPE_LABELS } from "@/lib/types";
 
 const CONTENT_TYPES = Object.keys(CONTENT_TYPE_LABELS) as ContentType[];
@@ -21,7 +21,7 @@ export function ContentDrafter({
   orders,
   initialSelectedId,
 }: {
-  orders: ExecutiveOrder[];
+  orders: ExecutiveOrderListItem[];
   initialSelectedId?: string;
 }) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(

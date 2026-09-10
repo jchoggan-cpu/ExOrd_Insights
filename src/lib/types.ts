@@ -101,6 +101,35 @@ export interface ExecutiveOrder {
   updatedAt: string;
 }
 
+/**
+ * List-shaped view of an ExecutiveOrder: exactly the columns the tracker
+ * table, the draft picker, and the Needs Attention page render (verified
+ * against src/components/eo-table.tsx). Deliberately a `Pick`, not the full
+ * `ExecutiveOrder` — omitting `fullText`/`sourceNotes`/etc. entirely (rather
+ * than typing them as always-`undefined`) means a caller that tries to read
+ * one off a list row gets a compile error, not a silent `undefined` at
+ * runtime. See getExecutiveOrders() vs. getExecutiveOrderById() in
+ * src/lib/executive-orders.ts.
+ */
+export type ExecutiveOrderListItem = Pick<
+  ExecutiveOrder,
+  | "id"
+  | "eoNumber"
+  | "actionType"
+  | "title"
+  | "dateSigned"
+  | "status"
+  | "subjectArea"
+  | "practiceAreas"
+  | "industries"
+  | "legalChallenges"
+  | "needsReview"
+  | "needsReviewReason"
+  | "ingestionFlagged"
+  | "ingestionFlagReason"
+  | "aiSummary"
+>;
+
 export interface ContentDraft {
   id: string;
   eoIds: string[];

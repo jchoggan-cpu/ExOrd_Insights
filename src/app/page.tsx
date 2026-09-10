@@ -2,6 +2,14 @@ import { getExecutiveOrders, isUsingLocalData } from "@/lib/data";
 import { EoTable } from "@/components/eo-table";
 import { LocalDataBanner } from "@/components/local-data-banner";
 
+// Reads live tracker data (cron jobs ingest new orders continuously) — must
+// never be statically prerendered, or new/updated orders wouldn't show up
+// without a redeploy. Next's legacy caching model defaults a page like this
+// ("looks static — just reads and renders") to prerender-and-cache-forever,
+// which is exactly the wrong default for a tracker whose whole value is
+// currency. Same reasoning as src/app/needs-attention/page.tsx.
+export const dynamic = "force-dynamic";
+
 export default async function TrackerPage() {
   const orders = await getExecutiveOrders();
   const usingLocalData = isUsingLocalData();

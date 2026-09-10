@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import type { ExecutiveOrder } from "@/lib/types";
+import type { ExecutiveOrderListItem } from "@/lib/types";
 import { PRACTICE_AREA_NAMES, INDUSTRIES } from "@/lib/taxonomy";
 import { StatusBadge } from "@/components/status-badge";
 import { TagPill } from "@/components/tag-pill";
@@ -11,7 +11,7 @@ import { PriorAdministrationBadge } from "@/components/prior-administration-badg
 import { formatDate } from "@/lib/format-date";
 import { isPriorAdministrationHoldover } from "@/lib/federal-register/prior-administration";
 
-export function EoTable({ orders }: { orders: ExecutiveOrder[] }) {
+export function EoTable({ orders }: { orders: ExecutiveOrderListItem[] }) {
   const [search, setSearch] = useState("");
   const [practiceFilter, setPracticeFilter] = useState("");
   const [industryFilter, setIndustryFilter] = useState("");

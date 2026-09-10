@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getExecutiveOrders } from "@/lib/data";
+import { getExecutiveOrdersByIds } from "@/lib/data";
 import { generateContent } from "@/lib/content-generation";
 import type { ContentType } from "@/lib/types";
 
@@ -31,8 +31,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const allOrders = await getExecutiveOrders();
-  const selected = allOrders.filter((eo) => eoIds.includes(eo.id));
+  // Full-column fetch of exactly the selected orders, not the whole table:
+  // generateContent needs eo.fullText (see content-generation.ts) to verify
+  // quoted material against source text, so this can't use the list-shaped
+  // getExecutiveOrders() the rest of the app reads from.
+  const selected = await getExecutiveOrdersByIds(eoIds);
 
   if (selected.length === 0) {
     return NextResponse.json({ error: "No matching executive orders found." }, { status: 404 });
