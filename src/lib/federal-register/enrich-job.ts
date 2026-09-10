@@ -3,7 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { getConfiguredModel } from "@/lib/ai-model";
 import { formatError } from "@/lib/format-error";
 import { ENRICH_BATCH_SIZE } from "@/lib/federal-register/constants";
-import { finishRun, startRun } from "@/lib/federal-register/ingestion-run";
+import { finishRunSafely, startRun } from "@/lib/federal-register/ingestion-run";
 import { findUnverifiedQuotes } from "@/lib/federal-register/quote-verify";
 import { summarizeDocument } from "@/lib/federal-register/summarize";
 
@@ -42,8 +42,19 @@ export interface JobResult {
  * full_text (a code check, not a prompt instruction) before saving. A
  * summary with an unverifiable quote is never saved — the row is flagged
  * for review instead, since a retry can't fix a hallucination.
+ *
+ * `anthropicClient` is injectable (rule 3) — the cron route omits it and
+ * gets a real client; tests inject a fake instead of making a real
+ * Anthropic API call. Constructed inside the try below rather than as a
+ * default parameter value, since a default is evaluated before the body
+ * runs: were a future SDK version to validate credentials eagerly at
+ * construction, that throw would escape past startRun/finishRun and leave
+ * the failure unrecorded in ingestion_runs instead of logged.
  */
-export async function runEnrichJob(supabase: SupabaseClient): Promise<JobResult> {
+export async function runEnrichJob(
+  supabase: SupabaseClient,
+  anthropicClient?: Anthropic,
+): Promise<JobResult> {
   const runId = await startRun(supabase, "federal_register_enrichment");
 
   try {
@@ -56,7 +67,7 @@ export async function runEnrichJob(supabase: SupabaseClient): Promise<JobResult>
     if (error) throw new Error(`Failed to load rows needing enrichment: ${error.message}`);
 
     const rows = (data ?? []) as EnrichableRow[];
-    const client = new Anthropic();
+    const client = anthropicClient ?? new Anthropic();
     const model = getConfiguredModel();
 
     let updatedCount = 0;
@@ -109,12 +120,12 @@ export async function runEnrichJob(supabase: SupabaseClient): Promise<JobResult>
 
     const status = errors.length > 0 ? "partial" : "success";
     const errorMessage = errors.length > 0 ? errors.join("; ") : undefined;
-    await finishRun(supabase, runId, { status, newCount: 0, updatedCount, errorMessage });
+    await finishRunSafely(supabase, runId, { status, newCount: 0, updatedCount, errorMessage });
 
     return { runId, status, updatedCount, flaggedCount, errorMessage };
   } catch (err) {
     const errorMessage = formatError(err);
-    await finishRun(supabase, runId, { status: "failure", newCount: 0, updatedCount: 0, errorMessage });
+    await finishRunSafely(supabase, runId, { status: "failure", newCount: 0, updatedCount: 0, errorMessage });
     return { runId, status: "failure", updatedCount: 0, flaggedCount: 0, errorMessage };
   }
 }

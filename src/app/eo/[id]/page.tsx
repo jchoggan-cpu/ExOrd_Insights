@@ -5,13 +5,9 @@ import { StatusBadge } from "@/components/status-badge";
 import { TagPill } from "@/components/tag-pill";
 import { LocalDataBanner } from "@/components/local-data-banner";
 import { NeedsReviewBadge } from "@/components/needs-review-badge";
-
-function formatDate(iso: string | undefined) {
-  if (!iso) return "—";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-}
+import { PriorAdministrationBadge } from "@/components/prior-administration-badge";
+import { formatDate } from "@/lib/format-date";
+import { isPriorAdministrationHoldover } from "@/lib/federal-register/prior-administration";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -49,8 +45,11 @@ export default async function EoDetailPage({
             </h1>
             <div className="mt-2 flex items-center gap-3">
               <StatusBadge status={eo.status} />
-              <span className="text-sm text-muted">Signed {formatDate(eo.dateSigned)}</span>
+              <span className="text-sm text-muted">Signed {formatDate(eo.dateSigned, "long")}</span>
               {eo.needsReview && <NeedsReviewBadge reason={eo.needsReviewReason} />}
+              {isPriorAdministrationHoldover(eo.dateSigned) && (
+                <PriorAdministrationBadge dateSigned={eo.dateSigned} />
+              )}
             </div>
           </div>
           <Link
@@ -102,7 +101,7 @@ export default async function EoDetailPage({
                 {eo.keyDates.map((kd) => (
                   <li key={kd.label} className="flex justify-between gap-4 border-b border-border/60 py-1 last:border-0">
                     <span>{kd.label}</span>
-                    <span className="whitespace-nowrap text-muted">{formatDate(kd.date)}</span>
+                    <span className="whitespace-nowrap text-muted">{formatDate(kd.date, "long")}</span>
                   </li>
                 ))}
               </ul>
@@ -166,7 +165,7 @@ export default async function EoDetailPage({
                       >
                         {n.title}
                       </a>
-                      <span className="text-xs text-muted">{formatDate(n.date)}</span>
+                      <span className="text-xs text-muted">{formatDate(n.date, "long")}</span>
                     </div>
                     <p className="mt-1 text-xs text-muted">{n.source}</p>
                     <p className="mt-2">{n.snippet}</p>

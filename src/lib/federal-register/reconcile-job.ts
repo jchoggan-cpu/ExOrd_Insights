@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { formatError } from "@/lib/format-error";
 import { fetchAllDocuments, fetchDocumentDetail, fetchRawText, MINIMAL_FIELDS } from "@/lib/federal-register/client";
 import { ADMINISTRATION_START_DATE } from "@/lib/federal-register/constants";
-import { finishRun, startRun } from "@/lib/federal-register/ingestion-run";
+import { finishRunSafely, startRun } from "@/lib/federal-register/ingestion-run";
 import { syncDocument } from "@/lib/federal-register/sync";
 
 export interface ReconcileJobResult {
@@ -16,6 +16,17 @@ export interface ReconcileJobResult {
   errorMessage?: string;
 }
 
+// Federal Register client calls this job needs, as an injectable dependency
+// (rule 3) — defaults to the real network-calling client so every existing
+// caller (the cron route) needs no change. Tests inject fakes instead.
+export interface ReconcileJobDeps {
+  fetchAllDocuments: typeof fetchAllDocuments;
+  fetchDocumentDetail: typeof fetchDocumentDetail;
+  fetchRawText: typeof fetchRawText;
+}
+
+const defaultDeps: ReconcileJobDeps = { fetchAllDocuments, fetchDocumentDetail, fetchRawText };
+
 /**
  * Weekly job: a cheap document_number-only diff against the API over the
  * FULL administration-to-date range (not just the daily job's trailing
@@ -24,11 +35,14 @@ export interface ReconcileJobResult {
  * its own run type so a completeness gap is never confused with an
  * ingestion failure.
  */
-export async function runReconcileJob(supabase: SupabaseClient): Promise<ReconcileJobResult> {
+export async function runReconcileJob(
+  supabase: SupabaseClient,
+  deps: ReconcileJobDeps = defaultDeps,
+): Promise<ReconcileJobResult> {
   const runId = await startRun(supabase, "federal_register_reconciliation");
 
   try {
-    const apiDocuments = await fetchAllDocuments({
+    const apiDocuments = await deps.fetchAllDocuments({
       publicationDateGte: ADMINISTRATION_START_DATE,
       fields: MINIMAL_FIELDS,
     });
@@ -59,8 +73,8 @@ export async function runReconcileJob(supabase: SupabaseClient): Promise<Reconci
 
     for (const gap of missing) {
       try {
-        const fullDoc = await fetchDocumentDetail(gap.document_number);
-        const rawText = await fetchRawText(fullDoc.raw_text_url);
+        const fullDoc = await deps.fetchDocumentDetail(gap.document_number);
+        const rawText = await deps.fetchRawText(fullDoc.raw_text_url);
         const outcome = await syncDocument(supabase, fullDoc, rawText);
         if (outcome.action === "inserted") newCount++;
         else if (outcome.action === "updated") updatedCount++;
@@ -73,7 +87,7 @@ export async function runReconcileJob(supabase: SupabaseClient): Promise<Reconci
 
     const status = errors.length > 0 ? "partial" : "success";
     const errorMessage = errors.length > 0 ? errors.join("; ") : undefined;
-    await finishRun(supabase, runId, { status, newCount, updatedCount, errorMessage });
+    await finishRunSafely(supabase, runId, { status, newCount, updatedCount, errorMessage });
 
     return {
       runId,
@@ -87,7 +101,7 @@ export async function runReconcileJob(supabase: SupabaseClient): Promise<Reconci
     };
   } catch (err) {
     const errorMessage = formatError(err);
-    await finishRun(supabase, runId, { status: "failure", newCount: 0, updatedCount: 0, errorMessage });
+    await finishRunSafely(supabase, runId, { status: "failure", newCount: 0, updatedCount: 0, errorMessage });
     return {
       runId,
       status: "failure",

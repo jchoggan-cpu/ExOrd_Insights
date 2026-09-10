@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { cleanFederalRegisterText } from "@/lib/federal-register/clean-text";
+import { checkDateSanity } from "@/lib/federal-register/date-sanity";
 import { parseDispositionNotes } from "@/lib/federal-register/parse-disposition";
 import type { FederalRegisterDocument } from "@/lib/federal-register/types";
 
@@ -172,7 +173,11 @@ export async function syncDocument(
       }
     }
 
-    const { error: insertError } = await supabase.from("executive_orders").insert(record);
+    const dateSanityReason = checkDateSanity(record);
+    const insertRecord = dateSanityReason
+      ? { ...record, needs_review: true, review_reason: dateSanityReason }
+      : record;
+    const { error: insertError } = await supabase.from("executive_orders").insert(insertRecord);
     if (insertError) throw new Error(`Insert failed for ${doc.document_number}: ${insertError.message}`);
     return { documentNumber: doc.document_number, action: "inserted" };
   }
@@ -214,6 +219,7 @@ export async function syncDocument(
   // record.document_number is deliberately not applied here — the row
   // keeps its original document_number as its stable identity; the
   // correction's own number is tracked in applied_correction_document_numbers instead.
+  const correctionDateSanityReason = checkDateSanity(record);
   const { error } = await supabase
     .from("executive_orders")
     .update({
@@ -231,6 +237,9 @@ export async function syncDocument(
       applied_correction_document_numbers: [
         ...new Set([...(target.applied_correction_document_numbers ?? []), doc.document_number]),
       ],
+      ...(correctionDateSanityReason
+        ? { needs_review: true, review_reason: correctionDateSanityReason }
+        : {}),
     })
     .eq("id", target.id);
   if (error) throw new Error(`Failed to apply correction ${doc.document_number}: ${error.message}`);

@@ -57,20 +57,36 @@ without being asked again.
   test coverage.** Not being retrofitted en masse — rule 9 applies to code
   written or touched from here forward; bring a file under test when you're
   already in it for another reason, not as a separate sweep.
-- **The three Federal Register job orchestration functions** (`ingest-job.ts`,
-  `enrich-job.ts`, `reconcile-job.ts`) are not integration-tested end to end —
-  doing so would mean mocking both the Federal Register API and Supabase
-  together, which is a lot of test-infrastructure weight for what's mostly
-  wiring. What each depends on **is** tested directly: `sync.ts` (the actual
-  insert/update/flag decisions, via `test-support/fake-supabase.ts`),
-  `clean-text.ts`, `parse-disposition.ts`, `quote-verify.ts`, `cron-auth.ts`,
-  and `summarize.ts`'s response validation, all against real captured API
-  samples (`fixtures/`). **Status: accepted for now** — revisit if a bug ever
-  turns up in the orchestration layer itself rather than in one of the
-  pieces it calls. `ingestion-run.ts`'s overlap guard is one specific piece
-  of that untested orchestration layer worth calling out — it's the thing
-  that prevents two overlapping cron invocations, and a regression there
-  wouldn't be caught by anything currently in the suite.
+- ~~**The three Federal Register job orchestration functions** are not
+  integration-tested~~ **Closed (2026-09-09).** `ingest-job.test.ts`,
+  `enrich-job.test.ts`, `reconcile-job.test.ts`, and `ingestion-run.test.ts`
+  now cover all three jobs (happy path, per-item error isolation, "the list
+  request itself fails") plus the overlap guard specifically (blocks a
+  second concurrent run; releases on both the success and failure paths),
+  via an extended `test-support/fake-supabase.ts` (now also handles
+  `.insert().select().single()`, a bare-awaited select query, and forced
+  select/update errors). `fetchAllDocuments`/`fetchDocumentDetail`/
+  `fetchRawText` and `enrich-job.ts`'s `new Anthropic()` are now injectable
+  dependency parameters defaulting to the real implementations (rule 3),
+  so no test makes a real network or Anthropic call — and no caller
+  (the three `src/app/api/cron/*` routes) needed to change, since the
+  injection is optional.
+  **Bug found, and fixed (2026-09-09)**: none of the three jobs wrapped their
+  final `finishRun(...)` call in a try/catch — if that write itself failed,
+  the promise rejected with the `ingestion_runs` row stuck at
+  `status: "running"` forever, which then made `startRun`'s overlap guard
+  refuse every future run of that type until a human fixed the row by hand.
+  Fixed with the staleness-timeout approach: `startRun` now treats a
+  "running" row older than `STALE_RUN_THRESHOLD_MINUTES` (30 — see
+  `constants.ts`) as abandoned, marks it `failed` as superseded, and lets the
+  new run proceed — so it self-heals rows already stuck, not just future
+  ones. The three jobs' `finishRun` calls were also made non-fatal
+  (`finishRunSafely`, in `ingestion-run.ts`) so a failed bookkeeping write no
+  longer crashes the job itself; the failure is still logged via
+  `console.error` rather than swallowed silently. Covered by
+  `ingestion-run.test.ts` (fresh-blocks / stale-self-heals / different-type-
+  unaffected / stale-mark-failure-surfaces-loudly) and the rewritten
+  ingest-job.test.ts scenario formerly named "BUG:".
 - **`ingest-job.ts`/`enrich-job.ts`/`reconcile-job.ts` share a lot of
   structural duplication** (a near-identical fetch/sync/tally loop, near-
   identical result interfaces, near-identical try/catch/finishRun-on-failure

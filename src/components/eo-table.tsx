@@ -7,13 +7,9 @@ import { PRACTICE_AREA_NAMES, INDUSTRIES } from "@/lib/taxonomy";
 import { StatusBadge } from "@/components/status-badge";
 import { TagPill } from "@/components/tag-pill";
 import { NeedsReviewBadge } from "@/components/needs-review-badge";
-
-function formatDate(iso: string | undefined) {
-  if (!iso) return "—";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-}
+import { PriorAdministrationBadge } from "@/components/prior-administration-badge";
+import { formatDate } from "@/lib/format-date";
+import { isPriorAdministrationHoldover } from "@/lib/federal-register/prior-administration";
 
 export function EoTable({ orders }: { orders: ExecutiveOrder[] }) {
   const [search, setSearch] = useState("");
@@ -113,6 +109,11 @@ export function EoTable({ orders }: { orders: ExecutiveOrder[] }) {
                   {eo.needsReview && (
                     <div className="mt-1">
                       <NeedsReviewBadge reason={eo.needsReviewReason} />
+                    </div>
+                  )}
+                  {isPriorAdministrationHoldover(eo.dateSigned) && (
+                    <div className="mt-1">
+                      <PriorAdministrationBadge dateSigned={eo.dateSigned} />
                     </div>
                   )}
                   {eo.subjectArea.length > 0 && (

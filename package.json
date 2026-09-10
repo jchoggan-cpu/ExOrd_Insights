@@ -14,7 +14,8 @@
     "test": "vitest run",
     "import:legacy": "python3 scripts/import_legacy_tracker.py",
     "import:supabase": "tsx scripts/import-to-supabase.ts",
-    "backfill:federal-register": "tsx scripts/backfill-federal-register.ts"
+    "backfill:federal-register": "tsx scripts/backfill-federal-register.ts",
+    "diagnostics": "tsx scripts/data-diagnostics.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.123.0",
