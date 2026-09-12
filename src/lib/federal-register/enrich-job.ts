@@ -4,6 +4,7 @@ import { createAnthropicClient, describeAiProvider, getSummaryModel } from "@/li
 import { loadActiveSummaryPrompt } from "@/lib/summary-prompt/store";
 import { renderSummaryPrompt } from "@/lib/summary-prompt/render";
 import { formatDeliverables } from "@/lib/federal-register/format-deliverables";
+import { recordApiUsage } from "@/lib/usage/record";
 import { formatError } from "@/lib/format-error";
 import { ENRICH_BATCH_SIZE } from "@/lib/federal-register/constants";
 import { finishRunSafely, startRun } from "@/lib/federal-register/ingestion-run";
@@ -98,7 +99,7 @@ export async function runEnrichJob(
     for (const row of rows) {
       try {
         if (!row.full_text) continue; // satisfies TypeScript; excluded by the query above already
-        const result = await summarizeDocument({
+        const { result, usage } = await summarizeDocument({
           client,
           model,
           systemPrompt,
@@ -108,6 +109,12 @@ export async function runEnrichJob(
             fullText: row.full_text,
           },
         });
+
+        // Recorded before the quote check, and outside the per-row failure
+        // path below, because the call is billed whether or not its output
+        // survives review — a flagged row still costs money and must still
+        // appear in the spend total.
+        await recordApiUsage(supabase, { feature: "summarize", model, usage, ingestionRunId: runId });
 
         const unverified = findUnverifiedQuotes(result.summary, row.full_text);
         if (unverified.length > 0) {

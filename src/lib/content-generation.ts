@@ -2,6 +2,7 @@ import type { ContentType, ExecutiveOrder } from "@/lib/types";
 import { CONTENT_TYPE_LABELS } from "@/lib/types";
 import { findUnverifiedQuotes } from "@/lib/federal-register/quote-verify";
 import { createAnthropicClient, extractTextBlock, getConfiguredModel, hasAiCredentials } from "@/lib/ai-model";
+import { toTokenUsage, type TokenUsage } from "@/lib/usage/pricing";
 
 // Content-type-specific length guidance and an output-token ceiling. Kept
 // short since these are drafts a human will edit, not final copy.
@@ -96,6 +97,10 @@ export interface GenerateContentResult {
   unverifiedQuotes: string[];
   /** False when none of the referenced orders have full_text yet — an empty unverifiedQuotes then means "not checked," not "verified clean," and the UI must not conflate the two. */
   quotesWereChecked: boolean;
+  /** What the call consumed, for the spend ticker. Absent for a stub draft, which makes no call. */
+  usage?: TokenUsage;
+  /** The model that produced this, so the caller can price the usage above. */
+  model?: string;
 }
 
 function buildStubDraft(orders: ExecutiveOrder[], contentType: ContentType): string {
@@ -129,6 +134,7 @@ export async function generateContent({
 
   const { instructions, maxTokens } = CONTENT_TYPE_GUIDANCE[contentType];
   const client = createAnthropicClient();
+  const model = getConfiguredModel();
 
   const userPrompt = [
     `Content type: ${CONTENT_TYPE_LABELS[contentType]}`,
@@ -140,7 +146,7 @@ export async function generateContent({
   ].join("\n");
 
   const response = await client.messages.create({
-    model: getConfiguredModel(),
+    model,
     max_tokens: maxTokens,
     system: buildSystemPrompt(styleGuide),
     messages: [{ role: "user", content: userPrompt }],
@@ -151,6 +157,8 @@ export async function generateContent({
   return {
     draftText,
     isStub: false,
+    usage: toTokenUsage(response.usage),
+    model,
     ...computeUnverifiedQuotes(draftText, orders),
   };
 }

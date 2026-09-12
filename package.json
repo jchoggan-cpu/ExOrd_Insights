@@ -16,7 +16,8 @@
     "import:supabase": "tsx scripts/import-to-supabase.ts",
     "backfill:federal-register": "tsx scripts/backfill-federal-register.ts",
     "diagnostics": "tsx scripts/data-diagnostics.ts",
-    "draft:summaries": "tsx scripts/draft-summaries.ts"
+    "draft:summaries": "tsx scripts/draft-summaries.ts",
+    "enrich:all": "tsx scripts/enrich-all.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.123.0",

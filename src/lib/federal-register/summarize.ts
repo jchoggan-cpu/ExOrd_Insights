@@ -1,6 +1,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { extractTextBlock } from "@/lib/ai-model";
 import { INDUSTRIES, PRACTICE_AREA_NAMES, SUBJECT_AREAS } from "@/lib/taxonomy";
+import { toTokenUsage, type TokenUsage } from "@/lib/usage/pricing";
 
 /**
  * Sends one document to the model and validates what comes back.
@@ -129,6 +130,12 @@ export function parseSummaryResponse(rawText: string): SummarizeResult {
   };
 }
 
+export interface SummarizeOutcome {
+  result: SummarizeResult;
+  /** Returned rather than recorded here, so this file keeps one job and the caller owns the database. */
+  usage: TokenUsage;
+}
+
 export interface SummarizeDocumentParams {
   client: Anthropic;
   model: string;
@@ -142,11 +149,18 @@ export async function summarizeDocument({
   model,
   systemPrompt,
   input,
-}: SummarizeDocumentParams): Promise<SummarizeResult> {
+}: SummarizeDocumentParams): Promise<SummarizeOutcome> {
   const response = await client.messages.create({
     model,
     max_tokens: SUMMARY_MAX_TOKENS,
-    system: systemPrompt,
+    // The system prompt is identical on every call and ~3,400 tokens — over
+    // a 276-row backfill that is ~930k of the ~1.6M input tokens sent, paid
+    // at full price each time. Marking it cached turns all but the first
+    // into a cache read at a tenth the rate. Hits show up as
+    // cache_read_input_tokens on /usage: if that stays zero, the prefix is
+    // below this model's minimum cacheable size and caching is doing
+    // nothing — which is silent, hence the dedicated column.
+    system: [{ type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } }],
     messages: [
       {
         role: "user",
@@ -155,5 +169,8 @@ export async function summarizeDocument({
     ],
   });
 
-  return parseSummaryResponse(extractTextBlock(response));
+  return {
+    result: parseSummaryResponse(extractTextBlock(response)),
+    usage: toTokenUsage(response.usage),
+  };
 }

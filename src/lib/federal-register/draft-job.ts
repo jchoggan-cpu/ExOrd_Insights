@@ -6,6 +6,7 @@ import { renderSummaryPrompt } from "@/lib/summary-prompt/render";
 import { summarizeDocument } from "@/lib/federal-register/summarize";
 import { findUnverifiedQuotes } from "@/lib/federal-register/quote-verify";
 import { formatError } from "@/lib/format-error";
+import { recordApiUsage } from "@/lib/usage/record";
 
 /**
  * Writes AI draft summaries for rows that ALREADY have a summary — the 338
@@ -93,7 +94,7 @@ export async function runDraftJob(
     try {
       if (!row.full_text) continue; // satisfies TypeScript; excluded by the query above already
 
-      const summary = await summarizeDocument({
+      const { result: summary, usage } = await summarizeDocument({
         client,
         model,
         systemPrompt,
@@ -103,6 +104,8 @@ export async function runDraftJob(
           fullText: row.full_text,
         },
       });
+
+      await recordApiUsage(supabase, { feature: "draft", model, usage });
 
       const unverifiedQuotes = findUnverifiedQuotes(summary.summary, row.full_text);
       if (unverifiedQuotes.length > 0) result.flaggedQuoteCount++;

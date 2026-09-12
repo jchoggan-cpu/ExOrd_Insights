@@ -5,6 +5,7 @@ const NAV_LINKS = [
   { href: "/draft", label: "Draft Content" },
   { href: "/needs-attention", label: "Needs Attention" },
   { href: "/prompt", label: "Summary Prompt" },
+  { href: "/usage", label: "API Spend" },
 ];
 
 export function SiteHeader() {

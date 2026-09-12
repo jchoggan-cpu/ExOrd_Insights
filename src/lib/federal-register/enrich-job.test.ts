@@ -16,7 +16,17 @@ function createFakeAnthropic(responses: Array<{ text: string } | { throw: string
         call++;
         if (!next) throw new Error("createFakeAnthropic: ran out of scripted responses");
         if ("throw" in next) throw new Error(next.throw);
-        return { content: [{ type: "text", text: next.text }], stop_reason: "end_turn" };
+        return {
+          content: [{ type: "text", text: next.text }],
+          stop_reason: "end_turn",
+          // Mirrors the real response so the usage-recording path is exercised.
+          usage: {
+            input_tokens: 100,
+            output_tokens: 50,
+            cache_creation_input_tokens: 0,
+            cache_read_input_tokens: 3000,
+          },
+        };
       },
     },
   } as unknown as Anthropic;
@@ -66,6 +76,39 @@ describe("runEnrichJob", () => {
       status: "success",
       updated_count: 1,
     });
+  });
+
+  it("records what each call cost, including for a row flagged and not saved", async () => {
+    const supabase = createFakeSupabase({
+      rows: [
+        {
+          id: "row-1",
+          title: "Some Order",
+          action_type: "Executive Order",
+          full_text: "The order directs agencies to review the policy.",
+          manually_edited_fields: [],
+          ai_summary: null,
+        },
+      ],
+    });
+    // A quote that isn't in full_text: the row is flagged, not saved — but
+    // the model call still happened and still cost money.
+    const anthropic = createFakeAnthropic([{ text: summaryJson('It declares a "national emergency".') }]);
+
+    const result = await runEnrichJob(supabase, anthropic);
+    expect(result.flaggedCount).toBe(1);
+
+    const { data: usage } = await supabase.from("api_usage").select("*");
+    expect(usage).toHaveLength(1);
+    expect(usage![0]).toMatchObject({
+      feature: "summarize",
+      input_tokens: 100,
+      output_tokens: 50,
+      cache_read_input_tokens: 3000,
+      ingestion_run_id: result.runId,
+      priced: true,
+    });
+    expect(Number(usage![0].cost_usd)).toBeGreaterThan(0);
   });
 
   it("leaves the deliverable column alone when the prompt never asked for deliverables", async () => {

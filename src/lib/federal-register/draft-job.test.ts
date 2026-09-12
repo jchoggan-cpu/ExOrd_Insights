@@ -12,7 +12,17 @@ function fakeAnthropic(responses: Array<{ text: string } | { throw: string }>): 
         const next = responses[call++];
         if (!next) throw new Error("fakeAnthropic: ran out of scripted responses");
         if ("throw" in next) throw new Error(next.throw);
-        return { content: [{ type: "text", text: next.text }], stop_reason: "end_turn" };
+        return {
+          content: [{ type: "text", text: next.text }],
+          stop_reason: "end_turn",
+          // Mirrors the real response so the usage-recording path is exercised.
+          usage: {
+            input_tokens: 100,
+            output_tokens: 50,
+            cache_creation_input_tokens: 0,
+            cache_read_input_tokens: 3000,
+          },
+        };
       },
     },
   } as unknown as Anthropic;
@@ -59,6 +69,18 @@ describe("runDraftJob", () => {
       summary: "This EO directs agencies to review the policy.",
       subject_area: [SUBJECT_AREAS[0]],
     });
+  });
+
+  it("records what each draft call cost", async () => {
+    const supabase = createFakeSupabase({ rows: [curatedRow("row-1")] });
+    await runDraftJob(supabase, {
+      anthropicClient: fakeAnthropic([{ text: summaryJson("A draft.") }]),
+      limit: 10,
+    });
+
+    const { data: usage } = await supabase.from("api_usage").select("*");
+    expect(usage).toHaveLength(1);
+    expect(usage![0]).toMatchObject({ feature: "draft", model: "claude-fable-5" });
   });
 
   it("skips rows with no summary — those belong to the nightly enrich job", async () => {
