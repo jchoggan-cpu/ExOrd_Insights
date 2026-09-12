@@ -1,7 +1,14 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseClient } from "@/lib/supabase";
 import legacyExecutiveOrders from "@/data/legacy-import/executive-orders.json";
 import type { ExecutiveOrder, ExecutiveOrderListItem } from "@/lib/types";
+import {
+  applyDuplicateFlag,
+  flagDuplicateEoNumbers,
+} from "@/lib/duplicate-eo-numbers";
+
+// Re-exported so existing `@/lib/data` and test imports keep working after
+// the split (see duplicate-eo-numbers.ts for why it moved).
+export { flagDuplicateEoNumbers };
 
 // Raw shape of a full row from the `executive_orders` table (snake_case,
 // per supabase/migrations/0001_init.sql). Used only where the caller needs
@@ -136,33 +143,6 @@ function normalizeLegacyOrder(raw: (typeof legacyExecutiveOrders)[number]): Exec
   };
 }
 
-function duplicateEoNumberReason(eoNumber: string): string {
-  return `${eoNumber} appears on more than one record in the source data — likely a data-entry error in the original tracker. Verify against the Federal Register before relying on this number.`;
-}
-
-/**
- * Flags any executive order whose eoNumber is shared with another order in
- * the list — a known data-quality issue inherited from the source
- * spreadsheet (see README "Known data quality issues"), not something to
- * silently trust. Computed fresh on every fetch rather than stored, so it
- * self-corrects once the underlying duplicates are reconciled. Generic so it
- * works on both full ExecutiveOrder rows and list-shaped rows alike.
- */
-export function flagDuplicateEoNumbers<
-  T extends { eoNumber?: string; needsReview?: boolean; needsReviewReason?: string },
->(orders: T[]): T[] {
-  const counts = new Map<string, number>();
-  for (const eo of orders) {
-    if (eo.eoNumber) counts.set(eo.eoNumber, (counts.get(eo.eoNumber) ?? 0) + 1);
-  }
-  return orders.map((eo) => {
-    if (eo.eoNumber && (counts.get(eo.eoNumber) ?? 0) > 1) {
-      return { ...eo, needsReview: true, needsReviewReason: duplicateEoNumberReason(eo.eoNumber) };
-    }
-    return eo;
-  });
-}
-
 const LOCAL_EXECUTIVE_ORDERS: ExecutiveOrder[] = flagDuplicateEoNumbers(
   (legacyExecutiveOrders as (typeof legacyExecutiveOrders)[number][])
     .map(normalizeLegacyOrder)
@@ -201,38 +181,6 @@ export async function getExecutiveOrders(
   }
 
   return flagDuplicateEoNumbers((data as unknown as ExecutiveOrderListRow[]).map(mapListRow));
-}
-
-/**
- * Re-checks a single detail row against every other row sharing its
- * eoNumber, since getExecutiveOrderById only fetches the one row and can't
- * otherwise reproduce flagDuplicateEoNumbers' cross-row comparison. A
- * narrow `select("id")` filtered by eo_number, not a full-table fetch — the
- * same "measure just what's needed" reasoning as the rest of this file.
- * Fails open (returns eo unflagged) on a query error: a broken secondary
- * check shouldn't stop the detail page from rendering the order itself.
- */
-async function applyDuplicateFlag(
-  supabase: SupabaseClient,
-  eo: ExecutiveOrder,
-): Promise<ExecutiveOrder> {
-  if (!eo.eoNumber) return eo;
-
-  const { data, error } = await supabase
-    .from("executive_orders")
-    .select("id")
-    .eq("eo_number", eo.eoNumber);
-
-  // Fails open, but never silently: unlogged, a real duplicate reads as clean.
-  if (error || !data) {
-    console.error(`Duplicate eo_number check failed for ${eo.eoNumber}; showing the order unflagged:`, error);
-    return eo;
-  }
-
-  if (data.length > 1) {
-    return { ...eo, needsReview: true, needsReviewReason: duplicateEoNumberReason(eo.eoNumber) };
-  }
-  return eo;
 }
 
 /**
