@@ -190,7 +190,11 @@ Steps that need a human, can't be automated away, and how to tell they're done:
 |---|---|---|
 | Run `npm run import:supabase` once (loads the 340 legacy rows) — **not safe to re-run**, only after confirming the tables are empty | local machine, after `.env.local` has real Supabase keys | Rows visible in Supabase's Table Editor |
 | Run `npm run backfill:federal-register` once, after `import:supabase` | local machine | `/needs-attention` shows recent runs and the tracker's order count jumps to match the administration-to-date total |
-| Set a monthly spending cap on the Anthropic API key | Anthropic Console | Cap visible in the Console's billing limits page |
+| Set `AI_GATEWAY_API_KEY` (from Vercel > AI Gateway > API Keys) in `.env.local` and in Vercel, to route Claude calls through the gateway instead of the Anthropic API directly | Vercel dashboard / `vercel env add` | An enrichment run logs "Vercel AI Gateway"; requests appear in the AI Gateway overview |
+| Set a monthly spending cap — on the AI Gateway budget if routing through it, otherwise on the Anthropic API key | Vercel AI Gateway settings / Anthropic Console | Cap visible in that product's billing limits page |
+| Push migration `0005_summary_prompt_and_drafts.sql` (creates `summary_prompts` + `summary_drafts`) — **pushing to this branch IS the apply step**, review the SQL first | git push | `/prompt` loads and saving works instead of erroring |
+| Review the derived summarization prompt at `/prompt` and the drafted practice-area `criteria` in `src/config/practice-areas.json` — both are a first pass distilled from the firm's own summaries, not firm-authored | the app / editor | You've read them once and edited or accepted them |
+| Run `npm run draft:summaries -- --apply` in batches to draft against the 222 curated rows that have full text, then compare on each EO page | local machine | Drafts visible beneath the curated summaries |
 | Set `SITE_PASSWORD` if sharing a deployed URL pre-auth | deployment env vars | `/gate` prompts before the app loads |
 
 When this list passes ~5 items, review whether any can now be automated (per

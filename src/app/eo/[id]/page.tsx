@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getExecutiveOrderById, isUsingLocalData } from "@/lib/data";
+import { getSummaryDraft } from "@/lib/summary-drafts";
+import { SummaryDraftPanel } from "@/components/summary-draft-panel";
 import { StatusBadge } from "@/components/status-badge";
 import { TagPill } from "@/components/tag-pill";
 import { LocalDataBanner } from "@/components/local-data-banner";
@@ -26,6 +28,10 @@ export default async function EoDetailPage({
   const { id } = await params;
   const eo = await getExecutiveOrderById(id);
   if (!eo) notFound();
+
+  // A draft, when one exists, is shown beneath the summary rather than in
+  // place of it — see SummaryDraftPanel.
+  const draft = await getSummaryDraft(id);
 
   const usingLocalData = isUsingLocalData();
 
@@ -81,6 +87,11 @@ export default async function EoDetailPage({
         <div className="mt-2">
           <Section title="Summary">
             <p>{eo.aiSummary ?? "No AI summary generated yet."}</p>
+            {draft && (
+              <div className="mt-4">
+                <SummaryDraftPanel draft={draft} hasCuratedSummary={Boolean(eo.aiSummary)} />
+              </div>
+            )}
           </Section>
 
           <Section title="Agencies Impacted">

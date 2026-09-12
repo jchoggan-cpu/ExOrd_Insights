@@ -2,6 +2,7 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { describe, expect, it, vi } from "vitest";
 import { runEnrichJob } from "@/lib/federal-register/enrich-job";
 import { createFakeSupabase } from "@/lib/federal-register/test-support/fake-supabase";
+import { SUBJECT_AREAS } from "@/lib/taxonomy";
 
 // A minimal in-memory stand-in for the Anthropic client — just enough of
 // `messages.create` for summarizeDocument to call. Test-only; never a real
@@ -22,7 +23,13 @@ function createFakeAnthropic(responses: Array<{ text: string } | { throw: string
 }
 
 function summaryJson(summary: string): string {
-  return JSON.stringify({ summary, subjectArea: ["Trade Policy"], practiceAreas: [], industries: [] });
+  return JSON.stringify({
+    summary,
+    subjectArea: [SUBJECT_AREAS[0]],
+    practiceAreas: [],
+    industries: [],
+    deliverables: null,
+  });
 }
 
 describe("runEnrichJob", () => {
@@ -48,7 +55,10 @@ describe("runEnrichJob", () => {
     expect(result.flaggedCount).toBe(0);
     expect(result.errorMessage).toBeUndefined();
     expect(supabase.rows[0].ai_summary).toBe("The order directs agencies to review the policy.");
-    expect(supabase.rows[0].subject_area).toEqual(["Trade Policy"]);
+    expect(supabase.rows[0].subject_area).toEqual([SUBJECT_AREAS[0]]);
+    // No outside party is obliged, so the column reads the way the firm
+    // wrote it by hand in the original spreadsheet rather than being blank.
+    expect(supabase.rows[0].deliverable).toBe("None.");
 
     expect(supabase.ingestionRuns[0]).toMatchObject({
       id: result.runId,
@@ -56,6 +66,40 @@ describe("runEnrichJob", () => {
       status: "success",
       updated_count: 1,
     });
+  });
+
+  it("leaves the deliverable column alone when the prompt never asked for deliverables", async () => {
+    const supabase = createFakeSupabase({
+      rows: [
+        {
+          id: "row-1",
+          title: "Some Order",
+          action_type: "Executive Order",
+          full_text: "The order directs agencies to review the policy.",
+          manually_edited_fields: [],
+          ai_summary: null,
+          deliverable: "Importers to pay the new tariff (30 days).",
+        },
+      ],
+    });
+    // No `deliverables` key at all — what an edited prompt without a
+    // deliverables section produces. Writing "None." here would replace a
+    // real obligation with a claim nobody made.
+    const anthropic = createFakeAnthropic([
+      {
+        text: JSON.stringify({
+          summary: "The order directs agencies to review the policy.",
+          subjectArea: [SUBJECT_AREAS[0]],
+          practiceAreas: [],
+          industries: [],
+        }),
+      },
+    ]);
+
+    const result = await runEnrichJob(supabase, anthropic);
+
+    expect(result.updatedCount).toBe(1);
+    expect(supabase.rows[0].deliverable).toBe("Importers to pay the new tariff (30 days).");
   });
 
   it("isolates a per-row failure: one bad row doesn't abort the batch, and is reported in errors/partial status", async () => {

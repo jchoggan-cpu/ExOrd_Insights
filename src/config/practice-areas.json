@@ -1,17 +1,51 @@
 [
-  { "name": "Antitrust and Competition" },
-  { "name": "Appellate" },
-  { "name": "Bankruptcy and Restructuring" },
-  { "name": "Commercial Finance" },
-  { "name": "Corporate" },
-  { "name": "Entertainment, Technology and Advertising" },
-  { "name": "Global Reach" },
-  { "name": "Governmental" },
-  { "name": "Intellectual Property" },
-  { "name": "Labor and Employment" },
-  { "name": "Land Use" },
+  {
+    "name": "Antitrust and Competition",
+    "criteria": "changes merger review, competition policy, or antitrust enforcement priorities at the FTC or DOJ, or targets market concentration in a named sector."
+  },
+  {
+    "name": "Appellate",
+    "criteria": "alters a standard of judicial review, strips or confers jurisdiction, or creates a legal question squarely headed for the courts of appeals or the Supreme Court."
+  },
+  {
+    "name": "Bankruptcy and Restructuring",
+    "criteria": "affects insolvency proceedings, creditor priority, distressed industries, or federally backed restructuring and bailout mechanisms."
+  },
+  {
+    "name": "Commercial Finance",
+    "criteria": "changes lending, credit availability, secured transactions, or banking regulation in ways that reach loan terms or borrower obligations."
+  },
+  {
+    "name": "Corporate",
+    "criteria": "affects corporate governance, securities disclosure, M&A clearance, foreign investment review, or the formation and registration of business entities."
+  },
+  {
+    "name": "Entertainment, Technology and Advertising",
+    "criteria": "regulates media, online platforms, content moderation, advertising practices, artificial intelligence products, or telecommunications services."
+  },
+  {
+    "name": "Global Reach",
+    "criteria": "imposes tariffs, sanctions, export controls, or investment restrictions, or otherwise governs cross-border trade and the conduct of U.S. parties abroad."
+  },
+  {
+    "name": "Governmental",
+    "criteria": "sets conditions on federal contracts, grants, or funding, restructures an agency, or changes procurement, lobbying, or administrative procedure."
+  },
+  {
+    "name": "Intellectual Property",
+    "criteria": "affects patents, trademarks, copyright, trade secrets, licensing, or federal technology-transfer and research-commercialization rules."
+  },
+  {
+    "name": "Labor and Employment",
+    "criteria": "changes hiring, wages, workplace rules, workforce eligibility, employment-based immigration, collective bargaining, or terms for federal employees and contractor workforces."
+  },
+  {
+    "name": "Land Use",
+    "criteria": "affects zoning, siting, permitting, environmental review of development, or the approval path for building on federal or private land."
+  },
   {
     "name": "Litigation",
+    "criteria": "creates a cause of action, directs enforcement or investigation against identified parties, or is itself likely to be challenged in court.",
     "subPractices": [
       "Bankruptcy Litigation & Distressed Loan Workouts",
       "Brand and Reputation Management",
@@ -23,11 +57,32 @@
       "Securities Litigation"
     ]
   },
-  { "name": "Privacy and Cybersecurity" },
-  { "name": "Private Client Services" },
-  { "name": "Private Equity" },
-  { "name": "Private Wealth and Fiduciary Litigation" },
-  { "name": "Real Estate" },
-  { "name": "Tax" },
-  { "name": "White Collar Defense and Investigations" }
+  {
+    "name": "Privacy and Cybersecurity",
+    "criteria": "sets data protection, cybersecurity, surveillance, or breach-reporting obligations, or governs the handling of personal or classified information."
+  },
+  {
+    "name": "Private Client Services",
+    "criteria": "affects individual income, gift, or estate taxation, wealth transfer, or the immigration status and travel of individuals rather than businesses."
+  },
+  {
+    "name": "Private Equity",
+    "criteria": "restricts or conditions fund investment, limits foreign capital, or changes the regulatory exposure of portfolio companies and deal approvals."
+  },
+  {
+    "name": "Private Wealth and Fiduciary Litigation",
+    "criteria": "affects trusts, estates, fiduciary duties, or disputes over the administration of private wealth."
+  },
+  {
+    "name": "Real Estate",
+    "criteria": "affects property acquisition, leasing, development, housing policy, or the disposition and use of federal real property."
+  },
+  {
+    "name": "Tax",
+    "criteria": "changes tax rates, credits, deductions, tariffs treated as revenue measures, tax-exempt status, or IRS administration and enforcement."
+  },
+  {
+    "name": "White Collar Defense and Investigations",
+    "criteria": "directs criminal or civil enforcement, investigations, prosecutions, debarment, or the suspension of security clearances."
+  }
 ]

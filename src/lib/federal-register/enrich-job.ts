@@ -1,6 +1,9 @@
-import Anthropic from "@anthropic-ai/sdk";
+import type Anthropic from "@anthropic-ai/sdk";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getConfiguredModel } from "@/lib/ai-model";
+import { createAnthropicClient, describeAiProvider, getSummaryModel } from "@/lib/ai-model";
+import { loadActiveSummaryPrompt } from "@/lib/summary-prompt/store";
+import { renderSummaryPrompt } from "@/lib/summary-prompt/render";
+import { formatDeliverables } from "@/lib/federal-register/format-deliverables";
 import { formatError } from "@/lib/format-error";
 import { ENRICH_BATCH_SIZE } from "@/lib/federal-register/constants";
 import { finishRunSafely, startRun } from "@/lib/federal-register/ingestion-run";
@@ -25,6 +28,10 @@ const ENRICHABLE_FIELDS = {
   subject_area: "subjectArea",
   practice_areas: "practiceAreas",
   industries: "industries",
+  // Must stay in step with every key of candidateUpdate below: a column
+  // missing from this map looks up as undefined, the manual-edit check then
+  // never matches, and the job silently overwrites a hand-edited value.
+  deliverable: "deliverable",
 } as const;
 
 export interface JobResult {
@@ -67,8 +74,22 @@ export async function runEnrichJob(
     if (error) throw new Error(`Failed to load rows needing enrichment: ${error.message}`);
 
     const rows = (data ?? []) as EnrichableRow[];
-    const client = anthropicClient ?? new Anthropic();
-    const model = getConfiguredModel();
+    const client = anthropicClient ?? createAnthropicClient();
+    const model = getSummaryModel();
+    // The prompt is editable at /prompt and stored in summary_prompts;
+    // loading it here (once per run, not per row) means an edit takes effect
+    // on the next nightly run with no deploy. A failed load throws rather
+    // than falling back to the default — see loadActiveSummaryPrompt.
+    const activePrompt = await loadActiveSummaryPrompt(supabase);
+    const systemPrompt = renderSummaryPrompt(activePrompt.body);
+    if (!anthropicClient) {
+      // Which route, model and prompt version this run used, so a
+      // credential, billing or "why did the summaries change" question can
+      // be answered from the cron logs rather than by guessing.
+      console.log(
+        `Enrichment run ${runId}: ${describeAiProvider()}, model ${model}, prompt ${activePrompt.isDefault ? "built-in default" : activePrompt.id}`,
+      );
+    }
 
     let updatedCount = 0;
     let flaggedCount = 0;
@@ -77,10 +98,15 @@ export async function runEnrichJob(
     for (const row of rows) {
       try {
         if (!row.full_text) continue; // satisfies TypeScript; excluded by the query above already
-        const result = await summarizeDocument(client, model, {
-          title: row.title,
-          actionType: row.action_type ?? "Executive Order",
-          fullText: row.full_text,
+        const result = await summarizeDocument({
+          client,
+          model,
+          systemPrompt,
+          input: {
+            title: row.title,
+            actionType: row.action_type ?? "Executive Order",
+            fullText: row.full_text,
+          },
         });
 
         const unverified = findUnverifiedQuotes(result.summary, row.full_text);
@@ -98,12 +124,19 @@ export async function runEnrichJob(
         }
 
         const manuallyEdited = new Set(row.manually_edited_fields ?? []);
-        const candidateUpdate = {
+        const candidateUpdate: Record<string, unknown> = {
           ai_summary: result.summary,
           subject_area: result.subjectArea,
           practice_areas: result.practiceAreas,
           industries: result.industries,
         };
+        // Only record a deliverable when the model actually answered the
+        // question. Writing "None." off an undefined answer would assert
+        // that the order obliges no outside party — a claim nobody made,
+        // indistinguishable in the tracker from one that was checked.
+        if (result.deliverables !== undefined) {
+          candidateUpdate.deliverable = formatDeliverables(result.deliverables);
+        }
         const update = Object.fromEntries(
           Object.entries(candidateUpdate).filter(
             ([column]) => !manuallyEdited.has(ENRICHABLE_FIELDS[column as keyof typeof ENRICHABLE_FIELDS]),

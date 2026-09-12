@@ -15,7 +15,7 @@ with automation (Phases 2–5) still to come.
 | Piece | Status |
 |---|---|
 | Tracker table + EO detail pages | ✅ Working, showing real imported data (see below) |
-| Content-drafting UI (all 4 content types, single & multi-EO) | ✅ Working UI; generates **stub text** until `ANTHROPIC_API_KEY` is set |
+| Content-drafting UI (all 4 content types, single & multi-EO) | ✅ Working UI; generates **stub text** until `AI_GATEWAY_API_KEY` or `ANTHROPIC_API_KEY` is set |
 | Copy / .docx / markdown export | ✅ Working, gated behind a "reviewed for accuracy" confirmation |
 | Interim shared-password access gate | ✅ Working (`SITE_PASSWORD` env var) — see "Interim access" below |
 | Firm spreadsheet import | ✅ Done — 340 executive actions imported (see below) |
@@ -88,10 +88,23 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 # Only needed to run `npm run import:supabase` (one-time seed import)
 SUPABASE_SERVICE_ROLE_KEY=
 
-# Anthropic — enables real AI-generated content instead of stub drafts
+# AI credentials — enables real AI-generated content instead of stub drafts.
+# Set ONE of these; the gateway key wins if both are present.
+#   AI_GATEWAY_API_KEY — routes Claude calls through Vercel's AI Gateway
+#     (https://ai-gateway.vercel.sh), so spend and traffic are visible in the
+#     Vercel dashboard. Create the key under AI Gateway > API Keys.
+#   ANTHROPIC_API_KEY  — calls the Anthropic API directly.
+AI_GATEWAY_API_KEY=
 ANTHROPIC_API_KEY=
-# Optional: override the model used for content generation (defaults to claude-opus-5)
+# Optional: override the model used for content drafting (defaults to
+# claude-opus-5). Write it either bare ("claude-opus-5") or gateway-style
+# ("anthropic/claude-opus-5") — the prefix is added or stripped to match
+# whichever route is in use.
 EO_TRACKER_MODEL=
+# Optional: override the model used to summarize and classify Federal
+# Register documents (defaults to claude-fable-5). Separate from the drafting
+# model so the two can be priced and tuned independently.
+EO_TRACKER_SUMMARY_MODEL=
 
 # Optional: gates the whole app behind a single shared password (see "Interim
 # access before real auth" below). Leave unset for local development.
@@ -187,13 +200,49 @@ asserted as authoritative, cite the PDF.
 
 ## Firm-specific tagging lists
 
-Sheppard's Practice Areas and Industries lists (used for AI tagging) live in:
+The three fixed lists the AI must choose from live in:
 
-- `src/config/practice-areas.json`
+- `src/config/practice-areas.json` — each entry also carries a one-line `criteria`
+  string telling the model when that group should be selected
 - `src/config/industries.json`
+- `src/config/subject-areas.json` — the 26 topics derived from the values the firm
+  actually used across the 340 hand-curated rows of the original spreadsheet
 
-Edit these files directly if the firm's list changes — nothing else in the app needs
-to change.
+Edit these files directly if the firm's lists change — nothing else in the app needs
+to change. They are deliberately kept in code rather than in the editable prompt:
+`parseSummaryResponse` validates the model's answers against these same lists and
+silently drops anything off-list, so a hand-typed copy inside the prompt could drift
+and make valid selections disappear.
+
+## The summarization prompt
+
+The instructions sent to the model for every summary are **editable in the app at
+`/prompt`** — no deploy needed. Each save is a new version in the `summary_prompts`
+table; the version in force is shown, past versions are kept and readable, and
+"Reset to default" restores the built-in starting prompt
+(`src/lib/summary-prompt/default-prompt.ts`).
+
+That default was derived from the firm's own 340 hand-written summaries rather than
+written from scratch — median 67 words, one paragraph, descriptive not evaluative,
+openings like "This EO directs…" — and carries four of them as worked examples.
+
+A saved prompt is checked before it's accepted: one that stops asking for the
+required JSON keys is refused outright (it would fail on every row of the next
+nightly run), and one that drops a `{{...}}` taxonomy placeholder saves with a
+warning explaining what will come back empty.
+
+**Editing the prompt never rewrites existing summaries.** It applies to rows
+summarized after the save.
+
+### Drafting against the curated rows
+
+`npm run draft:summaries` writes AI drafts for rows that *already* have the firm's
+hand-written summary, into `summary_drafts`, leaving `ai_summary` untouched. Each
+EO's detail page then shows the draft beneath the curated text for comparison.
+Run it dry first (no flag) to see how many rows qualify without spending anything;
+`-- --apply` drafts them, `-- --apply --limit N` controls how many. It is
+deliberately a manual script rather than a cron job, since every row is a
+full-text model call.
 
 ## Project structure
 
@@ -210,7 +259,7 @@ src/
     eo/[id]/page.tsx         EO detail page
     draft/page.tsx           Content-drafting assistant
     needs-attention/page.tsx Flagged rows + recent ingestion run history
-    api/generate-content/    Content generation API route (stub or real, per ANTHROPIC_API_KEY)
+    api/generate-content/    Content generation API route (stub or real, per the AI credentials)
     api/cron/                Federal Register ingest/enrich/reconcile jobs (Vercel Cron, CRON_SECRET-gated)
   components/                UI components (table, tags, status badges, drafter, header)
   config/                    Fixed Practice Areas / Industries lists
