@@ -175,7 +175,7 @@ export function ContentDrafter({
           <h2 className="font-display text-lg font-semibold text-foreground">3. Review & export</h2>
           {isStub && (
             <p className="mt-2 rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-xs text-accent-strong">
-              This is a placeholder stub draft — set ANTHROPIC_API_KEY to enable real AI-generated
+              This is a placeholder stub draft — set AI_GATEWAY_API_KEY or ANTHROPIC_API_KEY to enable real AI-generated
               content (see README).
             </p>
           )}

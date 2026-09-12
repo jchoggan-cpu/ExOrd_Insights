@@ -1,8 +1,7 @@
-import Anthropic from "@anthropic-ai/sdk";
 import type { ContentType, ExecutiveOrder } from "@/lib/types";
 import { CONTENT_TYPE_LABELS } from "@/lib/types";
 import { findUnverifiedQuotes } from "@/lib/federal-register/quote-verify";
-import { extractTextBlock, getConfiguredModel } from "@/lib/ai-model";
+import { createAnthropicClient, extractTextBlock, getConfiguredModel, hasAiCredentials } from "@/lib/ai-model";
 
 // Content-type-specific length guidance and an output-token ceiling. Kept
 // short since these are drafts a human will edit, not final copy.
@@ -106,13 +105,13 @@ function buildStubDraft(orders: ExecutiveOrder[], contentType: ContentType): str
     "",
     `This is placeholder text standing in for an AI-generated draft about: ${titles}.`,
     "",
-    "Set the ANTHROPIC_API_KEY environment variable to enable real AI-generated drafts (see README).",
+    "Set AI_GATEWAY_API_KEY (Vercel AI Gateway) or ANTHROPIC_API_KEY to enable real AI-generated drafts (see README).",
   ].join("\n");
 }
 
 /**
  * Generates draft content for one or more executive orders. Returns a
- * clearly-labeled stub when ANTHROPIC_API_KEY isn't configured, so the UI
+ * clearly-labeled stub when no AI credentials are configured, so the UI
  * is usable before that's set up.
  */
 export async function generateContent({
@@ -124,12 +123,12 @@ export async function generateContent({
     throw new Error("At least one executive order is required to generate content.");
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!hasAiCredentials()) {
     return { draftText: buildStubDraft(orders, contentType), isStub: true, unverifiedQuotes: [], quotesWereChecked: false };
   }
 
   const { instructions, maxTokens } = CONTENT_TYPE_GUIDANCE[contentType];
-  const client = new Anthropic();
+  const client = createAnthropicClient();
 
   const userPrompt = [
     `Content type: ${CONTENT_TYPE_LABELS[contentType]}`,
