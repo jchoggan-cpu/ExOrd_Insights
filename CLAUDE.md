@@ -210,6 +210,34 @@ areas. But practice areas came back empty on 54% of rows and industries on
 66%, which makes the drafted practice-area `criteria` unproven — see the
 ledger row about reviewing them.
 
+## Summary quality audit (2026-09-12)
+
+`verify-facts.ts` checks the hard facts in every summary — deadlines, money,
+percentages, statutory citations, instrument numbers, dates — against that
+row's `full_text`. Run over all 498 summarized rows with source text, it
+found **759 checkable facts** and, after the checker's own false positives
+were fixed, **4 flags**:
+
+- **Zero confirmed fabrications in the 276 AI-written summaries.** Every
+  flag traced to the checker's formatting assumptions, not the model.
+- **One genuine defect, and it is the firm's own**: `EO 14183`
+  ("Prioritizing Military Excellence and Readiness") carries a legacy
+  hand-written summary describing a Unified Command Plan revision with a
+  10-day deadline. That order's text contains neither. The summary appears
+  to belong to a different document; it came from the source spreadsheet,
+  not from any AI run. Worth correcting by hand.
+
+The audit's own first pass flagged 19 rows; 15 of those were the checker
+being wrong, and fixing them is most of what `verify-facts.ts` now does:
+sources spell deadlines out ("within sixty days"), write ".15 percent"
+without the leading zero, write "$125,000,000" where a summary writes
+"$125 million", and cite statutes as "section 551(4), title 5, United
+States Code" where a summary correctly reformats to "5 U.S.C. 551(4)".
+Each of those is a regression test now. **Read a flag as "look at this",
+never as "this is wrong"** — and note the check only asks whether a figure
+appears in the source at all, not whether it is attached to the right actor
+or provision.
+
 ## Manual-steps ledger
 
 Steps that need a human, can't be automated away, and how to tell they're done:
