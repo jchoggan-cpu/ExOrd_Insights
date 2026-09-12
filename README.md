@@ -234,6 +234,36 @@ warning explaining what will come back empty.
 **Editing the prompt never rewrites existing summaries.** It applies to rows
 summarized after the save.
 
+### Summarizing the whole backlog at once
+
+`npm run enrich:all` works the enrichment queue down to empty in one sitting
+instead of waiting out the cron's 20 rows a night. Dry-run by default (counts
+and prices the queue, calls no model); `-- --apply` runs it, `-- --apply
+--max-cost N` changes the spend cap (default $30).
+
+Safe to interrupt and safe to re-run: each pass selects only rows where
+`ai_summary IS NULL`, so stopping — by Ctrl-C, the spend cap, or running out
+of API credit — leaves finished rows finished and resumes from there. It also
+stops on its own if a full pass summarizes nothing, so a systematic failure
+can't loop burning money.
+
+## What the API costs
+
+Every model call is recorded in `api_usage` (migration 0006) with its tokens
+and its cost, and **`/usage`** totals it by UTC day — the same basis the
+provider bills on — with a per-feature breakdown and a 30-day table.
+
+Cost is computed at call time from the rate table in
+`src/lib/usage/pricing.ts` and stored, so an upstream price change never
+rewrites what past runs cost. That table is a hardcoded snapshot: check it
+against Anthropic's pricing page if a total looks wrong. A model missing from
+it records as *unpriced* rather than free, and the page says so.
+
+The summarization system prompt is cached (`cache_control: ephemeral`),
+which is why `/usage` breaks out cache-read tokens: they bill at a tenth the
+input rate, and if that column reads 0 during a run, caching has silently
+stopped and the bill is roughly double what it should be.
+
 ### Drafting against the curated rows
 
 `npm run draft:summaries` writes AI drafts for rows that *already* have the firm's

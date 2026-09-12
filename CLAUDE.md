@@ -182,6 +182,34 @@ ever reads the three `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY
 / `SUPABASE_SERVICE_ROLE_KEY` names (see `src/lib/supabase.ts`). Safe to
 delete from the Vercel project if the clutter bothers you; not urgent.
 
+## Enrichment backlog cleared (2026-09-12)
+
+`npm run enrich:all -- --apply` summarized all 276 queued rows in 14 passes
+for **$15.98**, so every one of the 614 tracker rows now has a summary. Four
+things worth keeping:
+
+- **Prompt caching works and is load-bearing.** The ~3,300-token system
+  prompt is cached; every call after the first reads it at a tenth the input
+  rate. `/usage` shows cache-read tokens as their own column precisely
+  because the failure is silent — if that column goes to 0 during a run,
+  the bill roughly doubles with nothing else looking wrong.
+- **Estimating from a handful of calls is unreliable.** A mid-run estimate
+  taken from the first six calls projected $8-9; the real figure was $15.98,
+  because later rows produced longer outputs. Price a run from a full pass,
+  or from `/usage`, not from the first few rows.
+- **Resumability earned its keep.** One row failed with a Gateway Timeout
+  mid-run; because each pass selects only rows where `ai_summary IS NULL`, a
+  later pass picked it up with no intervention. Interrupting `enrich:all` at
+  any point is safe.
+- **Two rows were flagged** by quote verification and left unsummarized-but-
+  flagged rather than saved — see `/needs-attention`.
+
+Outcome against the firm's own corpus: median 83 words (the firm's
+hand-written median is 67), zero multi-paragraph summaries, 0% empty subject
+areas. But practice areas came back empty on 54% of rows and industries on
+66%, which makes the drafted practice-area `criteria` unproven — see the
+ledger row about reviewing them.
+
 ## Manual-steps ledger
 
 Steps that need a human, can't be automated away, and how to tell they're done:
@@ -191,10 +219,10 @@ Steps that need a human, can't be automated away, and how to tell they're done:
 | Run `npm run import:supabase` once (loads the 340 legacy rows) — **not safe to re-run**, only after confirming the tables are empty | local machine, after `.env.local` has real Supabase keys | Rows visible in Supabase's Table Editor |
 | Run `npm run backfill:federal-register` once, after `import:supabase` | local machine | `/needs-attention` shows recent runs and the tracker's order count jumps to match the administration-to-date total |
 | Set `AI_GATEWAY_API_KEY` (from Vercel > AI Gateway > API Keys) in `.env.local` and in Vercel, to route Claude calls through the gateway instead of the Anthropic API directly | Vercel dashboard / `vercel env add` | An enrichment run logs "Vercel AI Gateway"; requests appear in the AI Gateway overview |
+| **Top up Anthropic credits before the next large run.** The 276-row enrichment on 2026-09-12 cost $15.98 of a $20.00 balance, leaving roughly $4. A full `draft:summaries` pass costs about the same again and will stop partway on insufficient credit (safely — it resumes) | Anthropic Console | `/usage` totals plus the Console balance agree, with headroom |
 | Set a monthly spending cap — on the AI Gateway budget if routing through it, otherwise on the Anthropic API key | Vercel AI Gateway settings / Anthropic Console | Cap visible in that product's billing limits page |
-| Push migration `0005_summary_prompt_and_drafts.sql` (creates `summary_prompts` + `summary_drafts`) — **pushing to this branch IS the apply step**, review the SQL first | git push | `/prompt` loads and saving works instead of erroring |
 | Review the derived summarization prompt at `/prompt` and the drafted practice-area `criteria` in `src/config/practice-areas.json` — both are a first pass distilled from the firm's own summaries, not firm-authored | the app / editor | You've read them once and edited or accepted them |
-| Run `npm run draft:summaries -- --apply` in batches to draft against the 222 curated rows that have full text, then compare on each EO page | local machine | Drafts visible beneath the curated summaries |
+| Run `npm run draft:summaries -- --apply --limit N` in batches against the 222 curated rows that have full text, then compare on each EO page. Watch `/usage` between batches — see the credit row above | local machine | Drafts visible beneath the curated summaries |
 | Set `SITE_PASSWORD` if sharing a deployed URL pre-auth | deployment env vars | `/gate` prompts before the app loads |
 
 When this list passes ~5 items, review whether any can now be automated (per
