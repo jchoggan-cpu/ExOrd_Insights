@@ -17,7 +17,9 @@
     "backfill:federal-register": "tsx scripts/backfill-federal-register.ts",
     "diagnostics": "tsx scripts/data-diagnostics.ts",
     "draft:summaries": "tsx scripts/draft-summaries.ts",
-    "enrich:all": "tsx scripts/enrich-all.ts"
+    "enrich:all": "tsx scripts/enrich-all.ts",
+    "link:dockets": "tsx scripts/link-dockets.ts",
+    "generate:court-ids": "tsx scripts/generate-court-ids.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.123.0",

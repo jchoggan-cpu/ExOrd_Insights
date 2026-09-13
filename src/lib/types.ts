@@ -27,6 +27,18 @@ export interface LegalChallenge {
   status: string; // e.g. "Pending", "Injunction granted", "Dismissed"
   docketUrl?: string;
   summary: string;
+
+  // Added by `npm run link:dockets` when an entry is matched to a real
+  // CourtListener docket (see src/lib/courtlistener/). All optional: the
+  // firm's own hand-entered challenges predate this and carry none of them.
+  /** e.g. "1:25-cv-00677". */
+  docketNumber?: string;
+  /** ISO date the case was filed. */
+  dateFiled?: string | null;
+  /** Provenance: "courtlistener" for a matched link, absent for a hand-entered one. */
+  linkSource?: string;
+  /** ISO date the link was attached. */
+  linkedAt?: string;
 }
 
 export interface NewsMention {

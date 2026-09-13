@@ -113,6 +113,12 @@ SITE_PASSWORD=
 # Required in production once the /api/cron/* jobs are scheduled (see
 # "Federal Register ingestion" below) — generate with `openssl rand -hex 32`.
 CRON_SECRET=
+
+# Optional: a free CourtListener API token (courtlistener.com > Profile >
+# API tokens). `npm run link:dockets` works without it, but anonymous callers
+# are rate-limited hard — roughly 25 requests before a 429 — so a full run
+# takes longer and leans on the client's backoff. Costs nothing either way.
+COURTLISTENER_API_TOKEN=
 ```
 
 ### Setting up Supabase
@@ -274,15 +280,63 @@ Run it dry first (no flag) to see how many rows qualify without spending anythin
 deliberately a manual script rather than a cron job, since every row is a
 full-text model call.
 
+## Legal challenges — linking cases to real dockets
+
+The firm's spreadsheet recorded challenges as a case name and a court, with
+no link: 252 entries across 37 orders, none of them clickable. `npm run
+link:dockets` finds the matching docket on
+[CourtListener](https://www.courtlistener.com) (the Free Law Project's
+mirror of federal PACER records) and attaches the real docket number, filing
+date and URL.
+
+**It never guesses.** A docket is attached only when the case name matches
+exactly, in the court the firm recorded, filed on a date that makes sense for
+that order, and no other docket also fits. Everything else gets one of two
+other outcomes:
+
+| Outcome | What it means | What happens |
+|---|---|---|
+| `confident` | One exact match, right court, no rival | Linked automatically |
+| `ambiguous` | Several plausible dockets, or the court is missing/unrecognized | Written to the review file for a human to choose |
+| `not_found` | No docket carries that name in that court | Left empty — the case may have been renamed, or may not be in RECAP |
+
+That three-way split is deliberate. For a law firm a wrong docket link is
+worse than an empty cell, so "probably this one" is not an outcome the
+matcher can produce. There are genuinely two different `Doe v. Noem` cases
+in D. Mass., and filtering by court does not separate them.
+
+No model is called at any point and CourtListener's search API is free, so a
+run costs nothing.
+
+```bash
+npm run link:dockets              # dry run: searches, writes the review file, changes nothing
+npm run link:dockets -- --apply   # writes confident matches and your resolved choices
+```
+
+**Resolving an ambiguous entry**: open `data/legal-challenge-links.json`,
+find the entry, pick the right docket from its `candidates`, copy that
+candidate's `docketId` into the entry's `chosenDocketId`, and re-run with
+`--apply`. Choices survive re-runs, and the file is committed so the record
+of what was linked — and on what basis — lives in git.
+
+Applying a link only ever *adds* fields to an entry; the case name, court,
+status and summary the firm wrote are left exactly as they are, and a
+`docketUrl` already present is never overwritten. Each added link carries a
+`linkSource` and `linkedAt` stamp so a matched link can be told apart from a
+hand-entered one.
+
 ## Project structure
 
 ```
 data/
   source/                   The firm's original tracker spreadsheet (checked in for provenance)
+  legal-challenge-links.json  Docket-matching results + the review queue (generated; committed on purpose)
 scripts/
   import_legacy_tracker.py       Extracts the spreadsheet into src/data/legacy-import/*.json
   import-to-supabase.ts          One-time bulk load of that JSON into a connected Supabase project
   backfill-federal-register.ts   One-time Federal Register historical backfill (run locally)
+  link-dockets.ts                Links recorded legal challenges to real CourtListener dockets
+  generate-court-ids.ts          Regenerates the court lookup from CourtListener's own /courts/ API
 src/
   app/
     page.tsx                Tracker dashboard (table + filters)
@@ -302,6 +356,7 @@ src/
     content-generation.ts      Prompt construction + Claude API call for drafting
     cron-auth.ts                Verifies a request came from Vercel Cron (CRON_SECRET)
     federal-register/           Federal Register API client, sync/ingest/enrich/reconcile logic
+    courtlistener/              CourtListener docket search + the deterministic case-matching gate
 supabase/
   migrations/0001_init.sql  Full schema, indexes, and RLS policies
   migrations/0002_loosen_read_policies.sql  Loosens anon-client SELECT policies (see CLAUDE.md)

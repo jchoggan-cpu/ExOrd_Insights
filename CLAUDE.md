@@ -148,17 +148,12 @@ default-privilege bootstrap. Fixed for existing tables and defaulted going
 forward; if this project is ever recreated from scratch the same gap should
 be expected and checked for.
 
-**Also present, from the Supabase↔Vercel marketplace integration, and
-unused by this app's code** (harmless clutter, not wired to anything):
-`NEXT_PUBLIC_JCHLQSUPABASE_URL`, `NEXT_PUBLIC_JCHLQSUPABASE_ANON_KEY`,
-`NEXT_PUBLIC_JCHLQSUPABASE_PUBLISHABLE_KEY`, `SUPABASE_PUBLISHABLE_KEY`,
-`SUPABASE_SECRET_KEY`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_URL`,
-`SUPABASE_ANON_KEY`, `SUPABASE_JWT_SECRET`, `POSTGRES_URL`,
-`POSTGRES_PRISMA_URL`, `POSTGRES_URL_NON_POOLING`, `POSTGRES_USER`,
-`POSTGRES_HOST`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE` — this app only
-ever reads the three `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-/ `SUPABASE_SERVICE_ROLE_KEY` names (see `src/lib/supabase.ts`). Safe to
-delete from the Vercel project if the clutter bothers you; not urgent.
+**Also present, and unused by this app's code**: the Supabase↔Vercel
+marketplace integration added ~16 further env vars (the `*JCHLQSUPABASE*`,
+`*PUBLISHABLE*`, `SUPABASE_SECRET_KEY`, `SUPABASE_JWT_SECRET` and `POSTGRES_*`
+names). This app only ever reads `NEXT_PUBLIC_SUPABASE_URL` /
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` / `SUPABASE_SERVICE_ROLE_KEY` (see
+`src/lib/supabase.ts`). Harmless clutter; safe to delete, not urgent.
 
 ## Enrichment backlog cleared (2026-09-12)
 
@@ -230,6 +225,8 @@ Steps that need a human, can't be automated away, and how to tell they're done:
 | Review the derived summarization prompt at `/prompt` and the drafted practice-area `criteria` in `src/config/practice-areas.json` — both are a first pass distilled from the firm's own summaries, not firm-authored | the app / editor | You've read them once and edited or accepted them |
 | Run `npm run draft:summaries -- --apply --limit N` in batches against the 222 curated rows that have full text, then compare on each EO page. Watch `/usage` between batches — see the credit row above | local machine | Drafts visible beneath the curated summaries |
 | Set `SITE_PASSWORD` if sharing a deployed URL pre-auth | deployment env vars | `/gate` prompts before the app loads |
+| Review `data/legal-challenge-links.json`, paste a candidate's `docketId` into `chosenDocketId` for entries marked `ambiguous`, then `npm run link:dockets -- --apply` | editor, then local machine | Docket links show on EO detail pages; the file's `ambiguous` count is 0 or knowingly accepted |
+| Optional: set `COURTLISTENER_API_TOKEN` (free, from courtlistener.com) to lift the anonymous rate limit | `.env.local` | A full `link:dockets` run finishes with no 429 backoffs |
 
 When this list passes ~5 items, review whether any can now be automated (per
 the source rule).
