@@ -1,5 +1,9 @@
-import { getExecutiveOrders, isUsingLocalData } from "@/lib/data";
+import { isUsingLocalData } from "@/lib/data";
+import { searchExecutiveOrders } from "@/lib/executive-orders-search";
+import { parseTrackerQuery, type RawSearchParams } from "@/lib/tracker-query";
 import { EoTable } from "@/components/eo-table";
+import { TrackerControls } from "@/components/tracker-controls";
+import { TrackerPagination } from "@/components/tracker-pagination";
 import { LocalDataBanner } from "@/components/local-data-banner";
 
 // Reads live tracker data (cron jobs ingest new orders continuously) — must
@@ -10,8 +14,16 @@ import { LocalDataBanner } from "@/components/local-data-banner";
 // currency. Same reasoning as src/app/needs-attention/page.tsx.
 export const dynamic = "force-dynamic";
 
-export default async function TrackerPage() {
-  const orders = await getExecutiveOrders();
+export default async function TrackerPage({
+  searchParams,
+}: {
+  searchParams: Promise<RawSearchParams>;
+}) {
+  // Search, filters, sort and page all live in the URL, so a filtered view
+  // can be shared, bookmarked and reached with the back button — and so the
+  // server can do the work rather than shipping every row to the browser.
+  const query = parseTrackerQuery(await searchParams);
+  const { rows, total, page, totalPages } = await searchExecutiveOrders(query);
   const usingLocalData = isUsingLocalData();
 
   return (
@@ -27,7 +39,12 @@ export default async function TrackerPage() {
             AI-assisted summaries, tagging, and litigation tracking.
           </p>
         </div>
-        <EoTable orders={orders} />
+
+        <div className="flex flex-col gap-4">
+          <TrackerControls query={query} total={total} />
+          <EoTable orders={rows} />
+          <TrackerPagination query={query} page={page} totalPages={totalPages} />
+        </div>
       </div>
     </main>
   );

@@ -168,6 +168,7 @@ class FakeInsertBuilder {
 export interface FakeSupabase {
   rows: Row[];
   ingestionRuns: Row[];
+  rpcCalls: Array<{ name: string; args: Record<string, unknown> }>;
 }
 
 /**
@@ -187,11 +188,16 @@ export function createFakeSupabase({
   ingestionRuns = [],
   failSelect = {},
   failUpdate = {},
+  rpc = {},
+  failRpc = {},
 }: {
   rows?: Row[];
   ingestionRuns?: Row[];
   failSelect?: Partial<Record<string, string>>;
   failUpdate?: Partial<Record<string, string>>;
+  /** Canned results per Postgres function name, for `supabase.rpc(name, args)`. */
+  rpc?: Partial<Record<string, Row[]>>;
+  failRpc?: Partial<Record<string, string>>;
 }): SupabaseClient & FakeSupabase {
   const tables: Record<string, Row[]> = {
     executive_orders: rows,
@@ -201,6 +207,13 @@ export function createFakeSupabase({
   const client = {
     rows,
     ingestionRuns,
+    /** Records what each rpc() call was given, so tests can assert the arguments. */
+    rpcCalls: [] as Array<{ name: string; args: Record<string, unknown> }>,
+    async rpc(name: string, args: Record<string, unknown>) {
+      client.rpcCalls.push({ name, args });
+      if (failRpc[name]) return { data: null, error: { message: failRpc[name] } };
+      return { data: rpc[name] ?? [], error: null };
+    },
     from(table: string) {
       const tableRows = tables[table] ?? (tables[table] = []);
       return {
