@@ -28,6 +28,18 @@ const DEFAULT_CONTENT_MODEL = "claude-opus-5";
  * see SUMMARY_MAX_TOKENS in summarize.ts, which has to leave room for it.
  */
 const DEFAULT_SUMMARY_MODEL = "claude-fable-5";
+/**
+ * Classification (practice areas and industries) — a different job from
+ * summarization, and priced differently on purpose.
+ *
+ * Summarization writes prose an attorney reads, so it runs on the most
+ * capable tier. Classification picks labels from two fixed lists, and the
+ * cost profile is lopsided: measured on a 20-row pilot, Fable 5 charged
+ * $0.048 a row for a two-array answer, because its thinking is always on and
+ * billed as output. Routing this task separately is what lets a cheaper
+ * model take it without touching summarization.
+ */
+const DEFAULT_CLASSIFY_MODEL = "claude-fable-5";
 
 interface AiCredentials {
   apiKey: string;
@@ -103,6 +115,17 @@ export function getConfiguredModel(): string {
  */
 export function getSummaryModel(): string {
   return forCurrentRoute(process.env.EO_TRACKER_SUMMARY_MODEL || DEFAULT_SUMMARY_MODEL);
+}
+
+/**
+ * The model used to classify documents into practice areas and industries.
+ * Override with `EO_TRACKER_CLASSIFY_MODEL`.
+ *
+ * Separate from the summarization model so the two can move independently:
+ * see DEFAULT_CLASSIFY_MODEL for why this task is priced differently.
+ */
+export function getClassifyModel(): string {
+  return forCurrentRoute(process.env.EO_TRACKER_CLASSIFY_MODEL || DEFAULT_CLASSIFY_MODEL);
 }
 
 /** Pulls the text out of a Claude response, shared by content-generation.ts and summarize.ts — both need the same "did it actually return text" guard. */

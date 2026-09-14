@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { calculateCost, type TokenUsage } from "@/lib/usage/pricing";
 
 /** Which part of the app spent the money. Kept narrow so the ticker can group by it. */
-export type UsageFeature = "summarize" | "draft" | "content";
+export type UsageFeature = "summarize" | "draft" | "content" | "classify";
 
 export interface RecordUsageParams {
   feature: UsageFeature;

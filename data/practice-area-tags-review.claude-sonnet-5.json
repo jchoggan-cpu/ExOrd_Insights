@@ -1,0 +1,438 @@
+{
+  "generatedAt": "2026-09-14T02:19:24.794Z",
+  "model": "claude-sonnet-5",
+  "changes": [
+    {
+      "id": "116767c1-5390-44a4-99f0-59dbc9915df9",
+      "eoNumber": null,
+      "title": "Excluding Certain Canadian Products From Importation Into the United States in Response to Continued Discrimination Against the Commerce of the United States With Respect to Dairy",
+      "before": {
+        "practiceAreas": [
+          "Global Reach"
+        ],
+        "industries": [
+          "Food and Beverage"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Global Reach",
+          "Governmental",
+          "Litigation",
+          "Corporate"
+        ],
+        "industries": [
+          "Food and Beverage"
+        ]
+      }
+    },
+    {
+      "id": "ac21b684-e317-4bdd-8ae2-474f59883fdf",
+      "eoNumber": null,
+      "title": "Modifying the Scope of Products of Canada Subject to the Additional Duties Imposed To Offset Canadian Discrimination Against the Commerce of the United States With Respect to Motor Vehicles",
+      "before": {
+        "practiceAreas": [
+          "Global Reach"
+        ],
+        "industries": [
+          "Transportation"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Global Reach",
+          "Governmental"
+        ],
+        "industries": [
+          "Transportation"
+        ]
+      }
+    },
+    {
+      "id": "8b6ba6f3-9150-4523-b666-0bbb6906a152",
+      "eoNumber": "EO 14426",
+      "title": "Accelerating Access to Veterans' Benefits and Employment Opportunities",
+      "before": {
+        "practiceAreas": [
+          "Governmental",
+          "Privacy and Cybersecurity"
+        ],
+        "industries": [
+          "Media and Technology",
+          "Healthcare"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Governmental",
+          "Labor and Employment",
+          "Privacy and Cybersecurity"
+        ],
+        "industries": [
+          "Healthcare",
+          "AI, Robotics and Quantum",
+          "Aerospace, Defense & Government Services"
+        ]
+      }
+    },
+    {
+      "id": "82a6d674-afee-47fc-886e-b6abcd688432",
+      "eoNumber": "EO 14427",
+      "title": "Adjusting Certain Delegations Under the Defense Production Act",
+      "before": {
+        "practiceAreas": [],
+        "industries": []
+      },
+      "after": {
+        "practiceAreas": [
+          "Governmental"
+        ],
+        "industries": [
+          "Energy and Infrastructure"
+        ]
+      }
+    },
+    {
+      "id": "753ef045-8c86-4971-8a7c-4d27be8568ad",
+      "eoNumber": null,
+      "title": "Excluding Certain Canadian Products From Importation Into the United States in Response to Continued Discrimination Against the Commerce of the United States With Respect to Alcoholic Beverages",
+      "before": {
+        "practiceAreas": [
+          "Global Reach",
+          "Litigation"
+        ],
+        "industries": [
+          "Food and Beverage"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Global Reach",
+          "Governmental",
+          "Litigation",
+          "Tax"
+        ],
+        "industries": [
+          "Food and Beverage",
+          "Transportation"
+        ]
+      }
+    },
+    {
+      "id": "318932c2-e9e7-41eb-ba39-d8399efe1cb5",
+      "eoNumber": null,
+      "title": "Excluding Certain Canadian Products From Importation Into the United States in Response to Continued Discrimination Against the Commerce of the United States With Respect to Motor Vehicles",
+      "before": {
+        "practiceAreas": [
+          "Global Reach",
+          "Tax"
+        ],
+        "industries": [
+          "Transportation"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Global Reach",
+          "Governmental",
+          "Litigation",
+          "Appellate"
+        ],
+        "industries": [
+          "Transportation"
+        ]
+      }
+    },
+    {
+      "id": "1fe77bf4-29c5-4437-a566-ee3a00d727ad",
+      "eoNumber": null,
+      "title": "Modifying the Scope of Products of Canada Subject to the Additional Duties Imposed To Offset Canadian Discrimination Against the Commerce of the United States With Respect to Alcoholic Beverages",
+      "before": {
+        "practiceAreas": [
+          "Global Reach",
+          "Tax"
+        ],
+        "industries": [
+          "Food and Beverage"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Global Reach",
+          "Governmental",
+          "Corporate"
+        ],
+        "industries": [
+          "Food and Beverage",
+          "Retail, Fashion & Beauty"
+        ]
+      }
+    },
+    {
+      "id": "3e5f95ff-166f-4832-8672-0c035f8a21c3",
+      "eoNumber": null,
+      "title": "Labor Day, 2026",
+      "before": {
+        "practiceAreas": [],
+        "industries": []
+      },
+      "after": {
+        "practiceAreas": [],
+        "industries": []
+      }
+    },
+    {
+      "id": "dbc0857b-aa4e-4e2c-8040-684bc94c2dbb",
+      "eoNumber": "EO 14424",
+      "title": "Promoting Fair Competition in Livestock Markets and Expanding Market Access for American Meat Producers",
+      "before": {
+        "practiceAreas": [
+          "Antitrust and Competition",
+          "White Collar Defense and Investigations"
+        ],
+        "industries": [
+          "Food and Beverage"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Antitrust and Competition",
+          "Governmental",
+          "Commercial Finance"
+        ],
+        "industries": [
+          "Food and Beverage"
+        ]
+      }
+    },
+    {
+      "id": "d83d3235-303e-46f4-a400-60ee14bef25b",
+      "eoNumber": "EO 14425",
+      "title": "Supporting America's Ranchers",
+      "before": {
+        "practiceAreas": [
+          "Governmental",
+          "Global Reach"
+        ],
+        "industries": [
+          "Food and Beverage"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Governmental",
+          "Land Use",
+          "Global Reach",
+          "Litigation",
+          "Private Client Services"
+        ],
+        "industries": [
+          "Food and Beverage",
+          "Environmental"
+        ]
+      }
+    },
+    {
+      "id": "393b127e-a82f-45e6-94c0-15933ceb344a",
+      "eoNumber": "EO 14423",
+      "title": "Establishing the United States Space Academy",
+      "before": {
+        "practiceAreas": [],
+        "industries": []
+      },
+      "after": {
+        "practiceAreas": [
+          "Governmental"
+        ],
+        "industries": [
+          "Aerospace, Defense & Government Services"
+        ]
+      }
+    },
+    {
+      "id": "c7d5a469-c078-49a6-a720-a20da51ed35d",
+      "eoNumber": "EO 14422",
+      "title": "Honoring the American History of the Great Lakes and Renaming Lake Ontario as Lake America",
+      "before": {
+        "practiceAreas": [],
+        "industries": []
+      },
+      "after": {
+        "practiceAreas": [
+          "Governmental"
+        ],
+        "industries": []
+      }
+    },
+    {
+      "id": "6143e066-3bf1-40c5-a8f6-02e604461f0c",
+      "eoNumber": null,
+      "title": "Fifth Anniversary of the Attack at Abbey Gate",
+      "before": {
+        "practiceAreas": [],
+        "industries": []
+      },
+      "after": {
+        "practiceAreas": [],
+        "industries": []
+      }
+    },
+    {
+      "id": "66001f34-3318-4449-a2ca-aa2d78fe8b06",
+      "eoNumber": null,
+      "title": "Further Ensuring Affordable Beef for the American Consumer",
+      "before": {
+        "practiceAreas": [
+          "Global Reach"
+        ],
+        "industries": [
+          "Food and Beverage"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Global Reach",
+          "Governmental"
+        ],
+        "industries": [
+          "Food and Beverage"
+        ]
+      }
+    },
+    {
+      "id": "87dd1818-3377-42b7-9084-c03a56fad6f5",
+      "eoNumber": "EO 14421",
+      "title": "Declaring a National Emergency To Secure the United States Bulk-Power System",
+      "before": {
+        "practiceAreas": [
+          "Global Reach",
+          "Governmental",
+          "Privacy and Cybersecurity"
+        ],
+        "industries": [
+          "Energy and Infrastructure"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Global Reach",
+          "Governmental",
+          "Privacy and Cybersecurity",
+          "Corporate",
+          "White Collar Defense and Investigations",
+          "Litigation"
+        ],
+        "industries": [
+          "Energy and Infrastructure",
+          "Digital Infrastructure"
+        ]
+      }
+    },
+    {
+      "id": "44716f20-91bb-4477-b82b-c54888954e5a",
+      "eoNumber": null,
+      "title": "Honoring the Memory of Dolly Parton",
+      "before": {
+        "practiceAreas": [],
+        "industries": []
+      },
+      "after": {
+        "practiceAreas": [],
+        "industries": []
+      }
+    },
+    {
+      "id": "77af6eb9-2c82-444d-b005-636f0ee8fd06",
+      "eoNumber": null,
+      "title": "Temporary Suspension of Additional Duties To Offset Canadian Discrimination Against the Commerce of the United States With Respect to Alcoholic Beverages, Dairy, and Motor Vehicles",
+      "before": {
+        "practiceAreas": [
+          "Global Reach",
+          "Tax"
+        ],
+        "industries": [
+          "Food and Beverage",
+          "Transportation"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Global Reach",
+          "Governmental"
+        ],
+        "industries": [
+          "Food and Beverage",
+          "Transportation"
+        ]
+      }
+    },
+    {
+      "id": "464e8dde-cf7d-480b-9adb-7d9c265fe13e",
+      "eoNumber": null,
+      "title": "Adjusting Imports of Unmanned Aircraft Systems and Unmanned Aircraft Systems Components Into the United States",
+      "before": {
+        "practiceAreas": [
+          "Global Reach",
+          "Tax"
+        ],
+        "industries": [
+          "Aerospace, Defense & Government Services",
+          "AI, Robotics and Quantum"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Global Reach",
+          "Governmental",
+          "Corporate",
+          "White Collar Defense and Investigations"
+        ],
+        "industries": [
+          "Aerospace, Defense & Government Services",
+          "Digital Infrastructure",
+          "Transportation",
+          "Energy and Infrastructure"
+        ]
+      }
+    },
+    {
+      "id": "9fbcde06-37dc-499d-b67d-0ebd67a9d2a2",
+      "eoNumber": null,
+      "title": "National Substance Use Primary Prevention Month, 2026",
+      "before": {
+        "practiceAreas": [],
+        "industries": []
+      },
+      "after": {
+        "practiceAreas": [],
+        "industries": []
+      }
+    },
+    {
+      "id": "ed3a6f0f-893e-4e3d-af9b-1d94bc1fd16d",
+      "eoNumber": "EO 14420",
+      "title": "Delivering Gold Standard Childhood Vaccine Recommendations for Americans",
+      "before": {
+        "practiceAreas": [
+          "Governmental",
+          "Litigation"
+        ],
+        "industries": [
+          "Healthcare",
+          "Life Sciences"
+        ]
+      },
+      "after": {
+        "practiceAreas": [
+          "Governmental",
+          "Litigation",
+          "Private Client Services"
+        ],
+        "industries": [
+          "Healthcare",
+          "Life Sciences"
+        ]
+      }
+    }
+  ]
+}
