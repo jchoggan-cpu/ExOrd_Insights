@@ -19,6 +19,14 @@ const INITIAL_BACKOFF_MS = 10_000;
 const THROTTLED_STATUSES = [429, 503];
 
 /**
+ * How long to wait for one request before abandoning it and retrying.
+ * Without this a stalled connection hangs the whole run indefinitely: a real
+ * --apply pass sat idle for eleven minutes on a request that never returned
+ * and never errored, because fetch has no timeout of its own.
+ */
+const REQUEST_TIMEOUT_MS = 30_000;
+
+/**
  * What one search saw. `truncated` matters: CourtListener pages at 20
  * results, and the gate's "no rival candidate" test is only honest if the
  * whole result set was actually examined.
@@ -68,8 +76,8 @@ function buildUrl(caseName: string, courtId?: string | null): string {
 }
 
 /** Honour the server's own Retry-After when it sends one; otherwise back off exponentially. */
-function backoffMs(response: Response, attempt: number): number {
-  const retryAfter = Number(response.headers.get("retry-after"));
+function backoffMs(response: Response | null, attempt: number): number {
+  const retryAfter = Number(response?.headers.get("retry-after"));
   if (Number.isFinite(retryAfter) && retryAfter > 0) return retryAfter * 1000;
   return INITIAL_BACKOFF_MS * 2 ** (attempt - 1);
 }
@@ -93,7 +101,24 @@ export function createDocketSearch(deps: DocketSearchDeps = {}): SearchDockets {
     const url = buildUrl(caseName, courtId);
 
     for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-      const response = await fetchImpl(url, { headers });
+      let response: Response;
+      try {
+        response = await fetchImpl(url, { headers, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+      } catch (cause) {
+        // A timeout or dropped connection, not an answer from the server.
+        // Worth one more try for the same reason a 429 is: the run is long
+        // and a single flaky request shouldn't end it. The last attempt
+        // rethrows so the failure is never mistaken for "no docket found".
+        if (attempt < MAX_ATTEMPTS) {
+          await sleep(backoffMs(null, attempt));
+          continue;
+        }
+        throw new Error(
+          `CourtListener search for "${caseName}" failed after ${MAX_ATTEMPTS} attempts: ${
+            cause instanceof Error ? cause.message : String(cause)
+          }`,
+        );
+      }
 
       if (response.ok) {
         const body: { results?: CourtListenerDocket[]; next?: string | null } = await response.json();

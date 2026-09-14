@@ -106,6 +106,39 @@ describe("createDocketSearch", () => {
 
     expect(result.truncated).toBe(true);
   });
+  // A real --apply run sat idle for eleven minutes on a request that never
+  // returned: fetch has no timeout of its own, so the client sets one.
+  it("passes an abort signal so a stalled request cannot hang the run", async () => {
+    const fetchImpl = vi.fn<typeof fetch>(async () => okResponse([]));
+    await createDocketSearch({ fetchImpl, token: null })({ caseName: "A v. B" });
+
+    expect(fetchImpl.mock.calls[0][1]?.signal).toBeInstanceOf(AbortSignal);
+  });
+
+  it("retries a timed-out request instead of ending the run", async () => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockRejectedValueOnce(new DOMException("The operation was aborted due to timeout", "TimeoutError"))
+      .mockResolvedValueOnce(okResponse([{ caseName: "A v. B" }]));
+    const sleep = vi.fn(async () => {});
+
+    const result = await createDocketSearch({ fetchImpl, sleep, token: null })({ caseName: "A v. B" });
+
+    expect(result.dockets).toHaveLength(1);
+    expect(sleep).toHaveBeenCalledTimes(1);
+  });
+
+  it("reports a persistently failing connection rather than an empty result", async () => {
+    const fetchImpl = vi.fn<typeof fetch>(async () => {
+      throw new Error("ECONNRESET");
+    });
+    const sleep = vi.fn(async () => {});
+
+    await expect(createDocketSearch({ fetchImpl, sleep, token: null })({ caseName: "A v. B" })).rejects.toThrow(
+      "ECONNRESET",
+    );
+    expect(fetchImpl).toHaveBeenCalledTimes(5);
+  });
 });
 
 describe("docketUrl", () => {

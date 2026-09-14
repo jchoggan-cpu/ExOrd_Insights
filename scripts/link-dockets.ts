@@ -6,7 +6,8 @@
  *
  * Usage:
  *   npm run link:dockets                 # dry run — searches, writes the review file, changes nothing
- *   npm run link:dockets -- --apply      # writes confident matches (and your resolved choices) to the database
+ *   npm run link:dockets -- --apply      # re-searches, then writes confident matches and your resolved choices
+ *   npm run link:dockets -- --from-file --apply   # writes exactly what the review file already says (no searching)
  *   npm run link:dockets -- --limit 20   # first N orders only, for a quick look
  *   npm run link:dockets -- --delay 2000 # slow the requests down further
  *
@@ -23,7 +24,11 @@
  *
  * To resolve an ambiguous entry: open the review file, find the entry, pick
  * the right docket from its "candidates", copy that candidate's "docketId"
- * into the entry's "chosenDocketId", then re-run with --apply.
+ * into the entry's "chosenDocketId", then re-run with --from-file --apply.
+ *
+ * Prefer --from-file whenever you have reviewed the file: a plain --apply
+ * searches again first, so what it writes is what the API returns now, not
+ * what you actually read.
  */
 import { config as loadEnv } from "dotenv";
 loadEnv({ path: ".env.local" });
@@ -95,20 +100,36 @@ async function fetchRows(supabase: SupabaseClient, limit: number | null): Promis
   }));
 }
 
-/** Previously-saved choices, keyed so a re-run doesn't discard human work. */
-async function loadSavedChoices(): Promise<Map<string, number>> {
-  const choices = new Map<string, number>();
+/**
+ * Reads the whole saved review file, or null when there isn't one yet.
+ * A missing file is normal on the first run; anything else — unreadable,
+ * or not valid JSON — is reported rather than quietly treated as "no
+ * choices saved", which would silently discard a human's review work.
+ */
+async function readReviewFile(): Promise<{ decisions?: ChallengeLinkDecision[] } | null> {
   let raw: string;
   try {
     raw = await readFile(REVIEW_FILE, "utf8");
-  } catch {
-    // No review file yet — expected on the first run, so there is nothing to
-    // carry over. Any other read failure would resurface on the write below.
-    return choices;
+  } catch (cause) {
+    if ((cause as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw new Error(`Could not read ${REVIEW_FILE}: ${cause instanceof Error ? cause.message : String(cause)}`);
   }
 
-  const saved: { decisions?: ChallengeLinkDecision[] } = JSON.parse(raw);
-  for (const d of saved.decisions ?? []) {
+  try {
+    return JSON.parse(raw);
+  } catch (cause) {
+    throw new Error(
+      `${REVIEW_FILE} is not valid JSON (${cause instanceof Error ? cause.message : String(cause)}). ` +
+        `Fix or delete it — continuing would silently ignore any choices recorded in it.`,
+    );
+  }
+}
+
+/** Previously-saved choices, keyed so a re-run doesn't discard human work. */
+async function loadSavedChoices(): Promise<Map<string, number>> {
+  const choices = new Map<string, number>();
+  const saved = await readReviewFile();
+  for (const d of saved?.decisions ?? []) {
     if (typeof d.chosenDocketId === "number") choices.set(decisionKey(d), d.chosenDocketId);
   }
   return choices;
@@ -178,6 +199,7 @@ async function saveReviewFile(decisions: ChallengeLinkDecision[], options: { par
 async function main() {
   const args = process.argv.slice(2);
   const apply = hasFlag(args, "--apply");
+  const fromFile = hasFlag(args, "--from-file");
   const limit = args.includes("--limit") ? numberFlag(args, "--limit", 0) : null;
   const delayMs = numberFlag(args, "--delay", DEFAULT_DELAY_MS);
 
@@ -185,6 +207,27 @@ async function main() {
   const rows = await fetchRows(supabase, limit);
   const entryCount = rows.reduce((n, r) => n + r.legalChallenges.length, 0);
   console.log(`${rows.length} orders carry ${entryCount} recorded legal challenges.`);
+
+  // Applying straight from the reviewed file: no searching, so what gets
+  // written is exactly what was read and approved, rather than whatever a
+  // fresh search returns minutes later.
+  if (fromFile) {
+    const saved = await readReviewFile();
+    if (!saved?.decisions?.length) {
+      throw new Error(`No decisions found in ${REVIEW_FILE}. Run the dry run first to produce it.`);
+    }
+    const summary = summarizeLinkPlan(saved.decisions);
+    const byHand = saved.decisions.filter((d) => d.outcome !== "confident" && resolvedLink(d) !== null).length;
+    console.log(`\nApplying ${REVIEW_FILE} as reviewed: ${summary.confident} confident + ${byHand} resolved by hand.`);
+
+    if (!apply) {
+      console.log(`Dry run — nothing written. Add --apply to write these ${summary.confident + byHand} links.`);
+      return;
+    }
+    console.log(`\nApplied: ${await writeLinks(supabase, rows, saved.decisions)} orders updated.`);
+    return;
+  }
+
   console.log(`Searching CourtListener (${delayMs}ms between requests, no API key, no model calls)...\n`);
 
   let searches = 0;
