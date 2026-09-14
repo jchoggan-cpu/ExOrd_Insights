@@ -168,3 +168,76 @@ describe("applyLinkToChallenge", () => {
     expect(applyLinkToChallenge(existing, link)).toEqual(existing);
   });
 });
+
+describe("buildLinkPlan — agency abbreviation fallback", () => {
+  const abbreviated = row({
+    legalChallenges: [{ caseName: "FBI Agents Association et al v. DOJ", court: "D.D.C." }],
+  });
+
+  const realDocket = docket({
+    caseName: "FEDERAL BUREAU OF INVESTIGATION AGENTS ASSOCIATION v. DEPARTMENT OF JUSTICE",
+    court_id: "dcd",
+    court_citation_string: "D.D.C.",
+    docketNumber: "1:25-cv-00328",
+    dateFiled: "2025-02-04",
+    docket_id: 12345,
+  });
+
+  it("finds a case the firm recorded with acronyms, and never links it automatically", async () => {
+    // Verified against the live API: the firm's spelling returns nothing,
+    // the expanded spelling returns the real docket.
+    const searchDockets = vi.fn(async ({ caseName }: { caseName: string }) => ({
+      dockets: caseName.includes("FEDERAL BUREAU") || caseName.includes("Federal Bureau") ? [realDocket] : [],
+      truncated: false,
+    }));
+
+    const [decision] = await buildLinkPlan({ rows: [abbreviated], searchDockets });
+
+    // Ambiguous, not confident: expanding "DOJ" is an inference about what
+    // the firm meant, so a human confirms it.
+    expect(decision.outcome).toBe("ambiguous");
+    expect(decision.link).toBeNull();
+    expect(decision.candidates.map((c) => c.docketNumber)).toContain("1:25-cv-00328");
+    expect(decision.reason).toContain("abbreviated");
+  });
+
+  it("leaves the recorded case name untouched in the decision", async () => {
+    const searchDockets = vi.fn(async ({ caseName }: { caseName: string }) => ({
+      dockets: caseName.includes("Federal Bureau") ? [realDocket] : [],
+      truncated: false,
+    }));
+
+    const [decision] = await buildLinkPlan({ rows: [abbreviated], searchDockets });
+
+    expect(decision.caseName).toBe("FBI Agents Association et al v. DOJ");
+  });
+
+  it("stays not_found when no expansion matches either", async () => {
+    const searchDockets = vi.fn(async () => ({ dockets: [], truncated: false }));
+
+    const [decision] = await buildLinkPlan({ rows: [abbreviated], searchDockets });
+
+    expect(decision.outcome).toBe("not_found");
+  });
+
+  it("does not search expansions for a name with no abbreviations in it", async () => {
+    // "Doe v. Noem" must not be read as Department of Energy, and a name
+    // with nothing to expand should cost exactly one search.
+    const searchDockets = vi.fn(async () => ({ dockets: [], truncated: false }));
+
+    await buildLinkPlan({
+      rows: [row({ legalChallenges: [{ caseName: "Doe v. Noem", court: "D. Mass." }] })],
+      searchDockets,
+    });
+
+    expect(searchDockets).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not try expansions when the name as written already matched", async () => {
+    const searchDockets = vi.fn(async () => ({ dockets: [docket()], truncated: false }));
+
+    await buildLinkPlan({ rows: [row()], searchDockets });
+
+    expect(searchDockets).toHaveBeenCalledTimes(1);
+  });
+});

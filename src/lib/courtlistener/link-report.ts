@@ -1,5 +1,6 @@
 import type { DocketSearchResult, SearchDockets } from "./client";
 import { docketUrl } from "./client";
+import { expandAgencyAbbreviations } from "./agency-abbreviations";
 import { resolveCourtId } from "./court-codes";
 import { matchChallengeToDocket } from "./match-case";
 import { normalizeCaseName } from "./normalize-case-name";
@@ -140,6 +141,26 @@ export async function buildLinkPlan({ rows, searchDockets, onSearch, onDecision 
       }
 
       const match = matchChallengeToDocket({ caseName, court, orderDateSigned: row.dateSigned }, results);
+
+      // Nothing under the name as the firm wrote it. Before giving up, try
+      // the agency acronyms spelled out — the firm records "FBI Agents
+      // Association et al v. DOJ" where the docket reads "FEDERAL BUREAU OF
+      // INVESTIGATION AGENTS ASSOCIATION v. DEPARTMENT OF JUSTICE".
+      if (match.outcome === "not_found") {
+        const expanded = await findByExpandedName({
+          caseName,
+          court,
+          orderDateSigned: row.dateSigned,
+          searchDockets,
+          onSearch,
+          cache,
+        });
+        if (expanded) {
+          record({ ...base, ...expanded });
+          continue;
+        }
+      }
+
       record({
         ...base,
         outcome: match.outcome,
@@ -151,6 +172,57 @@ export async function buildLinkPlan({ rows, searchDockets, onSearch, onDecision 
   }
 
   return decisions;
+}
+
+/**
+ * How many expanded spellings to try for one case name. Each costs another
+ * search against a free, rate-limited API, and the expander orders its
+ * candidates most-likely-first, so trying every one buys little.
+ */
+const MAX_EXPANSIONS_TRIED = 3;
+
+/**
+ * Searches for a case under its agency acronyms spelled out, and reports
+ * what it finds as ambiguous — never as a confident link.
+ *
+ * The downgrade is the point. Expanding "DOJ" to "Department of Justice" is
+ * an inference about what the firm meant, and a match found only by way of
+ * that inference has one more assumption in it than a match on the name as
+ * written. A human confirms those; the matcher does not.
+ */
+async function findByExpandedName(params: {
+  caseName: string;
+  court: string;
+  orderDateSigned: string | null;
+  searchDockets: SearchDockets;
+  onSearch?: (caseName: string, court: string) => Promise<void> | void;
+  cache: Map<string, DocketSearchResult>;
+}): Promise<Pick<ChallengeLinkDecision, "outcome" | "reason" | "link" | "candidates"> | null> {
+  const { caseName, court, orderDateSigned, searchDockets, onSearch, cache } = params;
+
+  for (const expandedName of expandAgencyAbbreviations(caseName).slice(0, MAX_EXPANSIONS_TRIED)) {
+    const key = searchKey(expandedName, court);
+    let results = cache.get(key);
+    if (!results) {
+      await onSearch?.(expandedName, court);
+      results = await searchDockets({ caseName: expandedName, courtId: resolveCourtId(court) });
+      cache.set(key, results);
+    }
+
+    // Matched against the expanded name, since that is what was searched.
+    const match = matchChallengeToDocket({ caseName: expandedName, court, orderDateSigned }, results);
+    if (match.outcome === "not_found") continue;
+
+    const found = match.docket ? [match.docket, ...match.candidates.filter((c) => c !== match.docket)] : match.candidates;
+    return {
+      outcome: "ambiguous",
+      reason: `Not found as written, but "${expandedName}" matches — the agency name was abbreviated. Confirm this is the same case.`,
+      link: null,
+      candidates: found.map(toLink),
+    };
+  }
+
+  return null;
 }
 
 export interface LinkPlanSummary {
