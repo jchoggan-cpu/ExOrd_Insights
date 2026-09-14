@@ -45,6 +45,9 @@ const REVIEW_FILE_PREFIX = "data/practice-area-tags-review";
  */
 const DEFAULT_MAX_COST_USD = 40;
 
+/** How often to print progress and re-check the spend cap, in rows. */
+const PROGRESS_EVERY = 10;
+
 interface TagRow {
   id: string;
   eo_number: string | null;
@@ -192,13 +195,19 @@ async function main() {
       if (error) throw new Error(`Failed to write tags for ${row.eo_number ?? row.id}: ${error.message}`);
     }
 
+    // Checked on the same cadence as the progress line rather than every
+    // row: the spend total is a database round-trip, and 600 of them would
+    // cost more wall-clock than the model calls they are guarding. The cap
+    // is a runaway backstop, so being up to PROGRESS_EVERY rows late in
+    // noticing is harmless — the run is resumable either way.
+    if (classified % PROGRESS_EVERY !== 0 && classified !== 1) continue;
+
     const spendNow = (await getUsageSummary(supabase, 1)).today.costUsd;
-    if (classified % 10 === 0 || classified === 1) {
-      console.log(
-        `  ${classified}/${rows.length} · $${(spendNow - startingSpend).toFixed(2)} this run · ` +
-          `${row.eo_number ?? row.title.slice(0, 32)} -> ${result.practiceAreas.length} areas`,
-      );
-    }
+    console.log(
+      `  ${classified}/${rows.length} · $${(spendNow - startingSpend).toFixed(2)} this run · ` +
+        `${row.eo_number ?? row.title.slice(0, 32)} -> ${result.practiceAreas.length} areas`,
+    );
+
     if (spendNow >= maxCost) {
       console.log(`\nStopping: today's recorded spend reached the $${maxCost.toFixed(2)} cap.`);
       break;
