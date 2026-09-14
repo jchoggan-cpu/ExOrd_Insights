@@ -19,7 +19,8 @@
     "draft:summaries": "tsx scripts/draft-summaries.ts",
     "enrich:all": "tsx scripts/enrich-all.ts",
     "link:dockets": "tsx scripts/link-dockets.ts",
-    "generate:court-ids": "tsx scripts/generate-court-ids.ts"
+    "generate:court-ids": "tsx scripts/generate-court-ids.ts",
+    "correct": "tsx scripts/record-correction.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.123.0",

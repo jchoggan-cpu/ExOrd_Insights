@@ -1,0 +1,15 @@
+{
+  "corrections": [
+    {
+      "date": "2026-09-14",
+      "eoId": "a4d41b35-01d5-4872-84af-84b38e466588",
+      "eoNumber": "EO 14183",
+      "eoTitle": "Prioritizing Military Excellence and Readiness",
+      "field": "aiSummary",
+      "reason": "Summary describes a Unified Command Plan revision with 10- and 30-day deadlines; none of 'Command Plan', '10 days' or 'ten days' appears anywhere in this order's 6,786-char full_text. It belongs to a different document and came from the source spreadsheet, not from any AI run. Cleared so the pipeline regenerates from this order's actual text.",
+      "before": "10 days for Secretary of Defense to revise Command Plan. 30 days for a commander's estimate for a Level 3 planning requirement.",
+      "after": null,
+      "protectionRemoved": true
+    }
+  ]
+}
