@@ -31,11 +31,14 @@ export interface ClassifyResult {
 }
 
 /**
- * Small by design: the reply is two short arrays. Unlike summarization there
- * is no long prose to leave room for, though the default model still thinks
- * and those tokens are billed as output.
+ * The reply is two short arrays, but the ceiling has to cover the model's
+ * thinking as well — it is billed and counted as output. Sized at 2000 this
+ * truncated 4 of 614 rows on Sonnet 5, and the truncation surfaced as
+ * "response was not valid JSON" because the cut landed mid-object. Room for
+ * thinking costs nothing on runs that don't use it: only tokens actually
+ * generated are billed.
  */
-export const CLASSIFY_MAX_TOKENS = 2000;
+export const CLASSIFY_MAX_TOKENS = 8000;
 
 /**
  * Strips a Markdown code fence if the model wrapped its JSON in one.
@@ -131,6 +134,16 @@ export async function classifyDocument({
       },
     ],
   });
+
+  // Checked before parsing, because a truncated response is usually still
+  // *syntactically* broken JSON — reporting that as a parse failure sent a
+  // real 4-row failure down the wrong diagnosis until the token ceiling was
+  // found. Say what actually happened.
+  if (response.stop_reason === "max_tokens") {
+    throw new Error(
+      `Classification response was cut off at the ${CLASSIFY_MAX_TOKENS}-token ceiling before it finished.`,
+    );
+  }
 
   return {
     result: parseClassifyResponse(extractTextBlock(response)),

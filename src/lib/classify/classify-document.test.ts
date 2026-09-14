@@ -112,12 +112,12 @@ interface FakeResponse {
   usage: { input_tokens: number; output_tokens: number };
 }
 
-function fakeClient(text: string) {
+function fakeClient(text: string, stopReason = "end_turn") {
   // Typed through the generic rather than an unused parameter, so the call
   // arguments stay inspectable without tripping no-unused-vars.
   const create = vi.fn<(params: SentMessage) => Promise<FakeResponse>>(async () => ({
     content: [{ type: "text", text }],
-    stop_reason: "end_turn",
+    stop_reason: stopReason,
     usage: { input_tokens: 100, output_tokens: 20 },
   }));
   return { client: { messages: { create } } as never, create };
@@ -159,4 +159,20 @@ describe("classifyDocument", () => {
     const sent = create.mock.calls[0][0];
     expect(sent.messages[0].content).toContain("full text of this instrument is not available");
   });
+  // Four of 614 rows hit this on the real run. The cut landed mid-object, so
+  // it surfaced as "not valid JSON" and sent the diagnosis the wrong way;
+  // the ceiling is checked first now so the error names the real cause.
+  it("reports a truncated response as truncation, not as bad JSON", async () => {
+    const { client } = fakeClient('{"practiceAreas": ["Gov', "max_tokens");
+
+    await expect(
+      classifyDocument({
+        client,
+        model: "test-model",
+        systemPrompt: "SYSTEM",
+        input: { title: "An Order", actionType: "Executive Order", sourceText: "BODY", sourceIsSummary: false },
+      }),
+    ).rejects.toThrow("cut off");
+  });
 });
+
