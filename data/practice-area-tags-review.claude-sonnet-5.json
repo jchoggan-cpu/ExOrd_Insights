@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-14T02:19:24.794Z",
+  "generatedAt": "2026-09-14T02:32:34.650Z",
   "model": "claude-sonnet-5",
   "changes": [
     {
@@ -18,8 +18,7 @@
         "practiceAreas": [
           "Global Reach",
           "Governmental",
-          "Litigation",
-          "Corporate"
+          "Litigation"
         ],
         "industries": [
           "Food and Beverage"
@@ -40,8 +39,7 @@
       },
       "after": {
         "practiceAreas": [
-          "Global Reach",
-          "Governmental"
+          "Global Reach"
         ],
         "industries": [
           "Transportation"
@@ -71,7 +69,7 @@
         "industries": [
           "Healthcare",
           "AI, Robotics and Quantum",
-          "Aerospace, Defense & Government Services"
+          "Digital Infrastructure"
         ]
       }
     },
@@ -108,13 +106,10 @@
       "after": {
         "practiceAreas": [
           "Global Reach",
-          "Governmental",
-          "Litigation",
-          "Tax"
+          "Governmental"
         ],
         "industries": [
-          "Food and Beverage",
-          "Transportation"
+          "Food and Beverage"
         ]
       }
     },
@@ -135,8 +130,7 @@
         "practiceAreas": [
           "Global Reach",
           "Governmental",
-          "Litigation",
-          "Appellate"
+          "Litigation"
         ],
         "industries": [
           "Transportation"
@@ -158,13 +152,10 @@
       },
       "after": {
         "practiceAreas": [
-          "Global Reach",
-          "Governmental",
-          "Corporate"
+          "Global Reach"
         ],
         "industries": [
-          "Food and Beverage",
-          "Retail, Fashion & Beauty"
+          "Food and Beverage"
         ]
       }
     },
@@ -197,8 +188,9 @@
       "after": {
         "practiceAreas": [
           "Antitrust and Competition",
+          "Commercial Finance",
           "Governmental",
-          "Commercial Finance"
+          "Litigation"
         ],
         "industries": [
           "Food and Beverage"
@@ -223,7 +215,7 @@
           "Governmental",
           "Land Use",
           "Global Reach",
-          "Litigation",
+          "Tax",
           "Private Client Services"
         ],
         "industries": [
@@ -319,12 +311,12 @@
           "Governmental",
           "Privacy and Cybersecurity",
           "Corporate",
-          "White Collar Defense and Investigations",
-          "Litigation"
+          "White Collar Defense and Investigations"
         ],
         "industries": [
           "Energy and Infrastructure",
-          "Digital Infrastructure"
+          "Digital Infrastructure",
+          "Aerospace, Defense & Government Services"
         ]
       }
     },
@@ -357,8 +349,7 @@
       },
       "after": {
         "practiceAreas": [
-          "Global Reach",
-          "Governmental"
+          "Global Reach"
         ],
         "industries": [
           "Food and Beverage",
@@ -389,9 +380,9 @@
         ],
         "industries": [
           "Aerospace, Defense & Government Services",
+          "AI, Robotics and Quantum",
           "Digital Infrastructure",
-          "Transportation",
-          "Energy and Infrastructure"
+          "Transportation"
         ]
       }
     },
@@ -405,7 +396,9 @@
       },
       "after": {
         "practiceAreas": [],
-        "industries": []
+        "industries": [
+          "Healthcare"
+        ]
       }
     },
     {
@@ -425,8 +418,7 @@
       "after": {
         "practiceAreas": [
           "Governmental",
-          "Litigation",
-          "Private Client Services"
+          "Litigation"
         ],
         "industries": [
           "Healthcare",

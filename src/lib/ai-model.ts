@@ -38,8 +38,15 @@ const DEFAULT_SUMMARY_MODEL = "claude-fable-5";
  * $0.048 a row for a two-array answer, because its thinking is always on and
  * billed as output. Routing this task separately is what lets a cheaper
  * model take it without touching summarization.
+ *
+ * Sonnet 5 was chosen from a bake-off over the same 20 rows: ~$4.90 for the
+ * full corpus against Fable's ~$29, and the closest agreement with Fable of
+ * the cheaper models (8/20 identical tag sets, and it added tags on only 3
+ * rows where Haiku added them on 10). Over-tagging is the failure that
+ * matters here — a practice area applied to everything cannot filter
+ * anything.
  */
-const DEFAULT_CLASSIFY_MODEL = "claude-fable-5";
+const DEFAULT_CLASSIFY_MODEL = "claude-sonnet-5";
 
 interface AiCredentials {
   apiKey: string;

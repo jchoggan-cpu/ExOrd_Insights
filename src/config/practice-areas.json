@@ -45,7 +45,7 @@
   },
   {
     "name": "Litigation",
-    "criteria": "creates a cause of action, directs enforcement or investigation against identified parties, or is itself likely to be challenged in court.",
+    "criteria": "creates or removes a private right of action, alters litigation procedure, evidence, remedies, or access to court, or directs enforcement or investigation against specifically identified parties. Do not select this merely because the order is controversial or may attract a legal challenge — nearly every executive order may.",
     "subPractices": [
       "Bankruptcy Litigation & Distressed Loan Workouts",
       "Brand and Reputation Management",
@@ -79,7 +79,7 @@
   },
   {
     "name": "Tax",
-    "criteria": "changes tax rates, credits, deductions, tariffs treated as revenue measures, tax-exempt status, or IRS administration and enforcement."
+    "criteria": "changes tax rates, credits, deductions, tax-exempt status, or IRS administration and enforcement. Tariffs and import duties are Global Reach, not Tax, unless the order also changes tax-code treatment."
   },
   {
     "name": "White Collar Defense and Investigations",
