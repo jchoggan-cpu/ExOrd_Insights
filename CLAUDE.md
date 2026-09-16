@@ -57,6 +57,15 @@ without being asked again.
   test coverage.** Not being retrofitted en masse — rule 9 applies to code
   written or touched from here forward; bring a file under test when you're
   already in it for another reason, not as a separate sweep.
+- **A failed query silently serves January's spreadsheet** (rule 4 violation,
+  found 2026-09-16, unfixed). `getExecutiveOrders`, `getExecutiveOrderById`,
+  `getExecutiveOrdersByIds` and both reads in `data.ts` fall back to the
+  bundled legacy JSON on error with only a `console.error`; the "showing
+  spreadsheet data" banner is gated on `isUsingLocalData()`, which asks only
+  whether Supabase is *configured*. So a query failure shows 340 stale rows
+  that look live — on the EO detail page and the content drafter, the two
+  places stale text reaches a client. `searchExecutiveOrders` already throws
+  instead; these should too, or the banner must learn the difference.
 - ~~Federal Register job orchestration is not integration-tested~~ **Closed
   2026-09-09** — all three jobs plus the overlap guard are covered via
   `test-support/fake-supabase.ts`, with every network dependency injectable
@@ -70,25 +79,18 @@ without being asked again.
   `enrich` builds an Anthropic client and loads the stored prompt, and
   `ingest` carries the duplicate guard, so consolidate the shared shell only.
 
-## Resolved — RLS anon-read gap (was "Known blocking issue")
+## Resolved — RLS anon-read gap (2026-09-07)
 
-Found by adversarial review, pre-existing: SELECT policies on
-`executive_orders`, `ingestion_runs`, `rescinded_prior_orders` and
-`agency_actions` required `auth.role() = 'authenticated'` or `is_admin()`,
-but Supabase Auth (Phase 5) doesn't exist, so no anon-client read could ever
-satisfy them. Every tracker, EO-detail and Needs-Attention read would have
-been silently RLS-denied and fallen back to `[]` or stale JSON, with no
-error anywhere.
+SELECT policies on `executive_orders`, `ingestion_runs`,
+`rescinded_prior_orders` and `agency_actions` required an authenticated role
+that Phase 5 hasn't built, so no anon read could ever satisfy them — every
+tracker and detail read would have been RLS-denied and fallen back to stale
+JSON with no error anywhere. Loosened to `using (true)` in
+`0002_loosen_read_policies.sql`; the real boundary today is `SITE_PASSWORD`.
+Writes are unchanged, `is_admin()`-gated and service-role only.
 
-**Decision (2026-09-07):** loosen those four to `using (true)` — see
-`0002_loosen_read_policies.sql`. The real boundary today is `SITE_PASSWORD`
-(`src/lib/site-auth.ts`), so those policies were unreachable by design, not
-a deliberate restriction. Writes are unchanged — `is_admin()`-gated, and
-only reachable via the service-role key the jobs use.
-
-**Revisit at Phase 5**: once real per-user accounts ship, tighten these four
-SELECT policies back (e.g. to `auth.role() = 'authenticated'` or a
-role-aware policy) — `0002`'s own header comment says the same.
+**Revisit at Phase 5**: once real per-user accounts ship, tighten those four
+SELECT policies back — `0002`'s own header comment says the same.
 
 ## Supabase project is connected (2026-09-08)
 
@@ -136,8 +138,7 @@ be expected and checked for.
 
 **Also present, unused**: the marketplace integration added ~16 further env
 vars (`*JCHLQSUPABASE*`, `*PUBLISHABLE*`, `SUPABASE_JWT_SECRET`,
-`POSTGRES_*`). This app reads only the three names in `src/lib/supabase.ts`.
-Harmless clutter; safe to delete, not urgent.
+`POSTGRES_*`); this app reads only the three in `src/lib/supabase.ts`.
 
 ## Lessons that change how to work here
 

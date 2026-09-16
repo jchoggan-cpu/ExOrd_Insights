@@ -91,7 +91,7 @@ export async function searchExecutiveOrders(
   });
 
   if (error) {
-    // Loud, not silent: an empty tracker that should have had 614 rows is
+    // Loud, not silent: an empty tracker that should have had 553 rows is
     // indistinguishable from "nothing matched" unless this is surfaced.
     console.error("Tracker search failed:", error);
     throw new Error(`Tracker search failed: ${error.message}`);
