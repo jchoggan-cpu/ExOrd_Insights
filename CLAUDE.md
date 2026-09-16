@@ -41,7 +41,7 @@ without being asked again.
 | Cloud CI blocks bad changes | ✅ `.github/workflows/ci.yml` — lint, typecheck, test, build on every push/PR. Extend this file's steps rather than inventing a parallel check. |
 | Pin every tool version | ✅ All of `package.json` pinned exact (no `^`/`latest`); `engines.node` and the CI workflow's `setup-node` both pin `24.19.0` so local and CI never drift apart. Repin both together when Node is upgraded. |
 | Local ports <49152 | ✅ N/A today — Supabase is hosted, dev server is Next's default (3000). Revisit only if a local service is ever added. |
-| Generated files saved + CI-compared | Not yet applicable — no code generation step exists yet. Once Supabase is live, `supabase gen types typescript` output should be committed and CI should regenerate + diff it (add to the ledger below when that happens). |
+| Generated files saved + CI-compared | ⚠️ Now applicable, not done. Supabase is live, so `supabase gen types typescript` output could be committed and CI could regenerate + diff it. Today the schema is mirrored by hand in `src/lib/types.ts`, which is exactly the drift this rule exists to catch. |
 | Manual-steps ledger | ✅ See below. |
 | Environment fully documented | ✅ README.md's "Environment variables" + "Setting up Supabase" sections; CI proves the recipe actually works headless. |
 | Team-of-AIs for substantial work | **Adopted 2026-09-13, in two layers.** *Runtime*: each AI task in the app routes to its own model through `src/lib/ai-model.ts` (content drafting, summarization, classification), so a task's cost matches its difficulty rather than inheriting one default. Add a task by adding a `get*Model()` there — never a second access point. *Development*: mechanical, well-specified, independently-verifiable work (lookup tables, snapshots, scaffolding) goes to subagents on cheaper models; design, live-data writes, migrations, and final verification do not. **Every subagent claim is re-verified against live state before it is acted on** — subagents cannot see this project's history of bugs that were invisible until checked directly. Still required regardless of layer: (a) state the plan before coding, (b) run the `code-review` skill as an adversarial pass before calling it done. |
@@ -57,22 +57,18 @@ without being asked again.
   test coverage.** Not being retrofitted en masse — rule 9 applies to code
   written or touched from here forward; bring a file under test when you're
   already in it for another reason, not as a separate sweep.
-- ~~**The three Federal Register job orchestration functions** are not
-  integration-tested~~ **Closed (2026-09-09).** All three jobs plus the
-  overlap guard are covered via `test-support/fake-supabase.ts`, and the
-  Federal Register fetchers and Anthropic client are injectable (rule 3) so
-  no test makes a network call. A stuck-`running` row that permanently
-  jammed the guard was found and fixed at the same time
-  (`STALE_RUN_THRESHOLD_MINUTES`, `finishRunSafely`). Full writeup in
-  `git log 2026-09-09`.
+- ~~Federal Register job orchestration is not integration-tested~~ **Closed
+  2026-09-09** — all three jobs plus the overlap guard are covered via
+  `test-support/fake-supabase.ts`, with every network dependency injectable
+  (rule 3). See `git log 2026-09-09`.
 - **`ingest-job.ts`/`enrich-job.ts`/`reconcile-job.ts` share a lot of
-  structural duplication** (a near-identical fetch/sync/tally loop, near-
-  identical result interfaces, near-identical try/catch/finishRun-on-failure
-  boilerplate) that an adversarial review pass flagged and a consolidation
-  would clean up. **Status: accepted for now** — deferred rather than risking
-  a rushed refactor across three files right before the first real run;
-  worth doing as its own follow-up once the pipeline has run live at least
-  once.
+  structural duplication** (near-identical fetch/sync/tally loop, result
+  interfaces, and try/catch/finishRun boilerplate) that an adversarial review
+  flagged. It was deferred until the pipeline had run live at least once —
+  **that condition is now met**, so this is a live candidate rather than a
+  parked one. Note the jobs are no longer as symmetrical as they look:
+  `enrich` builds an Anthropic client and loads the stored prompt, and
+  `ingest` carries the duplicate guard, so consolidate the shared shell only.
 
 ## Resolved — RLS anon-read gap (was "Known blocking issue")
 
@@ -101,8 +97,10 @@ are live — **verify directly** against `pg_policies`/`information_schema`/
 `pg_proc`, never the migration-history log alone; that is what caught both
 issues below. `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
 `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET` and `ANTHROPIC_API_KEY` are set
-in `.env.local`; the first four plus `EO_TRACKER_MODEL` are in Vercel.
-Vercel won't read a Secret-type value back via CLI once set.
+in `.env.local`; those five plus `EO_TRACKER_MODEL` and `SITE_PASSWORD` are
+in Vercel. **Vercel won't read a Secret-type value back via CLI, so "the
+variable is listed" is not evidence it holds anything** — see Production
+environment below for the eight nights that cost.
 
 **Important workflow change**: the Supabase project's GitHub integration
 auto-deploys everything in `supabase/migrations/` on every push to
@@ -141,73 +139,74 @@ vars (`*JCHLQSUPABASE*`, `*PUBLISHABLE*`, `SUPABASE_JWT_SECRET`,
 `POSTGRES_*`). This app reads only the three names in `src/lib/supabase.ts`.
 Harmless clutter; safe to delete, not urgent.
 
-## Enrichment backlog cleared (2026-09-12)
+## Lessons that change how to work here
 
-`npm run enrich:all -- --apply` summarized all 276 queued rows in 14 passes
-for **$15.98**, so every one of the 614 tracker rows now has a summary. Four
-things worth keeping:
+Distilled from the sessions that produced them; the narratives are in
+`git log` and README.md. Figures below are true as of their date.
 
-- **Prompt caching is load-bearing, and fails silently.** The ~3,300-token
-  system prompt is cached, read thereafter at a tenth the input rate.
-  `/usage` gives cache-read tokens their own column for exactly that reason:
-  if it hits 0 mid-run the bill roughly doubles with nothing else looking
-  wrong.
-- **Estimating from a handful of calls is unreliable.** Six calls projected
-  $8-9 against an actual $15.98. Price a run from a full pass or `/usage`.
-- **Resumability earned its keep.** A Gateway Timeout killed one row; the
-  next pass picked it up unaided, since each selects only `ai_summary IS
-  NULL`. Interrupting `enrich:all` is always safe.
-- **Two rows were flagged** by quote verification and left unsummarized —
-  see `/needs-attention`.
+**Verify against live state — including against this file.** Nearly every
+real bug here was invisible until someone checked directly: the migration
+that silently never applied (`0004`), the stuck `running` row that jammed
+the ingest guard, RLS policies no anon read could satisfy, 62 duplicate rows
+nothing flagged, and a production cron that failed eight nights running.
+Counts and costs written here are the first thing to re-check, never to cite.
 
-Outcome: median 83 words (the firm's hand-written median is 67), zero
-multi-paragraph summaries, 0% empty subject areas. Practice-area coverage
-was poor then (54% empty) — **fixed 2026-09-15**, see below.
+**Match on a field and you have decided which records you cannot see.** The
+backfill reconciled the two data sources on `eo_number`; proclamations and
+memoranda have none, so 62 were duplicated instead of merged — and the
+duplicate *check* compared EO numbers too, so nothing flagged it. Before
+matching on any field, ask which rows lack it.
 
-## Summary quality audit (2026-09-12)
+**A guard that defaults instead of stopping guesses wrong quietly.**
+`merge-rules.ts` refuses to run when a column has no explicit rule, because
+the first version defaulted to one side and would have kept four stale
+`"Pending Federal Register Publication"` values without a word.
 
-`verify-facts.ts` checks the hard facts in every summary — deadlines, money,
-percentages, statutory citations, instrument numbers, dates — against that
-row's `full_text`. Run over all 498 summarized rows with source text, it
-found **759 checkable facts** and, after the checker's own false positives
-were fixed, **4 flags**:
+**Price a run from a full pass, not a sample.** Six calls projected $8–9
+against an actual $15.98. `/usage` records what this app has *spent*, never
+the balance — auto-reload means only the Anthropic Console shows that.
 
-- **Zero confirmed fabrications in the 276 AI-written summaries.** Every
-  flag traced to the checker's formatting assumptions, not the model.
-- **One genuine defect, and it was the firm's own**: `EO 14183` carried a
-  legacy summary describing a different document. **Corrected 2026-09-15**
-  via `npm run correct` — see `data/data-corrections.json`.
+**Prompt caching is load-bearing and fails silently.** A cache-read of 0
+during a *bulk* run means the bill roughly doubled with nothing else looking
+wrong. Zero on a one-row cron run is normal — an ephemeral cache lives ~5
+minutes, so a single call never reads one back.
 
-The first pass flagged 19 rows; 15 were the checker being wrong, and
-handling those formatting differences (spelled-out deadlines, ".15 percent",
-"$125 million" vs "$125,000,000", reformatted statutory citations) is most
-of what `verify-facts.ts` now does — each a regression test. **Read a flag
-as "look at this", never as "this is wrong"**: the check only asks whether a
-figure appears in the source, not whether it attaches to the right actor.
+**A tag on most of the corpus cannot filter, and fixing criteria beats
+changing models.** Tightening Litigation and Tax moved tags per row 2.40 →
+1.95 with the model held constant; `Governmental` hit 70% and had to be
+subdivided into `Governmental--National Security` form. **Any future
+compound tag must also update `search_executive_orders` in migration 0008** —
+introducing that separator silently broke the tracker's filter until 0008
+fixed it. Which tag form wins is enforced in `classify-document.ts`, not the
+prompt: the pilot proved the model returns both when merely asked not to.
 
-## Practice-area tagging (2026-09-15)
+**Read a verification flag as "look at this", never "this is wrong".**
+`verify-facts.ts` found 759 checkable facts across the summarized corpus and
+**zero confirmed fabrications** in the AI-written summaries; the one genuine
+defect was the firm's own (`EO 14183`, corrected via `npm run correct`). It
+only asks whether a figure appears in the source, not whether it attaches to
+the right actor.
 
-Tagging went from 128 of 615 rows to 467; every row still untagged is
-ceremonial (Labor Day, memorials, heritage months), where empty is correct.
-Four things worth keeping:
+**Enrichment is always safe to interrupt.** Every pass selects only
+`ai_summary IS NULL`, so Ctrl-C, a spend cap or an outage leaves finished
+rows finished.
 
-- **Classification is its own task with its own model.** It was welded into
-  summarization, so re-tagging would have regenerated the firm's 338 curated
-  summaries; `npm run classify` writes tags only. Routes via
-  `EO_TRACKER_CLASSIFY_MODEL` (Sonnet 5, ~$5 a corpus) while summarization
-  stays on Fable 5 (~$29) — chosen by a bake-off, not assumed.
-- **Loose criteria cost more than model choice.** Tightening Litigation and
-  Tax moved average tags per row 2.40 → 1.95 with the model held constant.
-  Fix criteria before paying to apply them 600 times.
-- **A tag on most of the corpus cannot filter.** `Governmental` reached 70%,
-  so it is subdivided into the firm's nine subgroups, stored as
-  `Governmental--National Security`. Largest tag is now 36%. The firm's
-  rules about which form wins are enforced in `classify-document.ts`, not in
-  the prompt — the pilot proved the model returns both when merely asked not
-  to.
-- **Subgroups broke the filter, silently.** Exact array matching meant
-  selecting `Governmental` matched almost nothing; migration 0008 matches a
-  parent OR any subgroup. Any future compound tag must update it too.
+## Production environment (2026-09-16)
+
+- **`SITE_PASSWORD` is set; the gate is live.** Vercel's own Deployment
+  Protection is the paid add-on — this app's gate (`src/proxy.ts`) is an
+  ordinary env var and works on Hobby. `/api/cron/*` is excluded from the
+  proxy matcher deliberately: those routes answer to `CRON_SECRET` and must
+  return JSON, not a redirect. Re-verify both if the matcher ever changes.
+- **A Vercel env var can exist and still be empty, with nothing to say so.**
+  `ANTHROPIC_API_KEY` was registered but blank, so the nightly enrich job
+  failed eight nights running while ingest succeeded beside it. A *wrong*
+  key returns 401 from Anthropic; our own "No AI credentials configured"
+  error means the stored value is empty. And env changes reach only new
+  deployments — a redeploy is part of the fix, not optional.
+- **Nothing alerts.** Every failure — dead cron, flagged hallucination, API
+  outage — surfaces only on `/needs-attention`, which a human has to open.
+  The single biggest structural gap in the project.
 
 ## Manual-steps ledger
 
@@ -215,17 +214,17 @@ Steps that need a human, can't be automated away, and how to tell they're done:
 
 | Step | Where | Done when |
 |---|---|---|
-| Run `npm run import:supabase` once (loads the 340 legacy rows) — **not safe to re-run**, only after confirming the tables are empty | local machine, after `.env.local` has real Supabase keys | Rows visible in Supabase's Table Editor |
-| Run `npm run backfill:federal-register` once, after `import:supabase` | local machine | `/needs-attention` shows recent runs and the tracker's order count jumps to match the administration-to-date total |
-| Set `AI_GATEWAY_API_KEY` (from Vercel > AI Gateway > API Keys) in `.env.local` and in Vercel, to route Claude calls through the gateway instead of the Anthropic API directly | Vercel dashboard / `vercel env add` | An enrichment run logs "Vercel AI Gateway"; requests appear in the AI Gateway overview |
-| **Check the Anthropic balance before a large run.** Auto-reload is on, so the `$4 remaining` figure in older notes was wrong — `/usage` records what this app spent ($16.10 through 2026-09-14), never the balance. Only the Console shows that | Anthropic Console | Balance and auto-reload both confirmed, with headroom |
-| Set a monthly spending cap — on the AI Gateway budget if routing through it, otherwise on the Anthropic API key | Vercel AI Gateway settings / Anthropic Console | Cap visible in that product's billing limits page |
-| Review the derived summarization prompt at `/prompt`. (The practice-area `criteria` were reviewed 2026-09-15: Litigation and Tax tightened, Governmental subdivided — the prompt itself is still a first pass distilled from the firm's summaries, not firm-authored) | the app | You've read it once and edited or accepted it |
-| Decide whether `Congressional Investigations` earns its place — it drew 0 of 615 rows, so it is a filter option that never matches | `src/config/practice-areas.json` | Kept deliberately, or removed |
-| Run `npm run draft:summaries -- --apply --limit N` in batches against the 222 curated rows that have full text, then compare on each EO page. Watch `/usage` between batches — see the credit row above | local machine | Drafts visible beneath the curated summaries |
-| Set `SITE_PASSWORD` if sharing a deployed URL pre-auth | deployment env vars | `/gate` prompts before the app loads |
-| Review `data/legal-challenge-links.json`, paste a candidate's `docketId` into `chosenDocketId` for entries marked `ambiguous`, then `npm run link:dockets -- --apply` | editor, then local machine | Docket links show on EO detail pages; the file's `ambiguous` count is 0 or knowingly accepted |
-| Optional: set `COURTLISTENER_API_TOKEN` (free, from courtlistener.com) to lift the anonymous rate limit | `.env.local` | A full `link:dockets` run finishes with no 429 backoffs |
+| **Check the Anthropic balance before a large run.** `/usage` records what this app has *spent* ($24.69 all-time through 2026-09-16), never the balance; auto-reload is on, so only the Console shows it | Anthropic Console | Balance and auto-reload both confirmed, with headroom |
+| Review the derived summarization prompt at `/prompt`. `summary_prompts` is still empty, so every summary to date used the built-in default. (Practice-area `criteria` were reviewed 2026-09-15; the prompt itself is still a first pass distilled from the firm's summaries, not firm-authored) | the app | You've read it once and edited or accepted it |
+| Review `data/legal-challenge-links.json`, paste a candidate's `docketId` into `chosenDocketId` for the 30 entries marked `ambiguous`, then `npm run link:dockets -- --from-file --apply` | editor, then local machine | Docket links show on EO detail pages; the file's `ambiguous` count is 0 or knowingly accepted |
+| Fix the 3 rows with malformed `action_type` (two `"Pending Federal Register Publication"`, one `"Proclamation 10973"`) — none has a Federal Register counterpart to correct it automatically | `npm run correct` | `npm run diagnostics` shows only real instrument types |
+| Decide whether `Congressional Investigations` earns its place — it drew 0 of 553 rows, so it is a filter option that never matches | `src/config/practice-areas.json` | Kept deliberately, or removed |
+| Run `npm run draft:summaries -- --apply --limit N` in batches against the 221 curated rows that have full text, then compare on each EO page. Watch `/usage` between batches | local machine | Drafts visible beneath the curated summaries |
+| Optional: set `AI_GATEWAY_API_KEY` to route Claude calls through Vercel's AI Gateway instead of the Anthropic API directly | Vercel dashboard / `vercel env add` | An enrichment run logs "Vercel AI Gateway" |
+| Optional: set `COURTLISTENER_API_TOKEN` (free) to lift the anonymous rate limit | `.env.local` | A full `link:dockets` run finishes with no 429 backoffs |
+
+Done and removed from this list: `import:supabase`, `backfill:federal-register`,
+`SITE_PASSWORD`, and the monthly spend cap — all completed by 2026-09-16.
 
 When this list passes ~5 items, review whether any can now be automated (per
 the source rule).
