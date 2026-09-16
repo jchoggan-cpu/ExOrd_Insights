@@ -12,8 +12,8 @@ import { searchLocalExecutiveOrders } from "@/lib/executive-orders-search-local"
  * One page of tracker results: searched, filtered, sorted and counted by
  * Postgres rather than by the browser.
  *
- * Everything happens in the `search_executive_orders` function (migration
- * 0007) rather than as REST query parameters, because relevance ordering
+ * Everything happens in the `search_executive_orders` function (migrations
+ * 0007 and 0008) rather than as REST query parameters, because relevance ordering
  * needs ORDER BY ts_rank(...) and PostgREST can only order by real columns.
  * Folding the count in with the rows also means the total and the page come
  * from one snapshot instead of two queries that could disagree.
@@ -76,9 +76,14 @@ export async function searchExecutiveOrders(
 
   const { data, error } = await supabase.rpc("search_executive_orders", {
     p_search: query.search || null,
-    p_practice_area: query.practiceArea || null,
-    p_industry: query.industry || null,
+    // Empty arrays would be indistinguishable from "filter to nothing" if the
+    // function treated them literally; it reads null and empty the same way,
+    // and null is the clearer signal of "not filtering on this".
+    p_practice_areas: query.practiceAreas.length > 0 ? query.practiceAreas : null,
+    p_industries: query.industries.length > 0 ? query.industries : null,
     p_status: query.status || null,
+    p_date_from: query.dateFrom || null,
+    p_date_to: query.dateTo || null,
     p_sort: query.sort,
     // null is the function's "no limit" — the "All" page-size option.
     p_limit: query.pageSize === "all" ? null : query.pageSize,

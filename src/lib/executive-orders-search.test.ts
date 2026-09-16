@@ -29,9 +29,11 @@ describe("searchExecutiveOrders", () => {
     const supabase = createFakeSupabase({ rpc: { search_executive_orders: [searchRow()] } });
     const query = parseTrackerQuery({
       q: "tariff",
-      practice: "Tax",
+      practice: ["Tax", "Governmental--National Security"],
       industry: "Fintech",
       status: "revoked",
+      from: "2025-01-20",
+      to: "2026-01-20",
       sort: "relevance",
       page: "3",
       size: "50",
@@ -43,9 +45,11 @@ describe("searchExecutiveOrders", () => {
       name: "search_executive_orders",
       args: {
         p_search: "tariff",
-        p_practice_area: "Tax",
-        p_industry: "Fintech",
+        p_practice_areas: ["Tax", "Governmental--National Security"],
+        p_industries: ["Fintech"],
         p_status: "revoked",
+        p_date_from: "2025-01-20",
+        p_date_to: "2026-01-20",
         p_sort: "relevance",
         p_limit: 50,
         p_offset: 100, // page 3 at 50 per page
@@ -59,9 +63,13 @@ describe("searchExecutiveOrders", () => {
 
     expect(supabase.rpcCalls[0].args).toMatchObject({
       p_search: null,
-      p_practice_area: null,
-      p_industry: null,
+      // Null rather than [] — an empty array could be read as "match nothing"
+      // by a future reader of the SQL; null says "not filtering on this".
+      p_practice_areas: null,
+      p_industries: null,
       p_status: null,
+      p_date_from: null,
+      p_date_to: null,
       p_offset: 0,
     });
   });

@@ -1,4 +1,5 @@
 import { getExecutiveOrders } from "@/lib/executive-orders";
+import { parentPracticeOf } from "@/lib/taxonomy";
 import type { ExecutiveOrderListItem } from "@/lib/types";
 import { offsetFor, totalPagesFor, type TrackerQuery } from "@/lib/tracker-query";
 
@@ -27,6 +28,21 @@ interface TrackerResultPage {
   totalPages: number;
 }
 
+/**
+ * True when the row carries any of the selected tags, counting a selected
+ * parent as a match for its subgroups — the same rule migration 0008 applies
+ * in SQL, so a developer without a database sees the same filtering.
+ */
+function matchesAnyPractice(rowTags: string[], selected: string[]): boolean {
+  if (selected.length === 0) return true;
+  return rowTags.some((tag) => selected.includes(tag) || selected.includes(parentPracticeOf(tag)));
+}
+
+/** True when the row carries any of the selected values (plain OR, no subgroups). */
+function matchesAny(rowValues: string[], selected: string[]): boolean {
+  return selected.length === 0 || rowValues.some((value) => selected.includes(value));
+}
+
 function matchesSearch(eo: ExecutiveOrderListItem, needle: string): boolean {
   if (!needle) return true;
   const haystack = [eo.title, eo.eoNumber, eo.actionType, eo.aiSummary, ...eo.subjectArea]
@@ -42,9 +58,11 @@ export async function searchLocalExecutiveOrders(query: TrackerQuery): Promise<T
 
   const matched = all.filter((eo) => {
     if (!matchesSearch(eo, needle)) return false;
-    if (query.practiceArea && !eo.practiceAreas.includes(query.practiceArea)) return false;
-    if (query.industry && !eo.industries.includes(query.industry)) return false;
+    if (!matchesAnyPractice(eo.practiceAreas, query.practiceAreas)) return false;
+    if (!matchesAny(eo.industries, query.industries)) return false;
     if (query.status && eo.status !== query.status) return false;
+    if (query.dateFrom && (!eo.dateSigned || eo.dateSigned < query.dateFrom)) return false;
+    if (query.dateTo && (!eo.dateSigned || eo.dateSigned > query.dateTo)) return false;
     return true;
   });
 

@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { PRACTICE_AREA_NAMES, INDUSTRIES } from "@/lib/taxonomy";
+import { INDUSTRIES, PRACTICE_AREAS, subPracticeTag } from "@/lib/taxonomy";
+import { MultiSelectFilter, type FilterOption } from "@/components/multi-select-filter";
 import {
   buildTrackerQueryString,
   PAGE_SIZES,
@@ -30,6 +31,24 @@ import {
  * typing feels laggy and above the gap between keystrokes.
  */
 const SEARCH_DEBOUNCE_MS = 300;
+
+/**
+ * Practice areas with their subgroups listed underneath. Selecting a parent
+ * already matches every subgroup of it, so the subgroups are here for
+ * narrowing to one part of a practice rather than for completeness.
+ */
+const PRACTICE_AREA_OPTIONS: FilterOption[] = PRACTICE_AREAS.flatMap((area) => [
+  { value: area.name, label: area.name },
+  ...(area.subPractices ?? [])
+    .filter((sub) => sub.criteria)
+    .map((sub) => ({
+      value: subPracticeTag(area.name, sub.name),
+      label: sub.name,
+      isSubOption: true,
+    })),
+]);
+
+const INDUSTRY_OPTIONS: FilterOption[] = INDUSTRIES.map((name) => ({ value: name, label: name }));
 
 const SELECT_CLASS =
   "rounded-md border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-link";
@@ -68,7 +87,14 @@ export function TrackerControls({ query, total }: { query: TrackerQuery; total: 
     if (!isTypingRef.current) setSearchText(query.search);
   }, [query.search]);
 
-  const hasFilters = Boolean(query.search || query.practiceArea || query.industry || query.status);
+  const hasFilters = Boolean(
+    query.search ||
+      query.practiceAreas.length ||
+      query.industries.length ||
+      query.status ||
+      query.dateFrom ||
+      query.dateTo,
+  );
 
   return (
     <div className="flex flex-col gap-3">
@@ -82,33 +108,21 @@ export function TrackerControls({ query, total }: { query: TrackerQuery; total: 
           className="w-full max-w-md rounded-md border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-link"
         />
 
-        <select
-          value={query.practiceArea}
-          onChange={(e) => navigate({ practiceArea: e.target.value })}
-          aria-label="Filter by practice area"
-          className={SELECT_CLASS}
-        >
-          <option value="">All Practice Areas</option>
-          {PRACTICE_AREA_NAMES.map((name) => (
-            <option key={name} value={name}>
-              {name}
-            </option>
-          ))}
-        </select>
+        <MultiSelectFilter
+          label="Practice areas"
+          emptyLabel="All Practice Areas"
+          options={PRACTICE_AREA_OPTIONS}
+          selected={query.practiceAreas}
+          onChange={(practiceAreas) => navigate({ practiceAreas })}
+        />
 
-        <select
-          value={query.industry}
-          onChange={(e) => navigate({ industry: e.target.value })}
-          aria-label="Filter by industry"
-          className={SELECT_CLASS}
-        >
-          <option value="">All Industries</option>
-          {INDUSTRIES.map((name) => (
-            <option key={name} value={name}>
-              {name}
-            </option>
-          ))}
-        </select>
+        <MultiSelectFilter
+          label="Industries"
+          emptyLabel="All Industries"
+          options={INDUSTRY_OPTIONS}
+          selected={query.industries}
+          onChange={(industries) => navigate({ industries })}
+        />
 
         <select
           value={query.status}
@@ -123,6 +137,27 @@ export function TrackerControls({ query, total }: { query: TrackerQuery; total: 
             </option>
           ))}
         </select>
+
+        <label className="flex items-center gap-2 text-sm text-muted">
+          Signed
+          <input
+            type="date"
+            value={query.dateFrom}
+            max={query.dateTo || undefined}
+            onChange={(e) => navigate({ dateFrom: e.target.value })}
+            aria-label="Signed on or after"
+            className={SELECT_CLASS}
+          />
+          to
+          <input
+            type="date"
+            value={query.dateTo}
+            min={query.dateFrom || undefined}
+            onChange={(e) => navigate({ dateTo: e.target.value })}
+            aria-label="Signed on or before"
+            className={SELECT_CLASS}
+          />
+        </label>
       </div>
 
       <div className="flex flex-wrap items-center gap-3 text-sm text-muted">
@@ -174,7 +209,15 @@ export function TrackerControls({ query, total }: { query: TrackerQuery; total: 
           <button
             type="button"
             onClick={() =>
-              navigate({ search: "", practiceArea: "", industry: "", status: "", sort: "date" })
+              navigate({
+                search: "",
+                practiceAreas: [],
+                industries: [],
+                status: "",
+                dateFrom: "",
+                dateTo: "",
+                sort: "date",
+              })
             }
             className="text-link hover:underline"
           >

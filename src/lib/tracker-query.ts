@@ -22,9 +22,19 @@ export const STATUSES = ["active", "amended", "revoked"] as const;
 
 export interface TrackerQuery {
   search: string;
-  practiceArea: string;
-  industry: string;
+  /**
+   * Selected practice areas. Several may be chosen at once and they widen
+   * the result set rather than narrowing it (OR), which is how a reader
+   * expects checkboxes to behave. A selected parent also matches its
+   * subgroups — see migration 0008.
+   */
+  practiceAreas: string[];
+  /** Selected industries, OR'd with each other, AND'd against practiceAreas. */
+  industries: string[];
   status: string;
+  /** Inclusive bounds on date_signed, as ISO dates. Empty means unbounded. */
+  dateFrom: string;
+  dateTo: string;
   sort: SortMode;
   /** 1-based, as shown to the reader. */
   page: number;
@@ -37,6 +47,24 @@ export type RawSearchParams = Record<string, string | string[] | undefined>;
 function firstValue(raw: string | string[] | undefined): string {
   if (Array.isArray(raw)) return raw[0] ?? "";
   return raw ?? "";
+}
+
+/**
+ * Every value for a repeated parameter ("?practice=Tax&practice=Litigation"),
+ * de-duplicated and with blanks dropped. Next hands a repeated parameter over
+ * as an array and a single one as a string, so both shapes arrive here.
+ */
+function allValues(raw: string | string[] | undefined): string[] {
+  const values = Array.isArray(raw) ? raw : raw === undefined ? [] : [raw];
+  return [...new Set(values.flatMap((v) => v.split(",")).map((v) => v.trim()).filter(Boolean))];
+}
+
+// A hand-edited "?from=last-tuesday" must not reach SQL as a date.
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+function parseIsoDate(raw: string): string {
+  if (!ISO_DATE.test(raw)) return "";
+  return Number.isNaN(Date.parse(raw)) ? "" : raw;
 }
 
 function parsePageSize(raw: string): PageSize {
@@ -57,8 +85,10 @@ export function parseTrackerQuery(params: RawSearchParams): TrackerQuery {
 
   return {
     search: firstValue(params.q).trim(),
-    practiceArea: firstValue(params.practice),
-    industry: firstValue(params.industry),
+    practiceAreas: allValues(params.practice),
+    industries: allValues(params.industry),
+    dateFrom: parseIsoDate(firstValue(params.from)),
+    dateTo: parseIsoDate(firstValue(params.to)),
     // An unrecognized status would silently match nothing; drop it instead.
     status: (STATUSES as readonly string[]).includes(status) ? status : "",
     sort: sort === "relevance" ? "relevance" : DEFAULT_SORT,
@@ -76,9 +106,11 @@ export function buildTrackerQueryString(query: Partial<TrackerQuery>): string {
   const params = new URLSearchParams();
 
   if (query.search) params.set("q", query.search);
-  if (query.practiceArea) params.set("practice", query.practiceArea);
-  if (query.industry) params.set("industry", query.industry);
+  for (const area of query.practiceAreas ?? []) params.append("practice", area);
+  for (const industry of query.industries ?? []) params.append("industry", industry);
   if (query.status) params.set("status", query.status);
+  if (query.dateFrom) params.set("from", query.dateFrom);
+  if (query.dateTo) params.set("to", query.dateTo);
   if (query.sort && query.sort !== DEFAULT_SORT) params.set("sort", query.sort);
   if (query.pageSize && query.pageSize !== DEFAULT_PAGE_SIZE) params.set("size", String(query.pageSize));
   if (query.page && query.page > 1) params.set("page", String(query.page));
@@ -99,9 +131,11 @@ export function withTrackerChange(
   const next = { ...current, ...change };
   const changesResultSet =
     change.search !== undefined ||
-    change.practiceArea !== undefined ||
-    change.industry !== undefined ||
+    change.practiceAreas !== undefined ||
+    change.industries !== undefined ||
     change.status !== undefined ||
+    change.dateFrom !== undefined ||
+    change.dateTo !== undefined ||
     change.pageSize !== undefined ||
     change.sort !== undefined;
 

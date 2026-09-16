@@ -1,5 +1,5 @@
 {
-  "takenAt": "2026-09-14T03:04:39.206Z",
+  "takenAt": "2026-09-16T03:09:07.223Z",
   "rows": [
     {
       "id": "059999ed-15be-40d0-bb36-da059d81be8e",
@@ -33,6 +33,22 @@
       "industries": []
     },
     {
+      "id": "6143e066-3bf1-40c5-a8f6-02e604461f0c",
+      "eo_number": null,
+      "title": "Fifth Anniversary of the Attack at Abbey Gate",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "06b15d52-ae71-4e30-bc8c-7af1a42a3160",
+      "eo_number": null,
+      "title": "National Donate Life Month, 2025",
+      "practice_areas": [],
+      "industries": [
+        "Healthcare"
+      ]
+    },
+    {
       "id": "d4d7f393-c89d-4080-8876-d57b4cc5514c",
       "eo_number": null,
       "title": "PRESIDENTIAL PERMIT AUTHORIZING STEEL REEF US PIPELINES LLC TO OPERATE AND MAINTAIN PIPELINE FACILITIES AT BURKE COUNTY, NORTH DAKOTA, AT THE INTERNATIONAL BOUNDARY BETWEEN THE UNITED STATES AND CANADA",
@@ -61,22 +77,6 @@
       ]
     },
     {
-      "id": "786e0b34-4488-4685-a715-41d171f31a60",
-      "eo_number": null,
-      "title": "World Intellectual Property Day, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "06b15d52-ae71-4e30-bc8c-7af1a42a3160",
-      "eo_number": null,
-      "title": "National Donate Life Month, 2025",
-      "practice_areas": [],
-      "industries": [
-        "Healthcare"
-      ]
-    },
-    {
       "id": "e4aa0efc-7d24-4fb0-818a-e3c8a619bd69",
       "eo_number": "EO 14253",
       "title": "Restoring Truth and Sanity to American History",
@@ -95,6 +95,13 @@
       "practice_areas": [
         "White Collar Defense and Investigations"
       ],
+      "industries": []
+    },
+    {
+      "id": "93b793e5-1669-4055-87ba-487730fcfc5a",
+      "eo_number": null,
+      "title": "National Child Abuse Prevention Month, 2025",
+      "practice_areas": [],
       "industries": []
     },
     {
@@ -137,9 +144,9 @@
       ]
     },
     {
-      "id": "93b793e5-1669-4055-87ba-487730fcfc5a",
+      "id": "44716f20-91bb-4477-b82b-c54888954e5a",
       "eo_number": null,
-      "title": "National Child Abuse Prevention Month, 2025",
+      "title": "Honoring the Memory of Dolly Parton",
       "practice_areas": [],
       "industries": []
     },
@@ -171,11 +178,13 @@
       "industries": []
     },
     {
-      "id": "255753eb-7741-45af-8cb7-9e455550052f",
+      "id": "9fbcde06-37dc-499d-b67d-0ebd67a9d2a2",
       "eo_number": null,
-      "title": "Honoring the Victims of the Tragedy in Minneapolis, Minnesota",
+      "title": "National Substance Use Primary Prevention Month, 2026",
       "practice_areas": [],
-      "industries": []
+      "industries": [
+        "Healthcare"
+      ]
     },
     {
       "id": "efd20144-240c-49a2-8876-b84ea981287c",
@@ -200,6 +209,13 @@
       "industries": [
         "Transportation"
       ]
+    },
+    {
+      "id": "9de2b80b-7bdc-47c8-b429-7f99e77cffa5",
+      "eo_number": null,
+      "title": "Death of Senator Lindsey Graham",
+      "practice_areas": [],
+      "industries": []
     },
     {
       "id": "701d7cab-f309-4ae0-b268-5874a3e8df9f",
@@ -262,6 +278,13 @@
       ]
     },
     {
+      "id": "6c9182d3-229e-46bb-9b1d-4a85dcd4b511",
+      "eo_number": null,
+      "title": "Peace Officers Memorial Day and Police Week, 2026",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "cedf9b29-ab47-4577-a576-abe3b0b2a481",
       "eo_number": null,
       "title": "Immediate Declassification of Materials Related to the Federal Bureau of Investigation’s Crossfire Hurricane Investigation",
@@ -270,6 +293,13 @@
         "White Collar Defense and Investigations",
         "Litigation"
       ],
+      "industries": []
+    },
+    {
+      "id": "105d95e1-6bb2-48d5-9b1d-c92edc45aabd",
+      "eo_number": null,
+      "title": "Greek Independence Day: A National Day of Celebration of Greek and American Democracy, 2026",
+      "practice_areas": [],
       "industries": []
     },
     {
@@ -291,13 +321,6 @@
       ]
     },
     {
-      "id": "80a4aa2e-aada-40d9-a4ae-fd43e9f1e16a",
-      "eo_number": null,
-      "title": "Cancer Control Month, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "f7b9cee9-ec7a-4451-991a-c1ff9e09ab17",
       "eo_number": "EO 14269",
       "title": "Restoring America's Maritime Dominance",
@@ -314,6 +337,20 @@
         "Energy and Infrastructure",
         "Construction"
       ]
+    },
+    {
+      "id": "30f570da-334a-43da-ac8b-dfdec6af418f",
+      "eo_number": null,
+      "title": "National Black History Month, 2026",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "f19ee025-9ee3-4729-8cb4-16c653f86dd6",
+      "eo_number": null,
+      "title": "Year of Celebration and Rededication, 2026",
+      "practice_areas": [],
+      "industries": []
     },
     {
       "id": "72a58915-9612-404c-b3a4-65f9632b11cb",
@@ -355,16 +392,6 @@
       "industries": [
         "Transportation",
         "Aerospace, Defense & Government Services"
-      ]
-    },
-    {
-      "id": "4cf46d5e-2ddd-487f-80d1-0fdf17c6532f",
-      "eo_number": null,
-      "title": "Cancer Control Month, 2025",
-      "practice_areas": [],
-      "industries": [
-        "Healthcare",
-        "Life Sciences"
       ]
     },
     {
@@ -414,6 +441,13 @@
       ]
     },
     {
+      "id": "62232c26-88fc-40c2-85d3-a93ab0e5d29a",
+      "eo_number": null,
+      "title": "Religious Freedom Day, 2026",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "31ea9c32-29bd-4efc-975b-90be670e1fd8",
       "eo_number": null,
       "title": "Denial of Presidential Permit for the Kickapoo Traditional Tribe of Texas",
@@ -428,9 +462,9 @@
       ]
     },
     {
-      "id": "029cf05f-a91f-47fe-8c08-05778cd94401",
+      "id": "cf1313e6-4f01-416a-97f1-941cea50819d",
       "eo_number": null,
-      "title": "250th Anniversary of the Battles of Lexington and Concord",
+      "title": "Bill of Rights Day, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -459,6 +493,20 @@
       "industries": []
     },
     {
+      "id": "0d385b71-931c-4894-b409-e62bdeb9fb30",
+      "eo_number": null,
+      "title": "Honoring the Memory of Specialist Sarah Beckstrom, West Virginia Army National Guard",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "03088051-51aa-44f5-a76c-ef6728f4c982",
+      "eo_number": null,
+      "title": "250th Anniversary of the Founding of the United States Marine Corps",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "93f8d2aa-79d5-49ff-ade2-3700b07aadf1",
       "eo_number": "EO 14175",
       "title": "Designation of Ansar Allah as a Foreign Terrorist Organization",
@@ -473,11 +521,13 @@
       ]
     },
     {
-      "id": "528546e9-eb60-4d81-b4fd-8a3a23a083b0",
+      "id": "a20e0a29-0504-4fb6-b0b5-d8aa15f63776",
       "eo_number": null,
-      "title": "National Day of Prayer, 2025",
+      "title": "National Energy Dominance Month, 2025",
       "practice_areas": [],
-      "industries": []
+      "industries": [
+        "Energy and Infrastructure"
+      ]
     },
     {
       "id": "65a03dbc-6e5c-4c5d-b442-2ce8b7b9f489",
@@ -489,6 +539,13 @@
       "industries": [
         "Aerospace, Defense & Government Services"
       ]
+    },
+    {
+      "id": "528546e9-eb60-4d81-b4fd-8a3a23a083b0",
+      "eo_number": null,
+      "title": "National Day of Prayer, 2025",
+      "practice_areas": [],
+      "industries": []
     },
     {
       "id": "c2572015-ff5a-43fa-be32-d858cec5ca0b",
@@ -524,6 +581,15 @@
         "Labor and Employment",
         "Litigation",
         "White Collar Defense and Investigations"
+      ],
+      "industries": []
+    },
+    {
+      "id": "f61a8c62-1e60-40e4-b39d-d958c10073dd",
+      "eo_number": null,
+      "title": "The Trump Declaration for Enduring Peace and Prosperity",
+      "practice_areas": [
+        "Global Reach"
       ],
       "industries": []
     },
@@ -619,6 +685,13 @@
       "industries": []
     },
     {
+      "id": "00563fa9-ebe9-4c4e-9719-ecd312dd10e2",
+      "eo_number": null,
+      "title": "General Pulaski Memorial Day, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "9a0e0b38-14f0-42e7-a938-25eff32ee768",
       "eo_number": "EO 14333",
       "title": "Declaring a Crime Emergency in the District of Columbia",
@@ -636,13 +709,6 @@
       "practice_areas": [
         "Governmental"
       ],
-      "industries": []
-    },
-    {
-      "id": "e8dbb99a-fe40-427f-9e8a-9f88e6397586",
-      "eo_number": null,
-      "title": "National Crime Victims' Rights Week, 2025",
-      "practice_areas": [],
       "industries": []
     },
     {
@@ -672,6 +738,27 @@
       "industries": []
     },
     {
+      "id": "e789b378-4593-4dc5-a414-29d009b13e60",
+      "eo_number": null,
+      "title": "250th Anniversary of the Founding of the United States Navy",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "859eae18-bc41-4370-a5af-6a83c1502f68",
+      "eo_number": null,
+      "title": "Gold Star Mother's and Family's Day, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "031dd8b9-2aff-4f03-a433-96ae8cdf9fd5",
+      "eo_number": null,
+      "title": "Patriot Day 2025, the 24th Anniversary of the September 11 Terrorist Attacks",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "550d1a56-3fc0-49fe-a7b9-4bd3b4a90242",
       "eo_number": null,
       "title": "Stopping Radical Environmentalism to Generate Power for the Columbia River Basin",
@@ -685,13 +772,6 @@
         "Environmental",
         "Tribal and Native American Law"
       ]
-    },
-    {
-      "id": "c1edf467-324c-4e4e-af34-bf84f240a2d6",
-      "eo_number": null,
-      "title": "Education and Sharing Day, USA 2025",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "9ae52b3e-a73e-44cf-9814-8e88311c52bb",
@@ -740,6 +820,13 @@
       ]
     },
     {
+      "id": "73e27395-6cd1-4cb3-b34a-b71343fba890",
+      "eo_number": null,
+      "title": "National Former Prisoner of War Recognition Day, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "ff7c4582-0c86-4313-b92b-d57064a54638",
       "eo_number": "EO 14301",
       "title": "Reforming Nuclear Reactor Testing at the Department of Energy",
@@ -750,13 +837,6 @@
       "industries": [
         "Energy and Infrastructure"
       ]
-    },
-    {
-      "id": "73e27395-6cd1-4cb3-b34a-b71343fba890",
-      "eo_number": null,
-      "title": "National Former Prisoner of War Recognition Day, 2025",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "05be0d81-3e4b-42a6-9716-cc4d37b11416",
@@ -851,6 +931,13 @@
       ]
     },
     {
+      "id": "255753eb-7741-45af-8cb7-9e455550052f",
+      "eo_number": null,
+      "title": "Honoring the Victims of the Tragedy in Minneapolis, Minnesota",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "7f1841e4-e399-498b-a2a7-fa1987d44f87",
       "eo_number": "EO 14225",
       "title": "Immediate Expansion of American Timber Production",
@@ -874,6 +961,24 @@
         "Labor and Employment"
       ],
       "industries": []
+    },
+    {
+      "id": "bf6e3351-dd63-4d31-afca-12cb703bc823",
+      "eo_number": null,
+      "title": "Accelerating Federal Permitting of Data Center Infrastructure",
+      "practice_areas": [
+        "Land Use",
+        "Governmental",
+        "Corporate",
+        "Global Reach"
+      ],
+      "industries": [
+        "AI, Robotics and Quantum",
+        "Digital Infrastructure",
+        "Energy and Infrastructure",
+        "Construction",
+        "Aerospace, Defense & Government Services"
+      ]
     },
     {
       "id": "973dbf48-8cf0-46fd-b7a3-49d00c804283",
@@ -901,6 +1006,20 @@
       ]
     },
     {
+      "id": "0534bded-fa48-4c3b-b657-938ab4e64571",
+      "eo_number": null,
+      "title": "101st Anniversary of the United States Border Patrol",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "be75b990-d929-4158-a646-e8b62dadc856",
+      "eo_number": null,
+      "title": "National Small Business Week, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "0962eb47-a0cd-40e8-bca3-c320213a5ef8",
       "eo_number": null,
       "title": "Putting People over Fish: Stopping Radical Environmentalism to Provide Water to Southern California",
@@ -915,16 +1034,9 @@
       ]
     },
     {
-      "id": "2f8194f9-638e-4d2a-b71d-b667724adc39",
-      "eo_number": "EO 14153",
-      "title": "Unleashing Alaska's Extraordinary Resource Potential",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "f47752c9-5ac5-4d91-8ebc-b364b88667ab",
+      "id": "786e0b34-4488-4685-a715-41d171f31a60",
       "eo_number": null,
-      "title": "Temporary Withdrawal of All Areas on the Outer Continental Shelf from Offshore Wind Leasing and Review of the Federal Government’s Leasing and Permitting Practices for Wind Projects",
+      "title": "World Intellectual Property Day, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -974,32 +1086,25 @@
       "industries": []
     },
     {
-      "id": "c273b137-5872-40c7-98c6-2666dd734bb3",
-      "eo_number": null,
-      "title": "Greek Independence Day: A National Day of Celebration of Greek and American Democracy, 2025",
-      "practice_areas": [],
-      "industries": []
+      "id": "2f8194f9-638e-4d2a-b71d-b667724adc39",
+      "eo_number": "EO 14153",
+      "title": "Unleashing Alaska's Extraordinary Resource Potential",
+      "practice_areas": [
+        "Land Use",
+        "Governmental",
+        "Litigation"
+      ],
+      "industries": [
+        "Energy and Infrastructure",
+        "Environmental",
+        "Transportation",
+        "Tribal and Native American Law"
+      ]
     },
     {
       "id": "4b673dff-446d-4644-b617-b87d052990f4",
       "eo_number": null,
       "title": "National Day of Prayer, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "bd5ed0a9-422f-4bd8-9b94-a2951692cf5e",
-      "eo_number": null,
-      "title": "World Intellectual Property Day, 2025",
-      "practice_areas": [
-        "Intellectual Property"
-      ],
-      "industries": []
-    },
-    {
-      "id": "f3a2f98a-50b2-409d-a6c6-84e4857417ae",
-      "eo_number": null,
-      "title": "National Park Week, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -1011,10 +1116,12 @@
       "industries": []
     },
     {
-      "id": "28e1c8e8-d43f-49c7-a983-b8dbb938479c",
+      "id": "bd5ed0a9-422f-4bd8-9b94-a2951692cf5e",
       "eo_number": null,
-      "title": "National Volunteer Week, 2025",
-      "practice_areas": [],
+      "title": "World Intellectual Property Day, 2025",
+      "practice_areas": [
+        "Intellectual Property"
+      ],
       "industries": []
     },
     {
@@ -1032,6 +1139,13 @@
       "industries": []
     },
     {
+      "id": "f3a2f98a-50b2-409d-a6c6-84e4857417ae",
+      "eo_number": null,
+      "title": "National Park Week, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "2e8c1690-272e-476f-bb49-929e50de6fc9",
       "eo_number": null,
       "title": "World Autism Awareness Day 2025",
@@ -1039,9 +1153,23 @@
       "industries": []
     },
     {
-      "id": "9f6bb18b-5610-4e52-b97a-95305fd64e60",
+      "id": "c273b137-5872-40c7-98c6-2666dd734bb3",
       "eo_number": null,
-      "title": "U.S. Hostage and Wrongful Detainee Day, 2025",
+      "title": "Greek Independence Day: A National Day of Celebration of Greek and American Democracy, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "28e1c8e8-d43f-49c7-a983-b8dbb938479c",
+      "eo_number": null,
+      "title": "National Volunteer Week, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "0dee605d-9dfd-49b5-90df-91bca058409d",
+      "eo_number": null,
+      "title": "National Day of Remembrance of the 80th Anniversary of the Liberation of Auschwitz, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -1057,20 +1185,6 @@
         "Energy and Infrastructure",
         "Aerospace, Defense & Government Services"
       ]
-    },
-    {
-      "id": "6e2439bf-da4b-4907-a020-83b1a8fa542e",
-      "eo_number": null,
-      "title": "80th Anniversary of the Battle of Iwo Jima",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "0dee605d-9dfd-49b5-90df-91bca058409d",
-      "eo_number": null,
-      "title": "National Day of Remembrance of the 80th Anniversary of the Liberation of Auschwitz, 2025",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "3f48e1b5-28bb-4a24-b235-1c4d55572627",
@@ -1095,6 +1209,20 @@
         "AI, Robotics and Quantum",
         "Media and Technology"
       ]
+    },
+    {
+      "id": "9f6bb18b-5610-4e52-b97a-95305fd64e60",
+      "eo_number": null,
+      "title": "U.S. Hostage and Wrongful Detainee Day, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "6e2439bf-da4b-4907-a020-83b1a8fa542e",
+      "eo_number": null,
+      "title": "80th Anniversary of the Battle of Iwo Jima",
+      "practice_areas": [],
+      "industries": []
     },
     {
       "id": "5a592963-d99f-4a6f-acb5-10b82759e703",
@@ -1141,6 +1269,20 @@
       ]
     },
     {
+      "id": "01c7b9a9-c80a-403f-888a-801cd9232a2a",
+      "eo_number": null,
+      "title": "National Volunteer Week, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "c654e1f3-a314-41be-9eed-ff449400efb7",
+      "eo_number": null,
+      "title": "Honoring the Memory of His Holiness Pope Francis",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "bc391355-0146-43da-aa4d-5d7887ba17e6",
       "eo_number": null,
       "title": "America First Investment Policy: U.S. Foreign Investment Policy Evolves under Trump 2.0",
@@ -1181,6 +1323,13 @@
       "industries": []
     },
     {
+      "id": "029cf05f-a91f-47fe-8c08-05778cd94401",
+      "eo_number": null,
+      "title": "250th Anniversary of the Battles of Lexington and Concord",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "65369a68-8700-4e5e-97d3-2326451c1cf7",
       "eo_number": "EO 14345",
       "title": "Implementing the United States-Japan Agreement",
@@ -1196,6 +1345,13 @@
         "Energy and Infrastructure",
         "Food and Beverage"
       ]
+    },
+    {
+      "id": "e8dbb99a-fe40-427f-9e8a-9f88e6397586",
+      "eo_number": null,
+      "title": "National Crime Victims' Rights Week, 2025",
+      "practice_areas": [],
+      "industries": []
     },
     {
       "id": "ea99d9e2-63b5-4bd8-9425-9d0abc476589",
@@ -1242,6 +1398,13 @@
       "industries": []
     },
     {
+      "id": "c1edf467-324c-4e4e-af34-bf84f240a2d6",
+      "eo_number": null,
+      "title": "Education and Sharing Day, USA 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "0f22b112-e458-4f6d-8342-ed898d819d51",
       "eo_number": "EO 14211",
       "title": "One Voice for America's Foreign Relations",
@@ -1249,6 +1412,13 @@
         "Governmental",
         "Labor and Employment"
       ],
+      "industries": []
+    },
+    {
+      "id": "b39ae26b-c01d-436d-8220-92cce30ae03b",
+      "eo_number": null,
+      "title": "National Child Abuse Prevention Month, 2025",
+      "practice_areas": [],
       "industries": []
     },
     {
@@ -1293,6 +1463,26 @@
       ],
       "industries": [
         "Energy and Infrastructure"
+      ]
+    },
+    {
+      "id": "4cf46d5e-2ddd-487f-80d1-0fdf17c6532f",
+      "eo_number": null,
+      "title": "Cancer Control Month, 2025",
+      "practice_areas": [],
+      "industries": [
+        "Healthcare",
+        "Life Sciences"
+      ]
+    },
+    {
+      "id": "80a4aa2e-aada-40d9-a4ae-fd43e9f1e16a",
+      "eo_number": null,
+      "title": "Cancer Control Month, 2025",
+      "practice_areas": [],
+      "industries": [
+        "Healthcare",
+        "Life Sciences"
       ]
     },
     {
@@ -1416,6 +1606,22 @@
       ]
     },
     {
+      "id": "f47752c9-5ac5-4d91-8ebc-b364b88667ab",
+      "eo_number": null,
+      "title": "Temporary Withdrawal of All Areas on the Outer Continental Shelf from Offshore Wind Leasing and Review of the Federal Government’s Leasing and Permitting Practices for Wind Projects",
+      "practice_areas": [
+        "Land Use",
+        "Governmental",
+        "Litigation",
+        "Real Estate"
+      ],
+      "industries": [
+        "Energy and Infrastructure",
+        "Environmental",
+        "ESG and Sustainability"
+      ]
+    },
+    {
       "id": "92acc080-77c3-4956-b995-84813a68a560",
       "eo_number": "EO 14256",
       "title": "Further Amendment to Duties Addressing the Synthetic Opioid Supply Chain in the People's Republic of China as Applied to Low-Value Imports",
@@ -1456,6 +1662,13 @@
         "Transportation",
         "Digital Infrastructure"
       ]
+    },
+    {
+      "id": "dd242d86-2102-4597-b40c-49390b96b2b3",
+      "eo_number": null,
+      "title": "Patriot Day 2026, the 25th Anniversary of the September 11 Terrorist Attacks",
+      "practice_areas": [],
+      "industries": []
     },
     {
       "id": "02746a4f-3e5e-48c1-b23f-dff8c3b825d5",
@@ -1933,18 +2146,6 @@
       ]
     },
     {
-      "id": "cfa2e2f2-f9b9-49e0-8021-6cf3175b3d88",
-      "eo_number": "EO 14328",
-      "title": "Establishing the White House Task Force on the 2028 Summer Olympics",
-      "practice_areas": [
-        "Governmental"
-      ],
-      "industries": [
-        "Sports",
-        "Transportation"
-      ]
-    },
-    {
       "id": "3847fbc2-4187-4ead-885d-53bee6e60bb9",
       "eo_number": "EO 14229",
       "title": "Honoring Jocelyn Nungaray",
@@ -1957,6 +2158,18 @@
       "title": "Gulf of America Day, 2025",
       "practice_areas": [],
       "industries": []
+    },
+    {
+      "id": "cfa2e2f2-f9b9-49e0-8021-6cf3175b3d88",
+      "eo_number": "EO 14328",
+      "title": "Establishing the White House Task Force on the 2028 Summer Olympics",
+      "practice_areas": [
+        "Governmental"
+      ],
+      "industries": [
+        "Sports",
+        "Transportation"
+      ]
     },
     {
       "id": "76b839d7-5631-421a-9181-1946cf791cc0",
@@ -2197,6 +2410,15 @@
       "industries": []
     },
     {
+      "id": "3bc9777b-71f3-435c-9510-0eaca37318cd",
+      "eo_number": null,
+      "title": "Overdose Prevention Week, 2025",
+      "practice_areas": [],
+      "industries": [
+        "Healthcare"
+      ]
+    },
+    {
       "id": "4981c6ba-c7e6-47c5-9bd5-12bf04e7d911",
       "eo_number": null,
       "title": "Invocation of the Alien Enemies Act Regarding the Invasion of the United States by Tren de Aragua",
@@ -2208,15 +2430,6 @@
         "White Collar Defense and Investigations"
       ],
       "industries": []
-    },
-    {
-      "id": "3bc9777b-71f3-435c-9510-0eaca37318cd",
-      "eo_number": null,
-      "title": "Overdose Prevention Week, 2025",
-      "practice_areas": [],
-      "industries": [
-        "Healthcare"
-      ]
     },
     {
       "id": "a4bae3e4-79fa-46ba-a797-132cf2195166",
@@ -2275,6 +2488,15 @@
       ]
     },
     {
+      "id": "9bdfc017-18cc-48e2-b0b3-0dea630abfe3",
+      "eo_number": null,
+      "title": "National Donate Life Month, 2025",
+      "practice_areas": [],
+      "industries": [
+        "Healthcare"
+      ]
+    },
+    {
       "id": "ff5e5533-9233-48db-890c-f91f61073dec",
       "eo_number": null,
       "title": "Adjusting Imports of Automobiles and Automobile Parts Into the United States",
@@ -2300,13 +2522,6 @@
         "Energy and Infrastructure",
         "Environmental"
       ]
-    },
-    {
-      "id": "9bdfc017-18cc-48e2-b0b3-0dea630abfe3",
-      "eo_number": null,
-      "title": "National Donate Life Month, 2025",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "a6ce6475-c2b2-44e8-af7e-0a12f3247a49",
@@ -2441,6 +2656,13 @@
       "industries": []
     },
     {
+      "id": "6995cd09-e136-4be2-b7b1-a1798b07fe6b",
+      "eo_number": null,
+      "title": "Prayer for Peace, Memorial Day, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "02b35f7e-4638-461f-a386-6815b2e811f1",
       "eo_number": "EO 14316",
       "title": "Extending the Modification of the Reciprocal Tariff Rates",
@@ -2448,13 +2670,6 @@
         "Global Reach",
         "Governmental"
       ],
-      "industries": []
-    },
-    {
-      "id": "6995cd09-e136-4be2-b7b1-a1798b07fe6b",
-      "eo_number": null,
-      "title": "Prayer for Peace, Memorial Day, 2025",
-      "practice_areas": [],
       "industries": []
     },
     {
@@ -2497,13 +2712,6 @@
         "ESG and Sustainability",
         "Environmental"
       ]
-    },
-    {
-      "id": "bf6e3351-dd63-4d31-afca-12cb703bc823",
-      "eo_number": null,
-      "title": "Accelerating Federal Permitting of Data Center Infrastructure",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "99314407-4031-4564-917e-f7ebe459e974",
@@ -2577,6 +2785,13 @@
       ]
     },
     {
+      "id": "b3d803d9-9366-4d15-802d-6bb83bc38a36",
+      "eo_number": null,
+      "title": "National Cybersecurity Awareness Month, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "e3412fc7-02dd-4423-8505-9e8ea5c6e7c7",
       "eo_number": "EO 14258",
       "title": "Extending the TikTok Enforcement Delay",
@@ -2590,6 +2805,13 @@
       "industries": [
         "Media and Technology"
       ]
+    },
+    {
+      "id": "baaa6df8-cae2-47af-ae4d-0ba28a36bd4d",
+      "eo_number": null,
+      "title": "National Day of Remembrance for Charlie Kirk",
+      "practice_areas": [],
+      "industries": []
     },
     {
       "id": "65924326-d03c-4184-bdf6-8e5564d7525c",
@@ -2609,29 +2831,6 @@
         "Aerospace, Defense & Government Services",
         "Life Sciences"
       ]
-    },
-    {
-      "id": "b3d803d9-9366-4d15-802d-6bb83bc38a36",
-      "eo_number": null,
-      "title": "National Cybersecurity Awareness Month, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "a20e0a29-0504-4fb6-b0b5-d8aa15f63776",
-      "eo_number": null,
-      "title": "National Energy Dominance Month, 2025",
-      "practice_areas": [],
-      "industries": [
-        "Energy and Infrastructure"
-      ]
-    },
-    {
-      "id": "baaa6df8-cae2-47af-ae4d-0ba28a36bd4d",
-      "eo_number": null,
-      "title": "National Day of Remembrance for Charlie Kirk",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "8284f019-798a-4765-b867-f8cf4dd2465a",
@@ -2852,6 +3051,13 @@
       ]
     },
     {
+      "id": "c7ec03f6-0fc8-425c-941d-f2bd38a3a0b9",
+      "eo_number": null,
+      "title": "National Adoption Month, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "9b1cd5c5-c908-4f47-9dad-adf267b2129a",
       "eo_number": "EO 14313",
       "title": "Establishing the President's Make America Beautiful Again Commission",
@@ -2864,13 +3070,6 @@
         "Environmental",
         "Hospitality"
       ]
-    },
-    {
-      "id": "c7ec03f6-0fc8-425c-941d-f2bd38a3a0b9",
-      "eo_number": null,
-      "title": "National Adoption Month, 2025",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "57c697b1-f823-48d3-8d96-0e3e4c72c3ac",
@@ -3142,6 +3341,13 @@
       ]
     },
     {
+      "id": "1b209451-4e7a-438a-9fe2-56f37d5e1c6b",
+      "eo_number": null,
+      "title": "250th Anniversary of the Battle of Bunker Hill",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "49df5e82-f96a-4a4c-90dd-db8894e6c9a9",
       "eo_number": "EO 14188",
       "title": "Additional Measures To Combat Anti-Semitism",
@@ -3155,6 +3361,13 @@
       "industries": []
     },
     {
+      "id": "a3a92db2-9bdd-4cef-8a9d-cc61d834eef3",
+      "eo_number": null,
+      "title": "Flag Day and National Flag Week, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "ca1e3dd1-a07b-4b2c-887b-0d3113e4a2fc",
       "eo_number": "EO 14176",
       "title": "Declassification of Records Concerning the Assassinations of President John F. Kennedy, Senator Robert F. Kennedy, and the Reverend Dr. Martin Luther King, Jr.",
@@ -3163,20 +3376,6 @@
         "Privacy and Cybersecurity",
         "White Collar Defense and Investigations"
       ],
-      "industries": []
-    },
-    {
-      "id": "1b209451-4e7a-438a-9fe2-56f37d5e1c6b",
-      "eo_number": null,
-      "title": "250th Anniversary of the Battle of Bunker Hill",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "a3a92db2-9bdd-4cef-8a9d-cc61d834eef3",
-      "eo_number": null,
-      "title": "Flag Day and National Flag Week, 2025",
-      "practice_areas": [],
       "industries": []
     },
     {
@@ -3755,6 +3954,20 @@
       "industries": []
     },
     {
+      "id": "6f03b221-dfe5-4269-934f-e68a3916b302",
+      "eo_number": null,
+      "title": "Made in America Week, 2026",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "86c327e9-3a42-48eb-b820-1e38ec0444f2",
+      "eo_number": null,
+      "title": "Thanksgiving Day, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "fc9e58b4-5210-4601-a168-b8d6ceafda35",
       "eo_number": null,
       "title": "Adjusting Imports of Aluminum and Steel Into the United States",
@@ -3769,20 +3982,6 @@
         "Transportation",
         "Aerospace, Defense & Government Services"
       ]
-    },
-    {
-      "id": "6f03b221-dfe5-4269-934f-e68a3916b302",
-      "eo_number": null,
-      "title": "Made in America Week, 2026",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "86c327e9-3a42-48eb-b820-1e38ec0444f2",
-      "eo_number": null,
-      "title": "Thanksgiving Day, 2025",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "2018e2da-ad86-4681-85f0-587d37f224ce",
@@ -3904,6 +4103,13 @@
       ]
     },
     {
+      "id": "e331ee05-4ca5-4b5e-9753-9b9cd95688b8",
+      "eo_number": null,
+      "title": "National Angel Family Day, 2026",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "02dadb81-f707-4b1f-8a58-644a04515893",
       "eo_number": null,
       "title": "Career and Technical Education Month, 2025",
@@ -3925,13 +4131,6 @@
         "Fintech",
         "Food and Beverage"
       ]
-    },
-    {
-      "id": "e331ee05-4ca5-4b5e-9753-9b9cd95688b8",
-      "eo_number": null,
-      "title": "National Angel Family Day, 2026",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "18d5fa5b-9ea5-41c1-ac43-b4da0039475a",
@@ -3984,13 +4183,6 @@
       ]
     },
     {
-      "id": "74f05dba-f96c-4f54-b377-6f752ee5ce1b",
-      "eo_number": null,
-      "title": "President George Washington's Birthday, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "de7f32bf-4280-45c6-b026-6a7bc310ba21",
       "eo_number": null,
       "title": "Adjusting Imports of Steel Into the United States",
@@ -4017,6 +4209,13 @@
       "industries": []
     },
     {
+      "id": "74f05dba-f96c-4f54-b377-6f752ee5ce1b",
+      "eo_number": null,
+      "title": "President George Washington's Birthday, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "03015c39-921f-402f-8ab5-225154c19739",
       "eo_number": null,
       "title": "National Sexual Assault Awareness and Prevention Month, 2025",
@@ -4027,20 +4226,6 @@
       "id": "96bdbeb6-c0c3-4714-8da6-8b0280c596ac",
       "eo_number": null,
       "title": "World Autism Awareness Day, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "ab3a96e7-509e-463b-ba29-ff747ab46384",
-      "eo_number": null,
-      "title": "Greek Independence Day: A National Day of Celebration of Greek and American Democracy, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "a4030027-f3ad-4c31-b499-8d96672d493c",
-      "eo_number": null,
-      "title": "250th Anniversary of Patrick Henry's \"Give Me Liberty, Or Give Me Death!\" Speech",
       "practice_areas": [],
       "industries": []
     },
@@ -4068,6 +4253,13 @@
       "industries": []
     },
     {
+      "id": "85a136ca-ccd9-49cc-aea7-08be2888a024",
+      "eo_number": null,
+      "title": "National Consumer Protection Week, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "873beb07-5a81-4815-90bb-7c686b5601d9",
       "eo_number": null,
       "title": "Women's History Month, 2025",
@@ -4075,9 +4267,16 @@
       "industries": []
     },
     {
-      "id": "85a136ca-ccd9-49cc-aea7-08be2888a024",
+      "id": "ab3a96e7-509e-463b-ba29-ff747ab46384",
       "eo_number": null,
-      "title": "National Consumer Protection Week, 2025",
+      "title": "Greek Independence Day: A National Day of Celebration of Greek and American Democracy, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "a4030027-f3ad-4c31-b499-8d96672d493c",
+      "eo_number": null,
+      "title": "250th Anniversary of Patrick Henry's \"Give Me Liberty, Or Give Me Death!\" Speech",
       "practice_areas": [],
       "industries": []
     },
@@ -4092,23 +4291,9 @@
       "industries": []
     },
     {
-      "id": "85745253-a04a-4027-9cee-3ba659d485a5",
-      "eo_number": null,
-      "title": "Military Spouse Day, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "fa5f15c1-6e18-40e8-a569-0363d676a6dc",
       "eo_number": null,
       "title": "Mother's Day, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "f0a0d337-0e1c-40f1-98b9-2344638c297c",
-      "eo_number": null,
-      "title": "National Foster Care Month, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -4120,9 +4305,9 @@
       "industries": []
     },
     {
-      "id": "3fc3ff90-4033-4bb5-8a44-17716f0228db",
+      "id": "85745253-a04a-4027-9cee-3ba659d485a5",
       "eo_number": null,
-      "title": "National Park Week, 2025",
+      "title": "Military Spouse Day, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -4134,6 +4319,13 @@
       "industries": []
     },
     {
+      "id": "f0a0d337-0e1c-40f1-98b9-2344638c297c",
+      "eo_number": null,
+      "title": "National Foster Care Month, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "72521cde-97e9-4eee-bb83-0cca873d5417",
       "eo_number": null,
       "title": "250th Anniversary of the Battles of Lexington and Concord",
@@ -4141,9 +4333,16 @@
       "industries": []
     },
     {
-      "id": "4ac589a7-fbd7-49a4-a9b8-4d98ee82179d",
+      "id": "3fc3ff90-4033-4bb5-8a44-17716f0228db",
       "eo_number": null,
-      "title": "National Crime Victims' Rights Week, 2025",
+      "title": "National Park Week, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "c225665b-b2ca-425c-8b2d-6ac0d64ca018",
+      "eo_number": null,
+      "title": "National Former Prisoner of War Recognition Day, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -4155,9 +4354,9 @@
       "industries": []
     },
     {
-      "id": "c225665b-b2ca-425c-8b2d-6ac0d64ca018",
+      "id": "4ac589a7-fbd7-49a4-a9b8-4d98ee82179d",
       "eo_number": null,
-      "title": "National Former Prisoner of War Recognition Day, 2025",
+      "title": "National Crime Victims' Rights Week, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -4179,23 +4378,48 @@
       "industries": []
     },
     {
-      "id": "0534bded-fa48-4c3b-b657-938ab4e64571",
-      "eo_number": null,
-      "title": "101st Anniversary of the United States Border Patrol",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "d36627a6-ffd7-4404-8f97-9f7256cc320f",
       "eo_number": null,
       "title": "National Physical Fitness and Sports Month, 2025",
       "practice_areas": [],
-      "industries": []
+      "industries": [
+        "Sports"
+      ]
     },
     {
       "id": "96c1f4c5-1236-4b55-9df2-92780dbb6777",
       "eo_number": null,
       "title": "World Trade Week, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "b190e378-6935-462f-bedf-8f5c3c524ad6",
+      "eo_number": null,
+      "title": "National Maritime Day, 2025",
+      "practice_areas": [],
+      "industries": [
+        "Transportation"
+      ]
+    },
+    {
+      "id": "69f5b565-7a0a-4d50-a5f1-a35029ffdf54",
+      "eo_number": null,
+      "title": "Jewish American Heritage Month, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "e6e8d395-f425-4822-bd5d-9ef949bba6c2",
+      "eo_number": null,
+      "title": "Asian American and Pacific Islander Heritage Month, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "489c04fd-ba82-40d1-b153-968886968c28",
+      "eo_number": null,
+      "title": "Armed Forces Day, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -4211,42 +4435,19 @@
       ]
     },
     {
-      "id": "b190e378-6935-462f-bedf-8f5c3c524ad6",
-      "eo_number": null,
-      "title": "National Maritime Day, 2025",
-      "practice_areas": [],
-      "industries": [
-        "Transportation"
-      ]
-    },
-    {
-      "id": "e6e8d395-f425-4822-bd5d-9ef949bba6c2",
-      "eo_number": null,
-      "title": "Asian American and Pacific Islander Heritage Month, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "69f5b565-7a0a-4d50-a5f1-a35029ffdf54",
-      "eo_number": null,
-      "title": "Jewish American Heritage Month, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "489c04fd-ba82-40d1-b153-968886968c28",
-      "eo_number": null,
-      "title": "Armed Forces Day, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "f1597acc-42a6-4830-ab2b-aa3bec6d47bd",
       "eo_number": "EO 14150",
       "title": "America First Policy Directive to the Secretary of State",
       "practice_areas": [
         "Governmental"
       ],
+      "industries": []
+    },
+    {
+      "id": "b1fe44db-986d-420f-847c-6ebf9c403df3",
+      "eo_number": null,
+      "title": "Made in America Week, 2025",
+      "practice_areas": [],
       "industries": []
     },
     {
@@ -4273,20 +4474,6 @@
       ]
     },
     {
-      "id": "1fd16cb9-c148-4b7e-9aa8-3427188bce38",
-      "eo_number": null,
-      "title": "Captive Nations Week, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "b1fe44db-986d-420f-847c-6ebf9c403df3",
-      "eo_number": null,
-      "title": "Made in America Week, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "ed298375-663a-497c-af0d-2ff2a7c9f385",
       "eo_number": null,
       "title": "160th Anniversary of the United States Secret Service, 2025",
@@ -4294,9 +4481,9 @@
       "industries": []
     },
     {
-      "id": "2dae3a0d-5030-4717-930f-87ce539f5fb6",
+      "id": "1fd16cb9-c148-4b7e-9aa8-3427188bce38",
       "eo_number": null,
-      "title": "250th Anniversary of the Founding of the United States Army",
+      "title": "Captive Nations Week, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -4308,23 +4495,9 @@
       "industries": []
     },
     {
-      "id": "c7269e69-679e-4328-a998-49a1ddeaa27c",
+      "id": "2dae3a0d-5030-4717-930f-87ce539f5fb6",
       "eo_number": null,
-      "title": "Fourth Anniversary of the Attack at Abbey Gate, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "184b9e17-fc54-4199-84ff-c629d6d95892",
-      "eo_number": null,
-      "title": "90th Anniversary of the Social Security Act",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "859eae18-bc41-4370-a5af-6a83c1502f68",
-      "eo_number": null,
-      "title": "Gold Star Mother's and Family's Day, 2025",
+      "title": "250th Anniversary of the Founding of the United States Army",
       "practice_areas": [],
       "industries": []
     },
@@ -4350,9 +4523,16 @@
       "industries": []
     },
     {
-      "id": "031dd8b9-2aff-4f03-a433-96ae8cdf9fd5",
+      "id": "c7269e69-679e-4328-a998-49a1ddeaa27c",
       "eo_number": null,
-      "title": "Patriot Day 2025, the 24th Anniversary of the September 11 Terrorist Attacks",
+      "title": "Fourth Anniversary of the Attack at Abbey Gate, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "184b9e17-fc54-4199-84ff-c629d6d95892",
+      "eo_number": null,
+      "title": "90th Anniversary of the Social Security Act",
       "practice_areas": [],
       "industries": []
     },
@@ -4411,9 +4591,16 @@
       ]
     },
     {
-      "id": "62232c26-88fc-40c2-85d3-a93ab0e5d29a",
+      "id": "c38e23b9-0d2f-4a39-88bd-cc204d28961b",
       "eo_number": null,
-      "title": "Religious Freedom Day, 2026",
+      "title": "Columbus Day, 2025",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "1565738a-12f1-4a92-990b-c9beb874f61f",
+      "eo_number": null,
+      "title": "Leif Erikson Day, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -4430,27 +4617,6 @@
         "Environmental",
         "ESG and Sustainability"
       ]
-    },
-    {
-      "id": "00563fa9-ebe9-4c4e-9719-ecd312dd10e2",
-      "eo_number": null,
-      "title": "General Pulaski Memorial Day, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "1565738a-12f1-4a92-990b-c9beb874f61f",
-      "eo_number": null,
-      "title": "Leif Erikson Day, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "c38e23b9-0d2f-4a39-88bd-cc204d28961b",
-      "eo_number": null,
-      "title": "Columbus Day, 2025",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "62277fdd-fc50-4f94-ba8e-1f3da1e9474f",
@@ -4483,9 +4649,9 @@
       ]
     },
     {
-      "id": "7dd0c12f-5d5d-41b2-a108-1bad3d4ddac7",
+      "id": "008b7047-28ec-42c1-9564-45795a633a2d",
       "eo_number": null,
-      "title": "Peace Officers Memorial Day and Police Week, 2025",
+      "title": "National School Choice Week, 2026",
       "practice_areas": [],
       "industries": []
     },
@@ -4502,16 +4668,16 @@
       ]
     },
     {
-      "id": "30f570da-334a-43da-ac8b-dfdec6af418f",
+      "id": "e69ece64-b911-4f2a-b80b-c051c16b0808",
       "eo_number": null,
-      "title": "National Black History Month, 2026",
+      "title": "National Day of Patriotic Devotion, 2026",
       "practice_areas": [],
       "industries": []
     },
     {
-      "id": "f19ee025-9ee3-4729-8cb4-16c653f86dd6",
+      "id": "4bd4670f-9f81-4848-a666-51aba4f14430",
       "eo_number": null,
-      "title": "Year of Celebration and Rededication, 2026",
+      "title": "Martin Luther King, Jr., Federal Holiday, 2026",
       "practice_areas": [],
       "industries": []
     },
@@ -4527,23 +4693,9 @@
       ]
     },
     {
-      "id": "008b7047-28ec-42c1-9564-45795a633a2d",
+      "id": "7dd0c12f-5d5d-41b2-a108-1bad3d4ddac7",
       "eo_number": null,
-      "title": "National School Choice Week, 2026",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "e69ece64-b911-4f2a-b80b-c051c16b0808",
-      "eo_number": null,
-      "title": "National Day of Patriotic Devotion, 2026",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "4bd4670f-9f81-4848-a666-51aba4f14430",
-      "eo_number": null,
-      "title": "Martin Luther King, Jr., Federal Holiday, 2026",
+      "title": "Peace Officers Memorial Day and Police Week, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -4560,15 +4712,6 @@
       "industries": []
     },
     {
-      "id": "7bd43ad7-9585-47e0-b064-9692b4fa9afe",
-      "eo_number": null,
-      "title": "National Mental Health Awareness Month, 2025",
-      "practice_areas": [],
-      "industries": [
-        "Healthcare"
-      ]
-    },
-    {
       "id": "6deb89e6-7c1e-47ad-b4d2-28cc300e8da3",
       "eo_number": "EO 14290",
       "title": "Ending Taxpayer Subsidization of Biased Media",
@@ -4580,6 +4723,13 @@
       "industries": [
         "Media and Technology"
       ]
+    },
+    {
+      "id": "d2a558d0-e91f-42a8-ba1b-b0ccfe932666",
+      "eo_number": null,
+      "title": "National Agriculture Day, 2026",
+      "practice_areas": [],
+      "industries": []
     },
     {
       "id": "0b2407c9-602b-452f-9e2d-ead37a3198c4",
@@ -4594,25 +4744,20 @@
       "industries": []
     },
     {
-      "id": "105d95e1-6bb2-48d5-9b1d-c92edc45aabd",
-      "eo_number": null,
-      "title": "Greek Independence Day: A National Day of Celebration of Greek and American Democracy, 2026",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "d2a558d0-e91f-42a8-ba1b-b0ccfe932666",
-      "eo_number": null,
-      "title": "National Agriculture Day, 2026",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "27173885-4dc1-4cd5-a400-9f7cac4df282",
       "eo_number": null,
       "title": "U.S. Hostage and Wrongful Detainee Day, 2026",
       "practice_areas": [],
       "industries": []
+    },
+    {
+      "id": "7bd43ad7-9585-47e0-b064-9692b4fa9afe",
+      "eo_number": null,
+      "title": "National Mental Health Awareness Month, 2025",
+      "practice_areas": [],
+      "industries": [
+        "Healthcare"
+      ]
     },
     {
       "id": "8bb7d889-c42a-4080-b763-f7e55ee4358a",
@@ -4626,16 +4771,9 @@
       "industries": []
     },
     {
-      "id": "e894c71b-5851-4deb-8fa4-f171b4792a90",
+      "id": "765f742b-153e-4c16-baf9-1310fa2ca265",
       "eo_number": null,
-      "title": "418th Anniversary of the First Landing and the Raising of the Cape Henry Cross",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "6c9182d3-229e-46bb-9b1d-4a85dcd4b511",
-      "eo_number": null,
-      "title": "Peace Officers Memorial Day and Police Week, 2026",
+      "title": "Victory Day for World War II, 2026",
       "practice_areas": [],
       "industries": []
     },
@@ -4643,13 +4781,6 @@
       "id": "ffdc90e8-cde9-42a1-84eb-9a631623a59c",
       "eo_number": null,
       "title": "Military Spouse Day, 2026",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "765f742b-153e-4c16-baf9-1310fa2ca265",
-      "eo_number": null,
-      "title": "Victory Day for World War II, 2026",
       "practice_areas": [],
       "industries": []
     },
@@ -4687,6 +4818,13 @@
       "id": "f563ffd0-2469-4b94-a70d-bac720eca2e2",
       "eo_number": null,
       "title": "Day of Celebration in Honor of the Life of Henry Clay, 2026",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "e894c71b-5851-4deb-8fa4-f171b4792a90",
+      "eo_number": null,
+      "title": "418th Anniversary of the First Landing and the Raising of the Cape Henry Cross",
       "practice_areas": [],
       "industries": []
     },
@@ -4729,8 +4867,15 @@
       "id": "a10226ef-364d-438d-a0b1-94026349898c",
       "eo_number": null,
       "title": "National Homeownership Month, 2026",
-      "practice_areas": [],
-      "industries": []
+      "practice_areas": [
+        "Antitrust and Competition",
+        "Commercial Finance",
+        "Real Estate",
+        "Governmental"
+      ],
+      "industries": [
+        "Consumer Financial Services"
+      ]
     },
     {
       "id": "a48775bc-7de7-4bdc-94c0-b6438d082f3c",
@@ -4743,6 +4888,13 @@
       "id": "7f035547-615e-467e-8bb1-5610cc9bba54",
       "eo_number": null,
       "title": "75th Anniversary of the White House Navy Mess, 2026",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
+      "id": "6974d440-b8ba-4865-a82c-fbfccdaf57ee",
+      "eo_number": null,
+      "title": "Memorial Day, 2026",
       "practice_areas": [],
       "industries": []
     },
@@ -4767,13 +4919,6 @@
         "Energy and Infrastructure",
         "Environmental"
       ]
-    },
-    {
-      "id": "6974d440-b8ba-4865-a82c-fbfccdaf57ee",
-      "eo_number": null,
-      "title": "Memorial Day, 2026",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "6c342649-73d5-4cf0-b118-e6a91e938170",
@@ -4866,6 +5011,13 @@
       "industries": []
     },
     {
+      "id": "f9300dc5-8a57-4f89-8e19-13f2ed41b966",
+      "eo_number": null,
+      "title": "National Purple Heart Day, 2026",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "77af6eb9-2c82-444d-b005-636f0ee8fd06",
       "eo_number": null,
       "title": "Temporary Suspension of Additional Duties To Offset Canadian Discrimination Against the Commerce of the United States With Respect to Alcoholic Beverages, Dairy, and Motor Vehicles",
@@ -4877,20 +5029,6 @@
         "Food and Beverage",
         "Transportation"
       ]
-    },
-    {
-      "id": "9fbcde06-37dc-499d-b67d-0ebd67a9d2a2",
-      "eo_number": null,
-      "title": "National Substance Use Primary Prevention Month, 2026",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "f9300dc5-8a57-4f89-8e19-13f2ed41b966",
-      "eo_number": null,
-      "title": "National Purple Heart Day, 2026",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "9cc3d7fd-600e-4f7c-b37c-ae3a4d5ccac1",
@@ -5034,6 +5172,13 @@
       "industries": []
     },
     {
+      "id": "3e5f95ff-166f-4832-8672-0c035f8a21c3",
+      "eo_number": null,
+      "title": "Labor Day, 2026",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "cc94ae86-be18-473b-b7ab-562a784842d9",
       "eo_number": null,
       "title": "The Mexico City Policy",
@@ -5056,13 +5201,6 @@
         "Transportation",
         "Aerospace, Defense & Government Services"
       ]
-    },
-    {
-      "id": "3e5f95ff-166f-4832-8672-0c035f8a21c3",
-      "eo_number": null,
-      "title": "Labor Day, 2026",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "ba04b92f-0bc9-4d85-b311-409ad50d4026",
@@ -5105,9 +5243,9 @@
       "industries": []
     },
     {
-      "id": "be75b990-d929-4158-a646-e8b62dadc856",
+      "id": "c8f8f144-fdd7-48e9-9cba-e01f55b4a928",
       "eo_number": null,
-      "title": "National Small Business Week, 2025",
+      "title": "Loyalty Day and Law Day, U.S.A., 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -5115,13 +5253,6 @@
       "id": "22973f98-b041-45ce-9da3-4d101c3f1597",
       "eo_number": null,
       "title": "National Fallen Firefighters Memorial Weekend, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "c8f8f144-fdd7-48e9-9cba-e01f55b4a928",
-      "eo_number": null,
-      "title": "Loyalty Day and Law Day, U.S.A., 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -5215,13 +5346,6 @@
       "industries": []
     },
     {
-      "id": "01c7b9a9-c80a-403f-888a-801cd9232a2a",
-      "eo_number": null,
-      "title": "National Volunteer Week, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "1ee8af3c-96b7-402e-aff8-764e1ecbfeba",
       "eo_number": "EO 14281",
       "title": "Restoring Equality of Opportunity and Meritocracy",
@@ -5239,16 +5363,16 @@
       ]
     },
     {
-      "id": "8954b66e-789b-4d5b-9e1d-e1f2bc482f03",
+      "id": "fd47f070-f736-42e3-8ced-cf179cb2fd24",
       "eo_number": null,
-      "title": "Martin Luther King, Jr., Federal Holiday, 2025",
+      "title": "National Pearl Harbor Remembrance Day, 2025",
       "practice_areas": [],
       "industries": []
     },
     {
-      "id": "fd47f070-f736-42e3-8ced-cf179cb2fd24",
+      "id": "8954b66e-789b-4d5b-9e1d-e1f2bc482f03",
       "eo_number": null,
-      "title": "National Pearl Harbor Remembrance Day, 2025",
+      "title": "Martin Luther King, Jr., Federal Holiday, 2025",
       "practice_areas": [],
       "industries": []
     },
@@ -5352,13 +5476,6 @@
       ]
     },
     {
-      "id": "5d56129c-837e-4383-9a6f-a7b4c18db760",
-      "eo_number": null,
-      "title": "Flying the Flag of the United States at Full- Staff on Inauguration Day",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "fd437756-d284-4d8d-a92d-f6a80748284d",
       "eo_number": null,
       "title": "Adjusting Imports of Medium- and Heavy-Duty Vehicles, Medium- and Heavy-Duty Vehicle Parts, and Buses Into the United States",
@@ -5374,16 +5491,9 @@
       ]
     },
     {
-      "id": "e789b378-4593-4dc5-a414-29d009b13e60",
+      "id": "5d56129c-837e-4383-9a6f-a7b4c18db760",
       "eo_number": null,
-      "title": "250th Anniversary of the Founding of the United States Navy",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
-      "id": "c654e1f3-a314-41be-9eed-ff449400efb7",
-      "eo_number": null,
-      "title": "Honoring the Memory of His Holiness Pope Francis",
+      "title": "Flying the Flag of the United States at Full- Staff on Inauguration Day",
       "practice_areas": [],
       "industries": []
     },
@@ -5400,6 +5510,13 @@
         "Food and Beverage",
         "Environmental"
       ]
+    },
+    {
+      "id": "6c51f670-5f60-4ab9-811d-e7db9f984785",
+      "eo_number": null,
+      "title": "Veterans Day, 2025",
+      "practice_areas": [],
+      "industries": []
     },
     {
       "id": "c545ff56-faf1-4c9e-a640-27a95e4ec2af",
@@ -5430,13 +5547,6 @@
       ]
     },
     {
-      "id": "6c51f670-5f60-4ab9-811d-e7db9f984785",
-      "eo_number": null,
-      "title": "Veterans Day, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "25a617ae-e2cd-491c-ab47-7a3beee9207b",
       "eo_number": "EO 14271",
       "title": "Ensuring Commercial, Cost-Effective Solutions in Federal Contracts",
@@ -5463,6 +5573,13 @@
       ]
     },
     {
+      "id": "3f2c67c2-4c3b-4731-9012-cccd8c2caa39",
+      "eo_number": null,
+      "title": "President George Washington's Birthday, 2026",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "ece2b661-b6a5-49dc-a687-d10226d31ba9",
       "eo_number": "EO 14387",
       "title": "Promoting the National Defense by Ensuring an Adequate Supply of Elemental Phosphorus and Glyphosate- Based Herbicides",
@@ -5475,13 +5592,6 @@
         "Food and Beverage",
         "Environmental"
       ]
-    },
-    {
-      "id": "3f2c67c2-4c3b-4731-9012-cccd8c2caa39",
-      "eo_number": null,
-      "title": "President George Washington's Birthday, 2026",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "c688cbde-ddfe-45ea-8d19-641c336b6df5",
@@ -5516,6 +5626,13 @@
       ]
     },
     {
+      "id": "573733fd-d49b-4933-a9eb-63a8cf376964",
+      "eo_number": null,
+      "title": "Honoring the Memory of Charlie Kirk",
+      "practice_areas": [],
+      "industries": []
+    },
+    {
       "id": "002c2e18-d974-476a-9a02-59e7a1feb78c",
       "eo_number": null,
       "title": "Delegation of Authority Under Section 404 (c) of the Child Soldiers Prevention Act of 2008",
@@ -5525,13 +5642,6 @@
       "industries": [
         "Aerospace, Defense & Government Services"
       ]
-    },
-    {
-      "id": "573733fd-d49b-4933-a9eb-63a8cf376964",
-      "eo_number": null,
-      "title": "Honoring the Memory of Charlie Kirk",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "a94a6ec9-9871-45cd-8df4-21a4f84f27dc",
@@ -6068,13 +6178,6 @@
       ]
     },
     {
-      "id": "b39ae26b-c01d-436d-8220-92cce30ae03b",
-      "eo_number": null,
-      "title": "National Child Abuse Prevention Month, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "64c6b2a2-164a-4e44-a5a5-91a00fec2e27",
       "eo_number": "EO 14163",
       "title": "Realigning the United States Refugee Admissions Program",
@@ -6151,8 +6254,23 @@
       "id": "a81d82bb-8380-4f3a-82a1-7e92d26266e7",
       "eo_number": "EO 14148",
       "title": "Initial Rescissions of Harmful Executive Orders and Actions",
-      "practice_areas": [],
-      "industries": []
+      "practice_areas": [
+        "Governmental",
+        "Labor and Employment",
+        "Land Use",
+        "Global Reach",
+        "Private Client Services",
+        "Entertainment, Technology and Advertising"
+      ],
+      "industries": [
+        "Healthcare",
+        "Environmental",
+        "ESG and Sustainability",
+        "Energy and Infrastructure",
+        "AI, Robotics and Quantum",
+        "Tribal and Native American Law",
+        "Transportation"
+      ]
     },
     {
       "id": "5d8a3caf-c664-4367-8f34-25df385a8777",
@@ -6340,13 +6458,6 @@
       "industries": []
     },
     {
-      "id": "6143e066-3bf1-40c5-a8f6-02e604461f0c",
-      "eo_number": null,
-      "title": "Fifth Anniversary of the Attack at Abbey Gate",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "66001f34-3318-4449-a2ca-aa2d78fe8b06",
       "eo_number": null,
       "title": "Further Ensuring Affordable Beef for the American Consumer",
@@ -6357,13 +6468,6 @@
       "industries": [
         "Food and Beverage"
       ]
-    },
-    {
-      "id": "44716f20-91bb-4477-b82b-c54888954e5a",
-      "eo_number": null,
-      "title": "Honoring the Memory of Dolly Parton",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "ed3a6f0f-893e-4e3d-af9b-1d94bc1fd16d",
@@ -6443,13 +6547,6 @@
       ]
     },
     {
-      "id": "82525937-5c7b-4219-928a-3e3e81267ad9",
-      "eo_number": null,
-      "title": "Captive Nations Week, 2026",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "0ad65852-833c-493f-9f2f-de8feb83d3a9",
       "eo_number": null,
       "title": "Imposing Additional Duties To Offset Canadian Discrimination Against the Commerce of the United States With Respect to Alcoholic Beverages",
@@ -6475,9 +6572,9 @@
       ]
     },
     {
-      "id": "9de2b80b-7bdc-47c8-b429-7f99e77cffa5",
+      "id": "82525937-5c7b-4219-928a-3e3e81267ad9",
       "eo_number": null,
-      "title": "Death of Senator Lindsey Graham",
+      "title": "Captive Nations Week, 2026",
       "practice_areas": [],
       "industries": []
     },
@@ -6971,13 +7068,6 @@
       "industries": []
     },
     {
-      "id": "cf1313e6-4f01-416a-97f1-941cea50819d",
-      "eo_number": null,
-      "title": "Bill of Rights Day, 2025",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "ebcd4d08-10a5-45e4-a95e-b185dca65204",
       "eo_number": "EO 14366",
       "title": "Protecting American Investors From Foreign-Owned and Politically-Motivated Proxy Advisors",
@@ -7025,13 +7115,6 @@
       ]
     },
     {
-      "id": "03088051-51aa-44f5-a76c-ef6728f4c982",
-      "eo_number": null,
-      "title": "250th Anniversary of the Founding of the United States Marine Corps",
-      "practice_areas": [],
-      "industries": []
-    },
-    {
       "id": "55de2ab3-c0ab-483e-beac-faf20d21a9f3",
       "eo_number": null,
       "title": "Aligning United States Core Childhood Vaccine Recommendations with Best Practices from Peer, Developed Countries",
@@ -7043,13 +7126,6 @@
         "Healthcare",
         "Life Sciences"
       ]
-    },
-    {
-      "id": "0d385b71-931c-4894-b409-e62bdeb9fb30",
-      "eo_number": null,
-      "title": "Honoring the Memory of Specialist Sarah Beckstrom, West Virginia Army National Guard",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "a5df5af0-bb0b-4774-8025-4f34e638909d",
@@ -7164,13 +7240,6 @@
       "industries": [
         "Aerospace, Defense & Government Services"
       ]
-    },
-    {
-      "id": "f61a8c62-1e60-40e4-b39d-d958c10073dd",
-      "eo_number": null,
-      "title": "The Trump Declaration for Enduring Peace and Prosperity",
-      "practice_areas": [],
-      "industries": []
     },
     {
       "id": "d37ab3ac-e613-404b-97ab-4c2740ede2a0",

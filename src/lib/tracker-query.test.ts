@@ -10,13 +10,30 @@ import {
 
 const DEFAULTS: TrackerQuery = {
   search: "",
-  practiceArea: "",
-  industry: "",
+  practiceAreas: [],
+  industries: [],
   status: "",
+  dateFrom: "",
+  dateTo: "",
   sort: "date",
   page: 1,
   pageSize: 25,
 };
+
+/**
+ * Turns a query string back into the shape Next hands to a page. Repeated
+ * parameters must stay arrays: Object.fromEntries would keep only the last
+ * value, which is exactly the bug a multi-select filter would hit.
+ */
+function asSearchParams(queryString: string): Record<string, string | string[]> {
+  const params = new URLSearchParams(queryString);
+  const entries: Record<string, string | string[]> = {};
+  for (const key of new Set(params.keys())) {
+    const values = params.getAll(key);
+    entries[key] = values.length > 1 ? values : values[0];
+  }
+  return entries;
+}
 
 describe("parseTrackerQuery", () => {
   it("returns defaults for an empty URL", () => {
@@ -30,15 +47,19 @@ describe("parseTrackerQuery", () => {
         practice: "Tax",
         industry: "Energy and Infrastructure",
         status: "revoked",
+        from: "2025-02-01",
+        to: "2026-02-01",
         sort: "relevance",
         page: "3",
         size: "50",
       }),
     ).toEqual({
       search: "critical minerals",
-      practiceArea: "Tax",
-      industry: "Energy and Infrastructure",
+      practiceAreas: ["Tax"],
+      industries: ["Energy and Infrastructure"],
       status: "revoked",
+      dateFrom: "2025-02-01",
+      dateTo: "2026-02-01",
       sort: "relevance",
       page: 3,
       pageSize: 50,
@@ -94,16 +115,17 @@ describe("buildTrackerQueryString", () => {
   it("round-trips through parse unchanged", () => {
     const original: TrackerQuery = {
       search: "tariff OR duty",
-      practiceArea: "Tax",
-      industry: "Fintech",
+      practiceAreas: ["Tax", "Governmental--National Security"],
+      industries: ["Fintech", "Healthcare"],
       status: "active",
+      dateFrom: "2025-01-20",
+      dateTo: "2026-01-20",
       sort: "relevance",
       page: 4,
       pageSize: 100,
     };
 
-    const params = Object.fromEntries(new URLSearchParams(buildTrackerQueryString(original)));
-    expect(parseTrackerQuery(params)).toEqual(original);
+    expect(parseTrackerQuery(asSearchParams(buildTrackerQueryString(original)))).toEqual(original);
   });
 });
 
@@ -113,7 +135,8 @@ describe("withTrackerChange", () => {
     // Narrowing while deep in the results would otherwise land on an empty
     // page, which reads as "no matches" rather than "you moved".
     expect(withTrackerChange(onPage12, { search: "tariff" }).page).toBe(1);
-    expect(withTrackerChange(onPage12, { practiceArea: "Tax" }).page).toBe(1);
+    expect(withTrackerChange(onPage12, { practiceAreas: ["Tax"] }).page).toBe(1);
+    expect(withTrackerChange(onPage12, { dateFrom: "2025-06-01" }).page).toBe(1);
     expect(withTrackerChange(onPage12, { pageSize: 100 }).page).toBe(1);
     expect(withTrackerChange(onPage12, { sort: "relevance" }).page).toBe(1);
   });
@@ -147,5 +170,51 @@ describe("offsetFor and totalPagesFor", () => {
 
   it("reports one page when nothing matches, so the UI never says 'page 1 of 0'", () => {
     expect(totalPagesFor(0, 25)).toBe(1);
+  });
+});
+
+describe("parseTrackerQuery — multi-select and dates", () => {
+  it("reads a repeated parameter as several selections", () => {
+    const query = parseTrackerQuery({ practice: ["Tax", "Litigation"] });
+    expect(query.practiceAreas).toEqual(["Tax", "Litigation"]);
+  });
+
+  it("reads a single selection as a one-element list", () => {
+    expect(parseTrackerQuery({ practice: "Tax" }).practiceAreas).toEqual(["Tax"]);
+  });
+
+  it("accepts a comma-separated list, for a hand-written URL", () => {
+    expect(parseTrackerQuery({ industry: "Fintech,Healthcare" }).industries).toEqual(["Fintech", "Healthcare"]);
+  });
+
+  it("drops duplicates and blanks", () => {
+    expect(parseTrackerQuery({ practice: ["Tax", "Tax", "", "  "] }).practiceAreas).toEqual(["Tax"]);
+  });
+
+  it("keeps a subgroup tag intact, separator and all", () => {
+    const query = parseTrackerQuery({ practice: "Governmental--National Security" });
+    expect(query.practiceAreas).toEqual(["Governmental--National Security"]);
+  });
+
+  it("accepts ISO dates", () => {
+    const query = parseTrackerQuery({ from: "2025-01-20", to: "2026-09-13" });
+    expect(query.dateFrom).toBe("2025-01-20");
+    expect(query.dateTo).toBe("2026-09-13");
+  });
+
+  it("rejects a date that is not an ISO date, rather than passing it to SQL", () => {
+    // These arrive from a URL a person can type.
+    expect(parseTrackerQuery({ from: "last tuesday" }).dateFrom).toBe("");
+    expect(parseTrackerQuery({ from: "2025-13-45" }).dateFrom).toBe("");
+    expect(parseTrackerQuery({ to: "2025/01/20" }).dateTo).toBe("");
+  });
+
+  it("emits one parameter per selection", () => {
+    const qs = buildTrackerQueryString({ ...DEFAULTS, practiceAreas: ["Tax", "Litigation"] });
+    expect(qs).toBe("practice=Tax&practice=Litigation");
+  });
+
+  it("omits date parameters when unset", () => {
+    expect(buildTrackerQueryString({ ...DEFAULTS, search: "x" })).toBe("q=x");
   });
 });
