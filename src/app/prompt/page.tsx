@@ -10,6 +10,7 @@ import { renderSummaryPrompt } from "@/lib/summary-prompt/render";
 import { getSummaryModel } from "@/lib/ai-model";
 import { PromptEditor } from "@/components/prompt-editor";
 import { formatDate } from "@/lib/format-date";
+import { hasRequestTokenSecret, mintRequestToken } from "@/lib/request-token";
 
 // Reads the live prompt and its history — never statically prerendered, or a
 // prompt saved today would keep showing yesterday's text until a rebuild
@@ -67,6 +68,7 @@ export default async function PromptPage() {
             defaultBody={DEFAULT_SUMMARY_PROMPT}
             isDefault={active.isDefault}
             renderedPreview={renderSummaryPrompt(active.body)}
+            requestToken={hasRequestTokenSecret() ? mintRequestToken() : null}
           />
         )}
 

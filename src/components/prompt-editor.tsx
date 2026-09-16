@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { REQUEST_TOKEN_HEADER } from "@/lib/request-token-header";
 
 interface PromptEditorProps {
   initialBody: string;
@@ -9,11 +10,19 @@ interface PromptEditorProps {
   isDefault: boolean;
   /** The rendered prompt as the model actually receives it, with the taxonomy lists substituted. */
   renderedPreview: string;
+  /** Minted per page render by the server (see src/lib/request-token.ts); expires after 12 hours. Null when REQUEST_TOKEN_SECRET isn't configured, which disables saving rather than failing with an opaque 401. */
+  requestToken: string | null;
 }
 
 type SaveState = { status: "idle" | "saving" } | { status: "error"; messages: string[] } | { status: "saved"; warnings: string[] };
 
-export function PromptEditor({ initialBody, defaultBody, isDefault, renderedPreview }: PromptEditorProps) {
+export function PromptEditor({
+  initialBody,
+  defaultBody,
+  isDefault,
+  renderedPreview,
+  requestToken,
+}: PromptEditorProps) {
   const router = useRouter();
   const [body, setBody] = useState(initialBody);
   const [note, setNote] = useState("");
@@ -23,11 +32,15 @@ export function PromptEditor({ initialBody, defaultBody, isDefault, renderedPrev
   const isDirty = body !== initialBody;
 
   async function handleSave() {
+    if (!requestToken) {
+      setSave({ status: "error", messages: ["Saving is disabled because this deployment has no REQUEST_TOKEN_SECRET set (see README)."] });
+      return;
+    }
     setSave({ status: "saving" });
     try {
       const response = await fetch("/api/summary-prompt", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", [REQUEST_TOKEN_HEADER]: requestToken },
         body: JSON.stringify({ body, note }),
       });
       const payload = await response.json();
@@ -107,7 +120,7 @@ export function PromptEditor({ initialBody, defaultBody, isDefault, renderedPrev
         <button
           type="button"
           onClick={handleSave}
-          disabled={!isDirty || save.status === "saving"}
+          disabled={!isDirty || save.status === "saving" || !requestToken}
           className="rounded-md bg-accent-strong px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
           {save.status === "saving" ? "Saving…" : "Save as new version"}

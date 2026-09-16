@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { ContentType, ExecutiveOrderListItem } from "@/lib/types";
+import { REQUEST_TOKEN_HEADER } from "@/lib/request-token-header";
 import { CONTENT_TYPE_LABELS } from "@/lib/types";
 
 const CONTENT_TYPES = Object.keys(CONTENT_TYPE_LABELS) as ContentType[];
@@ -20,9 +21,18 @@ function downloadBlob(blob: Blob, filename: string) {
 export function ContentDrafter({
   orders,
   initialSelectedId,
+  requestToken,
 }: {
   orders: ExecutiveOrderListItem[];
   initialSelectedId?: string;
+  /**
+   * Minted per page render by the server (see src/lib/request-token.ts);
+   * expires after 12 hours, at which point the page must be reloaded. Null
+   * when REQUEST_TOKEN_SECRET isn't configured — the page still renders and
+   * the order list still works, but generating is disabled rather than
+   * failing with an opaque 401.
+   */
+  requestToken: string | null;
 }) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(
     new Set(initialSelectedId ? [initialSelectedId] : []),
@@ -47,6 +57,10 @@ export function ContentDrafter({
   }
 
   async function handleGenerate() {
+    if (!requestToken) {
+      setError("Content drafting is disabled because this deployment has no REQUEST_TOKEN_SECRET set (see README).");
+      return;
+    }
     if (selectedIds.size === 0) {
       setError("Select at least one executive order first.");
       return;
@@ -60,7 +74,7 @@ export function ContentDrafter({
     try {
       const res = await fetch("/api/generate-content", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", [REQUEST_TOKEN_HEADER]: requestToken },
         body: JSON.stringify({ eoIds: Array.from(selectedIds), contentType }),
       });
       const data = await res.json();
@@ -162,7 +176,7 @@ export function ContentDrafter({
         <button
           type="button"
           onClick={handleGenerate}
-          disabled={generating}
+          disabled={generating || !requestToken}
           className="rounded-md bg-accent-strong px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {generating ? "Generating…" : "Generate draft"}

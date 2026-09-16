@@ -152,6 +152,13 @@ SITE_PASSWORD=
 # "Federal Register ingestion" below) — generate with `openssl rand -hex 32`.
 CRON_SECRET=
 
+# Signs the short-lived tokens that gate /api/generate-content and
+# /api/summary-prompt — the two routes that spend money and write. Generate
+# with `openssl rand -hex 32`. Without it those two endpoints refuse every
+# request and the Generate / Save buttons render disabled with an
+# explanation; everything else works. See "Protecting the write endpoints".
+REQUEST_TOKEN_SECRET=
+
 # Optional: a free CourtListener API token (courtlistener.com > Profile >
 # API tokens). `npm run link:dockets` works without it, but anonymous callers
 # are rate-limited hard — roughly 25 requests before a 429 — so a full run
@@ -204,6 +211,47 @@ Two things worth knowing about it:
   a plain GET expecting JSON, not a redirect to an HTML login page, so those routes are
   protected by `CRON_SECRET` instead. If you change the matcher, re-check that a cron
   request still returns JSON and an unauthenticated one still returns 401 — not the gate.
+
+### Protecting the write endpoints
+
+`SITE_PASSWORD` was removed on 2026-09-16 so the tracker could be shared
+freely. That left two routes reachable by anyone with the URL:
+`/api/generate-content`, which calls Claude Opus 5 and costs money, and
+`/api/summary-prompt`, which rewrites the instructions every future nightly
+summary is generated from. Both are now behind two independent checks.
+
+**A short-lived signed token** (`src/lib/request-token.ts`). Each render of
+`/draft` and `/prompt` mints an HMAC token valid for 12 hours; the client
+component sends it back as an `x-eo-request-token` header, and the route
+verifies it before doing anything.
+
+**Be clear about what that is worth.** Those pages are client components
+fetching from the browser, so the token is delivered to the browser and
+anyone who opens devtools can read it. It stops scrapers, crawlers and
+drive-by scripts hitting the endpoints directly. It does **not** stop a
+determined person, and it is not authentication — `SITE_PASSWORD` or Phase 5
+accounts are what actually close these routes.
+
+There is deliberately **no token-refresh endpoint**: anything that minted
+tokens without authentication would let anyone mint one, defeating the
+mechanism entirely. An expired token means reload the page. Expiry therefore
+buys little against a person, who could just reload it too; its real value is
+putting a clock on a token that leaks into a screenshot or a shared log.
+
+**An hourly ceiling on spend** (`src/lib/generation-limit.ts`). At most
+`CONTENT_GENERATIONS_PER_HOUR` (20) content generations per hour across the
+whole deployment, counted from the `api_usage` rows already being written —
+no new table, and no visitor identifiers stored. The token decides *who* may
+call; this decides *how much calling can cost*, which is the part that
+actually bounds the bill if a token is extracted. Deliberately global rather
+than per-caller, because a spend ceiling is a property of the deployment; the
+cost is that one runaway caller blocks everyone until the window rolls over.
+
+It is not a substitute for the monthly cap on the Anthropic account — that is
+still the real backstop. This just stops a loop exhausting it in an hour. If
+the counting query itself fails the request is allowed through and a loud
+`console.error` says the ceiling is not being enforced, since a Supabase blip
+should not take drafting down for a one-person tool.
 
 ## Federal Register ingestion
 

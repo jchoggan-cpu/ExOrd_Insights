@@ -2,16 +2,28 @@ import { NextResponse } from "next/server";
 import { getServiceRoleClient } from "@/lib/supabase";
 import { saveSummaryPrompt } from "@/lib/summary-prompt/store";
 import { validateSummaryPrompt } from "@/lib/summary-prompt/render";
+import { rejectionMessage, verifyRequest } from "@/lib/request-token";
 
 /**
  * Saves a new version of the summarization prompt.
  *
  * Uses the service-role client because `summary_prompts` write policies are
- * is_admin()-gated (migration 0005) and Supabase Auth doesn't exist yet —
- * the access boundary today is SITE_PASSWORD, same as the rest of the app.
- * Revisit at Phase 5 alongside the policies themselves.
+ * is_admin()-gated (migration 0005) and Supabase Auth doesn't exist yet. The
+ * access boundary today is the request token below — SITE_PASSWORD was
+ * removed on 2026-09-16 so the tracker could be shared freely, which is what
+ * left this route briefly open. Revisit at Phase 5 alongside the policies.
  */
 export async function POST(request: Request) {
+  // This route rewrites the instructions every future nightly summary is
+  // generated from, so an unauthenticated write here poisons the corpus
+  // going forward. A rate limit would not help — one write does the damage —
+  // so the token is the whole protection (see request-token.ts for what that
+  // is and isn't worth).
+  const token = verifyRequest(request);
+  if (!token.ok) {
+    return NextResponse.json({ error: rejectionMessage(token.reason) }, { status: 401 });
+  }
+
   let body: { body?: unknown; note?: unknown };
   try {
     body = await request.json();

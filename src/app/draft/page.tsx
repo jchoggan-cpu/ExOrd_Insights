@@ -1,6 +1,7 @@
 import { getExecutiveOrders, isUsingLocalData } from "@/lib/data";
 import { ContentDrafter } from "@/components/content-drafter";
 import { LocalDataBanner } from "@/components/local-data-banner";
+import { hasRequestTokenSecret, mintRequestToken } from "@/lib/request-token";
 
 export default async function DraftPage({
   searchParams,
@@ -10,6 +11,11 @@ export default async function DraftPage({
   const { eoId } = await searchParams;
   const orders = await getExecutiveOrders();
   const usingLocalData = isUsingLocalData();
+  // Minted per render and handed to the client component, which sends it back
+  // on every generate call. Null rather than a throw when the secret isn't
+  // set, so a checkout with no .env.local still renders a working tracker and
+  // an explicitly disabled Generate button instead of a 500.
+  const requestToken = hasRequestTokenSecret() ? mintRequestToken() : null;
 
   return (
     <main className="flex flex-1 flex-col">
@@ -24,7 +30,7 @@ export default async function DraftPage({
             one or more executive orders below.
           </p>
         </div>
-        <ContentDrafter orders={orders} initialSelectedId={eoId} />
+        <ContentDrafter orders={orders} initialSelectedId={eoId} requestToken={requestToken} />
       </div>
     </main>
   );

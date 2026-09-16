@@ -86,7 +86,7 @@ SELECT policies on `executive_orders`, `ingestion_runs`,
 that Phase 5 hasn't built, so no anon read could ever satisfy them — every
 tracker and detail read would have been RLS-denied and fallen back to stale
 JSON with no error anywhere. Loosened to `using (true)` in
-`0002_loosen_read_policies.sql`; the real boundary today is `SITE_PASSWORD`.
+`0002_loosen_read_policies.sql`; there is no read boundary today at all.
 Writes are unchanged, `is_admin()`-gated and service-role only.
 
 **Revisit at Phase 5**: once real per-user accounts ship, tighten those four
@@ -98,11 +98,12 @@ Project `tjnenceabzlvgozplpsp` ("EO Tracking Tool"). Migrations through 0008
 are live — **verify directly** against `pg_policies`/`information_schema`/
 `pg_proc`, never the migration-history log alone; that is what caught both
 issues below. `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
-`SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET` and `ANTHROPIC_API_KEY` are set
-in `.env.local`; those five plus `EO_TRACKER_MODEL` and `SITE_PASSWORD` are
-in Vercel. **Vercel won't read a Secret-type value back via CLI, so "the
-variable is listed" is not evidence it holds anything** — see Production
-environment below for the eight nights that cost.
+`SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET`, `ANTHROPIC_API_KEY` and
+`REQUEST_TOKEN_SECRET` are set in `.env.local`; those six plus
+`EO_TRACKER_MODEL` are in Vercel (`SITE_PASSWORD` removed 2026-09-16).
+**Vercel won't read a Secret-type value back via CLI, so "the variable is
+listed" is not evidence it holds anything** — see Production environment
+below for the eight nights that cost.
 
 **Important workflow change**: the Supabase project's GitHub integration
 auto-deploys everything in `supabase/migrations/` on every push to
@@ -126,15 +127,11 @@ error — see `0004_reconcile_executive_orders_drift.sql` for the fix and the
 full diagnosis. Going forward: always add a new migration file for schema
 changes, even a small one, never edit a migration that may already be live.
 
-**Also discovered (0003)**: this project's `postgres` role had default
-table privileges for `anon`/`authenticated`/`service_role` missing
-`select`/`insert`/`update`/`delete` entirely — a genuine Postgres-level
-grant gap (not an RLS policy issue), most likely because the project was
-provisioned through Vercel's Marketplace integration rather than
-supabase.com directly, which appears to skip Supabase's usual
-default-privilege bootstrap. Fixed for existing tables and defaulted going
-forward; if this project is ever recreated from scratch the same gap should
-be expected and checked for.
+**Also discovered (0003)**: default table privileges for
+`anon`/`authenticated`/`service_role` were missing entirely — a Postgres
+grant gap, not an RLS issue, most likely because the project came via
+Vercel's Marketplace rather than supabase.com. Fixed and defaulted forward;
+expect and check for it if this project is ever recreated.
 
 **Also present, unused**: the marketplace integration added ~16 further env
 vars (`*JCHLQSUPABASE*`, `*PUBLISHABLE*`, `SUPABASE_JWT_SECRET`,
@@ -194,11 +191,19 @@ rows finished.
 
 ## Production environment (2026-09-16)
 
-- **`SITE_PASSWORD` is set; the gate is live.** Vercel's own Deployment
-  Protection is the paid add-on — this app's gate (`src/proxy.ts`) is an
-  ordinary env var and works on Hobby. `/api/cron/*` is excluded from the
-  proxy matcher deliberately: those routes answer to `CRON_SECRET` and must
-  return JSON, not a redirect. Re-verify both if the matcher ever changes.
+- **`SITE_PASSWORD` was removed 2026-09-16** so the tracker could be shared
+  freely; the gate machinery stays in the repo, dormant, and re-adding the
+  env var plus a redeploy turns it back on in ~30 seconds. It needs no paid
+  Vercel plan (their Deployment Protection is the paid one). `/api/cron/*`
+  is excluded from the proxy matcher deliberately: those routes answer to
+  `CRON_SECRET` and must return JSON, not a redirect — re-verify both if the
+  matcher ever changes.
+- **The two write routes are protected by a token, not by auth.**
+  `/api/generate-content` and `/api/summary-prompt` verify a 12-hour HMAC
+  token minted per page render, plus a 20/hour global spend ceiling on the
+  former. The token ships to the browser, so it stops scrapers and not
+  people — do not mistake it for access control. There is no refresh
+  endpoint, because an unauthenticated minting endpoint would defeat it.
 - **A Vercel env var can exist and still be empty, with nothing to say so.**
   `ANTHROPIC_API_KEY` was registered but blank, so the nightly enrich job
   failed eight nights running while ingest succeeded beside it. A *wrong*
@@ -221,14 +226,12 @@ Steps that need a human, can't be automated away, and how to tell they're done:
 | Fix the 3 rows with malformed `action_type` (two `"Pending Federal Register Publication"`, one `"Proclamation 10973"`) — none has a Federal Register counterpart to correct it automatically | `npm run correct` | `npm run diagnostics` shows only real instrument types |
 | Decide whether `Congressional Investigations` earns its place — it drew 0 of 553 rows, so it is a filter option that never matches | `src/config/practice-areas.json` | Kept deliberately, or removed |
 | Run `npm run draft:summaries -- --apply --limit N` in batches against the 221 curated rows that have full text, then compare on each EO page. Watch `/usage` between batches | local machine | Drafts visible beneath the curated summaries |
+| Set `REQUEST_TOKEN_SECRET` in Vercel (`openssl rand -hex 32`) — without it `/api/generate-content` and `/api/summary-prompt` refuse every request and the Generate/Save buttons render disabled | `vercel env add` + redeploy | Generating a draft on the deployed site works |
 | Optional: set `AI_GATEWAY_API_KEY` to route Claude calls through Vercel's AI Gateway instead of the Anthropic API directly | Vercel dashboard / `vercel env add` | An enrichment run logs "Vercel AI Gateway" |
 | Optional: set `COURTLISTENER_API_TOKEN` (free) to lift the anonymous rate limit | `.env.local` | A full `link:dockets` run finishes with no 429 backoffs |
 
-Done and removed from this list: `import:supabase`, `backfill:federal-register`,
-`SITE_PASSWORD`, and the monthly spend cap — all completed by 2026-09-16.
-
-When this list passes ~5 items, review whether any can now be automated (per
-the source rule).
+Done and removed: `import:supabase`, `backfill:federal-register`, the spend
+cap, and `SITE_PASSWORD` (set then deliberately removed — see above).
 
 ## Working practices
 

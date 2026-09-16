@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getExecutiveOrdersByIds } from "@/lib/data";
 import { generateContent } from "@/lib/content-generation";
 import { recordApiUsage } from "@/lib/usage/record";
+import { checkGenerationLimit, limitMessage } from "@/lib/generation-limit";
+import { rejectionMessage, verifyRequest } from "@/lib/request-token";
 import { getServiceRoleClient } from "@/lib/supabase";
 import type { ContentType } from "@/lib/types";
 
@@ -13,6 +15,23 @@ const VALID_CONTENT_TYPES: ContentType[] = [
 ];
 
 export async function POST(request: Request) {
+  // Two gates, in cheapest-first order and both before any model call.
+  // The token says who may call (scrapers and drive-by scripts, not people —
+  // see request-token.ts); the hourly ceiling says how much calling can cost,
+  // which is what actually bounds the bill if a token is extracted.
+  const token = verifyRequest(request);
+  if (!token.ok) {
+    return NextResponse.json({ error: rejectionMessage(token.reason) }, { status: 401 });
+  }
+
+  const limit = await checkGenerationLimit(getServiceRoleClient());
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: limitMessage(limit) },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } },
+    );
+  }
+
   let body: { eoIds?: unknown; contentType?: unknown };
   try {
     body = await request.json();
