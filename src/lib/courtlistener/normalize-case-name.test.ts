@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { normalizeCaseName, partiesLookAlike, splitParties } from "@/lib/courtlistener/normalize-case-name";
+import {
+  normalizeCaseName,
+  partiesLookAlike,
+  splitParties,
+  toSearchPhrase,
+} from "@/lib/courtlistener/normalize-case-name";
 
 describe("normalizeCaseName", () => {
   it("makes the same case comparable however it is capitalized or punctuated", () => {
@@ -60,5 +65,40 @@ describe("partiesLookAlike", () => {
 
   it("rejects empty parties", () => {
     expect(partiesLookAlike("", "noem")).toBe(false);
+  });
+});
+
+describe("toSearchPhrase", () => {
+  // The bug this exists to prevent: the phrase sent to the API and the name
+  // compared against must agree. Measured live, the caption search for
+  // "... Office of Personnel Management et al" returned 0 results and the
+  // same phrase without "et al" returned the case.
+  it("removes 'et al' so a caption without it can still match", () => {
+    expect(toSearchPhrase("Doctors for America v. OPM et al")).toBe("Doctors for America v. OPM");
+  });
+
+  it("removes 'et al' from the plaintiff side too", () => {
+    expect(toSearchPhrase("San Francisco AIDS Foundation et al v. Trump")).toBe(
+      "San Francisco AIDS Foundation v. Trump",
+    );
+  });
+
+  it("removes it from both sides at once, taking the comma that introduced it", () => {
+    expect(toSearchPhrase("PFLAG, INC., et al v. Trump et al")).toBe("PFLAG, INC. v. Trump");
+  });
+
+  it("handles the trailing-period spelling", () => {
+    expect(toSearchPhrase("State of New Mexico et al. v. Musk")).toBe("State of New Mexico v. Musk");
+  });
+
+  it("leaves everything else alone — the search engine does its own tokenizing", () => {
+    expect(toSearchPhrase("RFE/RL, Inc. v. Lake")).toBe("RFE/RL, Inc. v. Lake");
+  });
+
+  it("agrees with normalizeCaseName on what counts as the same case", () => {
+    const recorded = "Doctors for America v. Office of Personnel Management et al";
+    const caption = "DOCTORS FOR AMERICA v. OFFICE OF PERSONNEL MANAGEMENT";
+    // What we search for, normalized, must equal what we compare against.
+    expect(normalizeCaseName(toSearchPhrase(recorded))).toBe(normalizeCaseName(caption));
   });
 });

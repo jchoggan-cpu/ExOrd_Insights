@@ -25,6 +25,25 @@ export function normalizeCaseName(caseName: string | null | undefined): string {
     .trim();
 }
 
+/**
+ * The form to send to CourtListener's caption search.
+ *
+ * Only "et al" is removed, and whitespace collapsed — everything else is
+ * left alone, because the search engine does its own tokenizing and a
+ * heavier normalization would just throw away signal.
+ *
+ * This exists because the search phrase and the comparison MUST agree.
+ * They did not: the raw name went to the API as a quoted phrase while
+ * normalizeCaseName stripped "et al" for comparison, so a caption without
+ * "et al" could never match one recorded with it. Measured against the live
+ * API, caseName:("Doctors for America v. Office of Personnel Management
+ * et al") returns 0 and the same phrase without "et al" returns the case.
+ * 29 of 61 unmatched names carried it.
+ */
+export function toSearchPhrase(caseName: string): string {
+  return caseName.replace(ET_AL, " ").replace(/\s+/g, " ").trim();
+}
+
 export interface CaseParties {
   plaintiff: string;
   defendant: string;

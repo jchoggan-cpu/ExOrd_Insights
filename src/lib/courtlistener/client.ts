@@ -1,3 +1,4 @@
+import { toSearchPhrase } from "./normalize-case-name";
 import type { CourtListenerDocket } from "./types";
 
 const SEARCH_URL = "https://www.courtlistener.com/api/rest/v4/search/";
@@ -69,7 +70,10 @@ function buildUrl(caseName: string, courtId?: string | null): string {
   // the docket actually named that. Measured on "Doe v. Noem" in D. Mass.:
   // 45 results unscoped (three pages of mostly unrelated dockets) against 2
   // scoped — the two genuine same-name cases, on a single page.
-  search.set("q", `caseName:("${caseName.replace(/"/g, "")}")`);
+  // toSearchPhrase, not the raw name: the phrase sent and the name compared
+  // against must agree, or a caption can fail to match for a reason that
+  // never shows up in the comparison. See toSearchPhrase.
+  search.set("q", `caseName:("${toSearchPhrase(caseName).replace(/"/g, "")}")`);
   search.set("type", RECAP_SEARCH_TYPE);
   if (courtId) search.set("court", courtId);
   return `${SEARCH_URL}?${search.toString()}`;

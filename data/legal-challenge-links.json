@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-13",
+  "generatedAt": "2026-09-16",
   "summary": {
     "total": 252,
     "confident": 119,
-    "ambiguous": 26,
-    "notFound": 107,
+    "ambiguous": 27,
+    "notFound": 106,
     "distinctCasesLinked": 72
   },
   "decisions": [
@@ -346,10 +346,979 @@
       "candidates": []
     },
     {
-      "eoId": "021e36d3-a28f-40f7-ab8f-46a82eb0578b",
-      "eoNumber": "EO 14165",
-      "eoTitle": "Securing Our Borders",
-      "caseName": "Las Americas Immigrant Advocacy Center v. DHS",
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "PFLAG, INC., et al v. Trump et al",
+      "court": "D.Md.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.Md. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Legal challenge",
+      "court": "",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket matches this case name, and no court was recorded.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Legal challenge",
+      "court": "",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket matches this case name, and no court was recorded.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Moe v. Trump et al",
+      "court": "D.Mass",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.Mass matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Doe v. McHenry",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69593824,
+        "caseName": "DOE v. MCHENRY",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00286",
+        "dateFiled": "2025-01-30",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69593824/doe-v-mchenry/"
+      },
+      "candidates": [
+        {
+          "docketId": 69593824,
+          "caseName": "DOE v. MCHENRY",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00286",
+          "dateFiled": "2025-01-30",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69593824/doe-v-mchenry/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Orr v. Trump",
+      "court": "D. Mass",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Mass.",
+      "link": {
+        "docketId": 69623342,
+        "caseName": "Orr v. Trump",
+        "court": "D. Mass.",
+        "docketNumber": "1:25-cv-10313",
+        "dateFiled": "2025-02-07",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69623342/orr-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69623342,
+          "caseName": "Orr v. Trump",
+          "court": "D. Mass.",
+          "docketNumber": "1:25-cv-10313",
+          "dateFiled": "2025-02-07",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69623342/orr-v-trump/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Doctors for America v. OPM et al",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "San Francisco AIDS Foundation et al v. Trump",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Chicago Women in Trades v. Trump",
+      "court": "N.D. Ill.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in N.D. Ill.",
+      "link": {
+        "docketId": 69675603,
+        "caseName": "Chicago Women in Trades v. Trump",
+        "court": "N.D. Ill.",
+        "docketNumber": "1:25-cv-02005",
+        "dateFiled": "2025-02-26",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69675603/chicago-women-in-trades-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69675603,
+          "caseName": "Chicago Women in Trades v. Trump",
+          "court": "N.D. Ill.",
+          "docketNumber": "1:25-cv-02005",
+          "dateFiled": "2025-02-26",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69675603/chicago-women-in-trades-v-trump/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "American Association of Colleges for Teacher Education v. Carter",
+      "court": "D. Md.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D. Md. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Rhode Island Latino Arts v. National Endowment for the Arts",
+      "court": "D.R.I.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.R.I.",
+      "link": {
+        "docketId": 69710414,
+        "caseName": "Rhode Island Latino Arts v. National Endowment for the Arts",
+        "court": "D.R.I.",
+        "docketNumber": "1:25-cv-00079",
+        "dateFiled": "2025-03-06",
+        "dateTerminated": "2025-09-19",
+        "url": "https://www.courtlistener.com/docket/69710414/rhode-island-latino-arts-v-national-endowment-for-the-arts/"
+      },
+      "candidates": [
+        {
+          "docketId": 69710414,
+          "caseName": "Rhode Island Latino Arts v. National Endowment for the Arts",
+          "court": "D.R.I.",
+          "docketNumber": "1:25-cv-00079",
+          "dateFiled": "2025-03-06",
+          "dateTerminated": "2025-09-19",
+          "url": "https://www.courtlistener.com/docket/69710414/rhode-island-latino-arts-v-national-endowment-for-the-arts/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "State of California v. U.S Department of Education",
+      "court": "D. Mass.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Mass.",
+      "link": {
+        "docketId": 69711499,
+        "caseName": "State of California v. U.S Department of Education",
+        "court": "D. Mass.",
+        "docketNumber": "1:25-cv-10548",
+        "dateFiled": "2025-03-06",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69711499/state-of-california-v-us-department-of-education/"
+      },
+      "candidates": [
+        {
+          "docketId": 69711499,
+          "caseName": "State of California v. U.S Department of Education",
+          "court": "D. Mass.",
+          "docketNumber": "1:25-cv-10548",
+          "dateFiled": "2025-03-06",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69711499/state-of-california-v-us-department-of-education/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Kingdom v. Trump",
+      "court": "D.D.C",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69717615,
+        "caseName": "KINGDOM v. TRUMP",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00691",
+        "dateFiled": "2025-03-07",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69717615/kingdom-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69717615,
+          "caseName": "KINGDOM v. TRUMP",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00691",
+          "dateFiled": "2025-03-07",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69717615/kingdom-v-trump/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Doe v. Collins",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "ambiguous",
+      "reason": "2 different dockets in that court share this case name — a human has to pick.",
+      "link": null,
+      "candidates": [
+        {
+          "docketId": 69740178,
+          "caseName": "DOE v. COLLINS",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00760",
+          "dateFiled": "2025-03-14",
+          "dateTerminated": "2025-07-22",
+          "url": "https://www.courtlistener.com/docket/69740178/doe-v-collins/"
+        },
+        {
+          "docketId": 69913121,
+          "caseName": "DOE v. COLLINS",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-01196",
+          "dateFiled": "2025-04-18",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69913121/doe-v-collins/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Legal challenge",
+      "court": "",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket matches this case name, and no court was recorded.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Legal challenge",
+      "court": "",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket matches this case name, and no court was recorded.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Commonwealth of Massachusetts v. Trump",
+      "court": "D. Mass.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Mass.",
+      "link": {
+        "docketId": 70989506,
+        "caseName": "Commonwealth of Massachusetts v. Trump",
+        "court": "D. Mass.",
+        "docketNumber": "1:25-cv-12162",
+        "dateFiled": "2025-08-01",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/70989506/commonwealth-of-massachusetts-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 70989506,
+          "caseName": "Commonwealth of Massachusetts v. Trump",
+          "court": "D. Mass.",
+          "docketNumber": "1:25-cv-12162",
+          "dateFiled": "2025-08-01",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/70989506/commonwealth-of-massachusetts-v-trump/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "FreeState Justice v. Equal Employment Opportunity Commission",
+      "court": "D. Md.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Maryland",
+      "link": {
+        "docketId": 70954220,
+        "caseName": "FreeState Justice v. Equal Employment Opportunity Commission",
+        "court": "D. Maryland",
+        "docketNumber": "1:25-cv-02482",
+        "dateFiled": "2025-07-29",
+        "dateTerminated": "2026-06-12",
+        "url": "https://www.courtlistener.com/docket/70954220/freestate-justice-v-equal-employment-opportunity-commission/"
+      },
+      "candidates": [
+        {
+          "docketId": 70954220,
+          "caseName": "FreeState Justice v. Equal Employment Opportunity Commission",
+          "court": "D. Maryland",
+          "docketNumber": "1:25-cv-02482",
+          "dateFiled": "2025-07-29",
+          "dateTerminated": "2026-06-12",
+          "url": "https://www.courtlistener.com/docket/70954220/freestate-justice-v-equal-employment-opportunity-commission/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "State of California v. Department of Justice",
+      "court": "N.D. Cal.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in N.D. Cal. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "King County v. Turner",
+      "court": "W.D. Wash.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in W.D. Wash.",
+      "link": {
+        "docketId": 70062174,
+        "caseName": "King County v. Turner",
+        "court": "W.D. Wash.",
+        "docketNumber": "2:25-cv-00814",
+        "dateFiled": "2025-05-02",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/70062174/king-county-v-turner/"
+      },
+      "candidates": [
+        {
+          "docketId": 70062174,
+          "caseName": "King County v. Turner",
+          "court": "W.D. Wash.",
+          "docketNumber": "2:25-cv-00814",
+          "dateFiled": "2025-05-02",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/70062174/king-county-v-turner/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Doe v. Department of Defense",
+      "court": "D. Md.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Maryland",
+      "link": {
+        "docketId": 71294148,
+        "caseName": "Doe v. Department of Defense",
+        "court": "D. Maryland",
+        "docketNumber": "8:25-cv-02947",
+        "dateFiled": "2025-09-08",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/71294148/doe-v-department-of-defense/"
+      },
+      "candidates": [
+        {
+          "docketId": 71294148,
+          "caseName": "Doe v. Department of Defense",
+          "court": "D. Maryland",
+          "docketNumber": "8:25-cv-02947",
+          "dateFiled": "2025-09-08",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/71294148/doe-v-department-of-defense/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "National Alliance to End Homelessness v. Turner",
+      "court": "D.R.I.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.R.I.",
+      "link": {
+        "docketId": 71316650,
+        "caseName": "National Alliance to End Homelessness v. Turner",
+        "court": "D.R.I.",
+        "docketNumber": "1:25-cv-00447",
+        "dateFiled": "2025-09-11",
+        "dateTerminated": "2026-04-29",
+        "url": "https://www.courtlistener.com/docket/71316650/national-alliance-to-end-homelessness-v-turner/"
+      },
+      "candidates": [
+        {
+          "docketId": 71316650,
+          "caseName": "National Alliance to End Homelessness v. Turner",
+          "court": "D.R.I.",
+          "docketNumber": "1:25-cv-00447",
+          "dateFiled": "2025-09-11",
+          "dateTerminated": "2026-04-29",
+          "url": "https://www.courtlistener.com/docket/71316650/national-alliance-to-end-homelessness-v-turner/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Fell v. Trump",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 71986673,
+        "caseName": "FELL v. TRUMP",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-04206",
+        "dateFiled": "2025-12-03",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/71986673/fell-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 71986673,
+          "caseName": "FELL v. TRUMP",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-04206",
+          "dateFiled": "2025-12-03",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/71986673/fell-v-trump/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Withrow v. United States",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "ambiguous",
+      "reason": "No exact name match; 1 docket(s) in that court have similar party names.",
+      "link": null,
+      "candidates": [
+        {
+          "docketId": 71939878,
+          "caseName": "WITHROW v. UNITED STATES OF AMERICA",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-04073",
+          "dateFiled": "2025-11-20",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/71939878/withrow-v-united-states-of-america/"
+        }
+      ]
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "Cross v. Equal Employment Opportunity Commission",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
+      "eoNumber": "EO 14168",
+      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "caseName": "State of Washington v. Health and Human Services",
+      "court": "D. Or.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D. Or. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "Legal challenge",
+      "court": "",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket matches this case name, and no court was recorded.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "Legal challenge",
+      "court": "",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket matches this case name, and no court was recorded.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "Legal challenge",
+      "court": "",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket matches this case name, and no court was recorded.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "Legal challenge",
+      "court": "",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket matches this case name, and no court was recorded.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "Doe v. Trump",
+      "court": "Massachusetts",
+      "chosenDocketId": null,
+      "outcome": "ambiguous",
+      "reason": "4 different dockets in that court share this case name — a human has to pick.",
+      "link": null,
+      "candidates": [
+        {
+          "docketId": 73453777,
+          "caseName": "Doe v. Trump",
+          "court": "D. Mass.",
+          "docketNumber": "1:26-cv-12597",
+          "dateFiled": "2026-06-08",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/73453777/doe-v-trump/"
+        },
+        {
+          "docketId": 72071916,
+          "caseName": "Doe v. Trump",
+          "court": "D. Mass.",
+          "docketNumber": "1:25-cv-13946",
+          "dateFiled": "2025-12-23",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/72071916/doe-v-trump/"
+        },
+        {
+          "docketId": 69560579,
+          "caseName": "Doe v. Trump",
+          "court": "D. Mass.",
+          "docketNumber": "1:25-cv-10135",
+          "dateFiled": "2025-01-20",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69560579/doe-v-trump/"
+        },
+        {
+          "docketId": 69560588,
+          "caseName": "Doe v. Trump",
+          "court": "D. Mass.",
+          "docketNumber": "1:25-cv-10136",
+          "dateFiled": "2025-01-20",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69560588/doe-v-trump/"
+        },
+        {
+          "docketId": 72526389,
+          "caseName": "Doe v. Trump DO NOT DOCKET IN THIS CASE - ALL FILINGS ARE TO BE MADE IN LEAD CASE 25-CV-13946-JEK",
+          "court": "D. Mass.",
+          "docketNumber": "1:26-cv-11382",
+          "dateFiled": "2026-03-20",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/72526389/doe-v-trump-do-not-docket-in-this-case-all-filings-are-to-be-made-in/"
+        }
+      ]
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "State of New Jersey et al v. Trump",
+      "court": "Mass",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in Mass matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "OCA v. Rubio et al",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "County of Santa Clara v. Trump et al",
+      "court": "N.D. Cal",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in N.D. Cal matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "Le v. Trump",
+      "court": "C.D. Cal",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in C.D. Cal matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "New York Immigration Coalition v. Trump et al",
+      "court": "S.D.N.Y.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in S.D.N.Y. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
+      "eoNumber": "EO 14160",
+      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
+      "caseName": "Barbara v. Trump",
+      "court": "D.N.H.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.N.H.",
+      "link": {
+        "docketId": 70651853,
+        "caseName": "Barbara v. Trump",
+        "court": "D.N.H.",
+        "docketNumber": "1:25-cv-00244",
+        "dateFiled": "2025-06-27",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/70651853/barbara-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 70651853,
+          "caseName": "Barbara v. Trump",
+          "court": "D.N.H.",
+          "docketNumber": "1:25-cv-00244",
+          "dateFiled": "2025-06-27",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/70651853/barbara-v-trump/"
+        }
+      ]
+    },
+    {
+      "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
+      "eoNumber": "EO 14169",
+      "eoTitle": "Reevaluating and Realigning United States Foreign Aid",
+      "caseName": "American Foreign Service Association v. Trump",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69853338,
+        "caseName": "AMERICAN FOREIGN SERVICE ASSOCIATION v. TRUMP",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-01030",
+        "dateFiled": "2025-04-07",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69853338/american-foreign-service-association-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69853338,
+          "caseName": "AMERICAN FOREIGN SERVICE ASSOCIATION v. TRUMP",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-01030",
+          "dateFiled": "2025-04-07",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69853338/american-foreign-service-association-v-trump/"
+        }
+      ]
+    },
+    {
+      "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
+      "eoNumber": "EO 14169",
+      "eoTitle": "Reevaluating and Realigning United States Foreign Aid",
+      "caseName": "Global Health Council v. Trump",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
+      "eoNumber": "EO 14169",
+      "eoTitle": "Reevaluating and Realigning United States Foreign Aid",
+      "caseName": "AIDS Vaccine Advocacy Coalition v. Department of State",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
+      "eoNumber": "EO 14169",
+      "eoTitle": "Reevaluating and Realigning United States Foreign Aid",
+      "caseName": "Personal Services Contractor Association v. Trump et al",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
+      "eoNumber": "EO 14169",
+      "eoTitle": "Reevaluating and Realigning United States Foreign Aid",
+      "caseName": "Greene v. United States Agency for International Development",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 71991277,
+        "caseName": "GREENE v. UNITED STATES AGENCY FOR INTERNATIONAL DEVELOPMENT",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-04217",
+        "dateFiled": "2025-12-03",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/71991277/greene-v-united-states-agency-for-international-development/"
+      },
+      "candidates": [
+        {
+          "docketId": 71991277,
+          "caseName": "GREENE v. UNITED STATES AGENCY FOR INTERNATIONAL DEVELOPMENT",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-04217",
+          "dateFiled": "2025-12-03",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/71991277/greene-v-united-states-agency-for-international-development/"
+        }
+      ]
+    },
+    {
+      "eoId": "a81d82bb-8380-4f3a-82a1-7e92d26266e7",
+      "eoNumber": "EO 14148",
+      "eoTitle": "Initial Rescissions of Harmful Executive Orders and Actions",
+      "caseName": "Northern Alaska Environmental Center v. Trump",
+      "court": "D. Alaska",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Alaska",
+      "link": {
+        "docketId": 69652665,
+        "caseName": "Northern Alaska Environmental Center v. Trump",
+        "court": "D. Alaska",
+        "docketNumber": "3:25-cv-00038",
+        "dateFiled": "2025-02-19",
+        "dateTerminated": "2026-08-24",
+        "url": "https://www.courtlistener.com/docket/69652665/northern-alaska-environmental-center-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69652665,
+          "caseName": "Northern Alaska Environmental Center v. Trump",
+          "court": "D. Alaska",
+          "docketNumber": "3:25-cv-00038",
+          "dateFiled": "2025-02-19",
+          "dateTerminated": "2026-08-24",
+          "url": "https://www.courtlistener.com/docket/69652665/northern-alaska-environmental-center-v-trump/"
+        }
+      ]
+    },
+    {
+      "eoId": "a81d82bb-8380-4f3a-82a1-7e92d26266e7",
+      "eoNumber": "EO 14148",
+      "eoTitle": "Initial Rescissions of Harmful Executive Orders and Actions",
+      "caseName": "Environmental Defense Fund, Inc. v. Wright",
+      "court": "D. Mass.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Mass.",
+      "link": {
+        "docketId": 71089266,
+        "caseName": "Environmental Defense Fund, Inc. v. Wright",
+        "court": "D. Mass.",
+        "docketNumber": "1:25-cv-12249",
+        "dateFiled": "2025-08-12",
+        "dateTerminated": "2026-01-30",
+        "url": "https://www.courtlistener.com/docket/71089266/environmental-defense-fund-inc-v-wright/"
+      },
+      "candidates": [
+        {
+          "docketId": 71089266,
+          "caseName": "Environmental Defense Fund, Inc. v. Wright",
+          "court": "D. Mass.",
+          "docketNumber": "1:25-cv-12249",
+          "dateFiled": "2025-08-12",
+          "dateTerminated": "2026-01-30",
+          "url": "https://www.courtlistener.com/docket/71089266/environmental-defense-fund-inc-v-wright/"
+        }
+      ]
+    },
+    {
+      "eoId": "a81d82bb-8380-4f3a-82a1-7e92d26266e7",
+      "eoNumber": "EO 14148",
+      "eoTitle": "Initial Rescissions of Harmful Executive Orders and Actions",
+      "caseName": "Lighthiser v. Trump",
+      "court": "D. Mont.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Mont.",
+      "link": {
+        "docketId": 70399441,
+        "caseName": "Lighthiser v. Trump",
+        "court": "D. Mont.",
+        "docketNumber": "2:25-cv-00054",
+        "dateFiled": "2025-05-29",
+        "dateTerminated": "2025-10-15",
+        "url": "https://www.courtlistener.com/docket/70399441/lighthiser-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 70399441,
+          "caseName": "Lighthiser v. Trump",
+          "court": "D. Mont.",
+          "docketNumber": "2:25-cv-00054",
+          "dateFiled": "2025-05-29",
+          "dateTerminated": "2025-10-15",
+          "url": "https://www.courtlistener.com/docket/70399441/lighthiser-v-trump/"
+        }
+      ]
+    },
+    {
+      "eoId": "a81d82bb-8380-4f3a-82a1-7e92d26266e7",
+      "eoNumber": "EO 14148",
+      "eoTitle": "Initial Rescissions of Harmful Executive Orders and Actions",
+      "caseName": "Kapaa, Conservation Council for Hawaii v. Trump",
+      "court": "D. Haw.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Haw.",
+      "link": {
+        "docketId": 70341271,
+        "caseName": "Kapaa, Conservation Council for Hawaii v. Trump",
+        "court": "D. Haw.",
+        "docketNumber": "1:25-cv-00209",
+        "dateFiled": "2025-05-22",
+        "dateTerminated": "2026-01-28",
+        "url": "https://www.courtlistener.com/docket/70341271/kapaa-conservation-council-for-hawaii-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 70341271,
+          "caseName": "Kapaa, Conservation Council for Hawaii v. Trump",
+          "court": "D. Haw.",
+          "docketNumber": "1:25-cv-00209",
+          "dateFiled": "2025-05-22",
+          "dateTerminated": "2026-01-28",
+          "url": "https://www.courtlistener.com/docket/70341271/kapaa-conservation-council-for-hawaii-v-trump/"
+        }
+      ]
+    },
+    {
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
+      "caseName": "APHA et al v-OMB et al",
       "court": "D.D.C",
       "chosenDocketId": null,
       "outcome": "not_found",
@@ -358,40 +1327,109 @@
       "candidates": []
     },
     {
-      "eoId": "021e36d3-a28f-40f7-ab8f-46a82eb0578b",
-      "eoNumber": "EO 14165",
-      "eoTitle": "Securing Our Borders",
-      "caseName": "Doe v. Noem",
-      "court": "D. Mass.",
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
+      "caseName": "Public Citizen, Inc et al v. Trump",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
+      "caseName": "Lentini et al v. DOGE",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
+      "caseName": "Legal challenge",
+      "court": "",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket matches this case name, and no court was recorded.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
+      "caseName": "Center for Biological Diversity v. OMB",
+      "court": "D.D.C.",
       "chosenDocketId": null,
       "outcome": "ambiguous",
-      "reason": "2 different dockets in that court share this case name — a human has to pick.",
+      "reason": "Not found as written, but \"Center for Biological Diversity v. Office of Management and Budget\" matches — the agency name was abbreviated. Confirm this is the same case.",
       "link": null,
       "candidates": [
         {
-          "docketId": 69918650,
-          "caseName": "Doe v. Noem",
-          "court": "D. Mass.",
-          "docketNumber": "1:25-cv-11037",
-          "dateFiled": "2025-04-21",
-          "dateTerminated": "2025-05-14",
-          "url": "https://www.courtlistener.com/docket/69918650/doe-v-noem/"
+          "docketId": 70749008,
+          "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. OFFICE OF MANAGEMENT AND BUDGET",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-02198",
+          "dateFiled": "2025-07-10",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/70749008/center-for-biological-diversity-v-office-of-management-and-budget/"
         },
         {
-          "docketId": 69880636,
-          "caseName": "Doe v. Noem",
-          "court": "D. Mass.",
-          "docketNumber": "1:25-cv-10904",
-          "dateFiled": "2025-04-11",
-          "dateTerminated": "2025-07-10",
-          "url": "https://www.courtlistener.com/docket/69880636/doe-v-noem/"
+          "docketId": 69559509,
+          "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. OFFICE OF MANAGEMENT AND BUDGET",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00165",
+          "dateFiled": "2025-01-20",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69559509/center-for-biological-diversity-v-office-of-management-and-budget/"
+        },
+        {
+          "docketId": 71089851,
+          "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. OFFICE OF MANAGEMENT AND BUDGET",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-02633",
+          "dateFiled": "2025-08-12",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/71089851/center-for-biological-diversity-v-office-of-management-and-budget/"
         }
       ]
     },
     {
-      "eoId": "021e36d3-a28f-40f7-ab8f-46a82eb0578b",
-      "eoNumber": "EO 14165",
-      "eoTitle": "Securing Our Borders",
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
+      "caseName": "J. Doe 1-26 v. Musk",
+      "court": "D.Md",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.Md matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
+      "caseName": "New Mexico et al. v. Musk",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
       "caseName": "Centro de Trabajadores Unidos v. Bessent",
       "court": "D.D.C.",
       "chosenDocketId": null,
@@ -419,9 +1457,69 @@
       ]
     },
     {
-      "eoId": "021e36d3-a28f-40f7-ab8f-46a82eb0578b",
-      "eoNumber": "EO 14165",
-      "eoTitle": "Securing Our Borders",
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
+      "caseName": "Japanese American Citizens League v. Musk",
+      "court": "D.D.C",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69706944,
+        "caseName": "JAPANESE AMERICAN CITIZENS LEAGUE v. MUSK",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00643",
+        "dateFiled": "2025-03-05",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69706944/japanese-american-citizens-league-v-musk/"
+      },
+      "candidates": [
+        {
+          "docketId": 69706944,
+          "caseName": "JAPANESE AMERICAN CITIZENS LEAGUE v. MUSK",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00643",
+          "dateFiled": "2025-03-05",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69706944/japanese-american-citizens-league-v-musk/"
+        }
+      ]
+    },
+    {
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
+      "caseName": "Center for Biological Diversity v. U.S. Department of Interior",
+      "court": "D.D.C",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69698261,
+        "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. U.S. DEPARTMENT OF INTERIOR",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00612",
+        "dateFiled": "2025-03-03",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69698261/center-for-biological-diversity-v-us-department-of-interior/"
+      },
+      "candidates": [
+        {
+          "docketId": 69698261,
+          "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. U.S. DEPARTMENT OF INTERIOR",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00612",
+          "dateFiled": "2025-03-03",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69698261/center-for-biological-diversity-v-us-department-of-interior/"
+        }
+      ]
+    },
+    {
+      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
+      "eoNumber": "EO 14158",
+      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
       "caseName": "State of California et al v. U.S. Department of Health and Human Services et al",
       "court": "N.D. Cal.",
       "chosenDocketId": null,
@@ -431,9 +1529,9 @@
       "candidates": []
     },
     {
-      "eoId": "97091863-83df-4fd1-93e9-6caad5f4be48",
-      "eoNumber": null,
-      "eoTitle": "Guaranteeing the States Protection Against Invasion",
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
       "caseName": "Legal challenge",
       "court": "",
       "chosenDocketId": null,
@@ -443,46 +1541,246 @@
       "candidates": []
     },
     {
-      "eoId": "64c6b2a2-164a-4e44-a5a5-91a00fec2e27",
-      "eoNumber": "EO 14163",
-      "eoTitle": "Realigning the United States Refugee Admissions Program",
-      "caseName": "Pacito v. Trump",
-      "court": "W.D. Wash",
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "San Francisco v. Trump et al",
+      "court": "N.D. Cal",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in N.D. Cal matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "Organized Communities Against Deportations et al v. Huffman et al",
+      "court": "N.D. Illinois",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in N.D. Illinois matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "Amica Center et al v. DOJ",
+      "court": "D.DC",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.DC matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "Centro de Trabajadores Unidos v. Bessent",
+      "court": "D.D.C.",
       "chosenDocketId": null,
       "outcome": "confident",
-      "reason": "Exact case-name match, sole result in W.D. Wash.",
+      "reason": "Exact case-name match, sole result in D.D.C.",
       "link": {
-        "docketId": 69626101,
-        "caseName": "Pacito v. Trump",
-        "court": "W.D. Wash.",
-        "docketNumber": "2:25-cv-00255",
-        "dateFiled": "2025-02-10",
+        "docketId": 69714586,
+        "caseName": "CENTRO DE TRABAJADORES UNIDOS v. BESSENT",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00677",
+        "dateFiled": "2025-03-07",
         "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69626101/pacito-v-trump/"
+        "url": "https://www.courtlistener.com/docket/69714586/centro-de-trabajadores-unidos-v-bessent/"
       },
       "candidates": [
         {
-          "docketId": 69626101,
-          "caseName": "Pacito v. Trump",
-          "court": "W.D. Wash.",
-          "docketNumber": "2:25-cv-00255",
-          "dateFiled": "2025-02-10",
+          "docketId": 69714586,
+          "caseName": "CENTRO DE TRABAJADORES UNIDOS v. BESSENT",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00677",
+          "dateFiled": "2025-03-07",
           "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69626101/pacito-v-trump/"
+          "url": "https://www.courtlistener.com/docket/69714586/centro-de-trabajadores-unidos-v-bessent/"
         }
       ]
     },
     {
-      "eoId": "64c6b2a2-164a-4e44-a5a5-91a00fec2e27",
-      "eoNumber": "EO 14163",
-      "eoTitle": "Realigning the United States Refugee Admissions Program",
-      "caseName": "United States Conference of Catholic Bishops v. Department of State et al.",
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "Solutions In Hometown Connections v. Noem",
+      "court": "D. Md.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Maryland",
+      "link": {
+        "docketId": 69748413,
+        "caseName": "Solutions In Hometown Connections v. Noem",
+        "court": "D. Maryland",
+        "docketNumber": "8:25-cv-00885",
+        "dateFiled": "2025-03-17",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69748413/solutions-in-hometown-connections-v-noem/"
+      },
+      "candidates": [
+        {
+          "docketId": 69748413,
+          "caseName": "Solutions In Hometown Connections v. Noem",
+          "court": "D. Maryland",
+          "docketNumber": "8:25-cv-00885",
+          "dateFiled": "2025-03-17",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69748413/solutions-in-hometown-connections-v-noem/"
+        }
+      ]
+    },
+    {
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "C.M. v. Noem",
+      "court": "S.D. Fla.",
+      "chosenDocketId": null,
+      "outcome": "ambiguous",
+      "reason": "2 different dockets in that court share this case name — a human has to pick.",
+      "link": null,
+      "candidates": [
+        {
+          "docketId": 70814838,
+          "caseName": "C.M. v. Noem",
+          "court": "S.D. Fla.",
+          "docketNumber": "1:25-cv-23182",
+          "dateFiled": "2025-07-16",
+          "dateTerminated": "2025-08-18",
+          "url": "https://www.courtlistener.com/docket/70814838/cm-v-noem/"
+        },
+        {
+          "docketId": 70826260,
+          "caseName": "C.M. v. Noem",
+          "court": "S.D. Fla.",
+          "docketNumber": "9:25-cv-80898",
+          "dateFiled": "2025-07-16",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/70826260/cm-v-noem/"
+        }
+      ]
+    },
+    {
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "State of California et al v. U.S. Department of Health and Human Services et al",
+      "court": "N.D. Cal.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in N.D. Cal. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "American Gateways v. U.S. Department for Justice",
       "court": "D.D.C.",
       "chosenDocketId": null,
       "outcome": "not_found",
       "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
       "link": null,
       "candidates": []
+    },
+    {
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "CLEAR Clinic v. Noem",
+      "court": "D. Or.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Or.",
+      "link": {
+        "docketId": 71668495,
+        "caseName": "CLEAR Clinic v. Noem",
+        "court": "D. Or.",
+        "docketNumber": "6:25-cv-01906",
+        "dateFiled": "2025-10-16",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/71668495/clear-clinic-v-noem/"
+      },
+      "candidates": [
+        {
+          "docketId": 71668495,
+          "caseName": "CLEAR Clinic v. Noem",
+          "court": "D. Or.",
+          "docketNumber": "6:25-cv-01906",
+          "dateFiled": "2025-10-16",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/71668495/clear-clinic-v-noem/"
+        }
+      ]
+    },
+    {
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "State of New York v. Noem",
+      "court": "S.D.N.Y.",
+      "chosenDocketId": null,
+      "outcome": "ambiguous",
+      "reason": "2 different dockets in that court share this case name — a human has to pick.",
+      "link": null,
+      "candidates": [
+        {
+          "docketId": 71507608,
+          "caseName": "State of New York v. Noem",
+          "court": "S.D.N.Y.",
+          "docketNumber": "1:25-cv-08106",
+          "dateFiled": "2025-09-30",
+          "dateTerminated": "2025-10-16",
+          "url": "https://www.courtlistener.com/docket/71507608/state-of-new-york-v-noem/"
+        },
+        {
+          "docketId": 71573860,
+          "caseName": "State of New York v. Noem",
+          "court": "S.D.N.Y.",
+          "docketNumber": "1:25-cv-08106",
+          "dateFiled": "2025-09-30",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/71573860/state-of-new-york-v-noem/"
+        }
+      ]
+    },
+    {
+      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
+      "eoNumber": "EO 14159",
+      "eoTitle": "Protecting the American People Against Invasion",
+      "caseName": "State of Illinois v. Noem",
+      "court": "D.R.I.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.R.I.",
+      "link": {
+        "docketId": 71490307,
+        "caseName": "State of Illinois v. Noem",
+        "court": "D.R.I.",
+        "docketNumber": "1:25-cv-00495",
+        "dateFiled": "2025-09-29",
+        "dateTerminated": "2025-12-22",
+        "url": "https://www.courtlistener.com/docket/71490307/state-of-illinois-v-noem/"
+      },
+      "candidates": [
+        {
+          "docketId": 71490307,
+          "caseName": "State of Illinois v. Noem",
+          "court": "D.R.I.",
+          "docketNumber": "1:25-cv-00495",
+          "dateFiled": "2025-09-29",
+          "dateTerminated": "2025-12-22",
+          "url": "https://www.courtlistener.com/docket/71490307/state-of-illinois-v-noem/"
+        }
+      ]
     },
     {
       "eoId": "589849c9-b8ba-4f0b-8b52-bc9ea9644968",
@@ -1272,232 +2570,6 @@
       "candidates": []
     },
     {
-      "eoId": "cc7986db-1c81-453b-be3e-4d964691ec04",
-      "eoNumber": "EO 14164",
-      "eoTitle": "Restoring the Death Penalty and Protecting Public Safety",
-      "caseName": "Taylor v. Trump",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "ambiguous",
-      "reason": "3 different dockets in that court share this case name — a human has to pick.",
-      "link": null,
-      "candidates": [
-        {
-          "docketId": 71717101,
-          "caseName": "TAYLOR v. TRUMP",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-03742",
-          "dateFiled": "2025-10-21",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/71717101/taylor-v-trump/"
-        },
-        {
-          "docketId": 72374239,
-          "caseName": "TAYLOR v. TRUMP",
-          "court": "D.D.C.",
-          "docketNumber": "1:26-cv-00421",
-          "dateFiled": "2026-01-12",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/72374239/taylor-v-trump/"
-        },
-        {
-          "docketId": 69903355,
-          "caseName": "TAYLOR v. TRUMP",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-01161",
-          "dateFiled": "2025-04-16",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69903355/taylor-v-trump/"
-        }
-      ]
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "APHA et al v-OMB et al",
-      "court": "D.D.C",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "Public Citizen, Inc et al v. Trump",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "Lentini et al v. DOGE",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "Legal challenge",
-      "court": "",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket matches this case name, and no court was recorded.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "Center for Biological Diversity v. OMB",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "J. Doe 1-26 v. Musk",
-      "court": "D.Md",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.Md matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "New Mexico et al. v. Musk",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "Centro de Trabajadores Unidos v. Bessent",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 69714586,
-        "caseName": "CENTRO DE TRABAJADORES UNIDOS v. BESSENT",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-00677",
-        "dateFiled": "2025-03-07",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69714586/centro-de-trabajadores-unidos-v-bessent/"
-      },
-      "candidates": [
-        {
-          "docketId": 69714586,
-          "caseName": "CENTRO DE TRABAJADORES UNIDOS v. BESSENT",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-00677",
-          "dateFiled": "2025-03-07",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69714586/centro-de-trabajadores-unidos-v-bessent/"
-        }
-      ]
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "Japanese American Citizens League v. Musk",
-      "court": "D.D.C",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 69706944,
-        "caseName": "JAPANESE AMERICAN CITIZENS LEAGUE v. MUSK",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-00643",
-        "dateFiled": "2025-03-05",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69706944/japanese-american-citizens-league-v-musk/"
-      },
-      "candidates": [
-        {
-          "docketId": 69706944,
-          "caseName": "JAPANESE AMERICAN CITIZENS LEAGUE v. MUSK",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-00643",
-          "dateFiled": "2025-03-05",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69706944/japanese-american-citizens-league-v-musk/"
-        }
-      ]
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "Center for Biological Diversity v. U.S. Department of Interior",
-      "court": "D.D.C",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 69698261,
-        "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. U.S. DEPARTMENT OF INTERIOR",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-00612",
-        "dateFiled": "2025-03-03",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69698261/center-for-biological-diversity-v-us-department-of-interior/"
-      },
-      "candidates": [
-        {
-          "docketId": 69698261,
-          "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. U.S. DEPARTMENT OF INTERIOR",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-00612",
-          "dateFiled": "2025-03-03",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69698261/center-for-biological-diversity-v-us-department-of-interior/"
-        }
-      ]
-    },
-    {
-      "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
-      "eoNumber": "EO 14158",
-      "eoTitle": "Establishing and Implementing the President's \"Department of Government Efficiency\"",
-      "caseName": "State of California et al v. U.S. Department of Health and Human Services et al",
-      "court": "N.D. Cal.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in N.D. Cal. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
       "eoId": "2bfa9db3-0d43-48da-a334-9b8968a202ae",
       "eoNumber": "EO 14161",
       "eoTitle": "Protecting the United States From Foreign Terrorists and Other National Security and Public Safety Threats",
@@ -1653,373 +2725,52 @@
       ]
     },
     {
-      "eoId": "a81d82bb-8380-4f3a-82a1-7e92d26266e7",
-      "eoNumber": "EO 14148",
-      "eoTitle": "Initial Rescissions of Harmful Executive Orders and Actions",
-      "caseName": "Northern Alaska Environmental Center v. Trump",
-      "court": "D. Alaska",
+      "eoId": "021e36d3-a28f-40f7-ab8f-46a82eb0578b",
+      "eoNumber": "EO 14165",
+      "eoTitle": "Securing Our Borders",
+      "caseName": "Las Americas Immigrant Advocacy Center v. DHS",
+      "court": "D.D.C",
       "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Alaska",
-      "link": {
-        "docketId": 69652665,
-        "caseName": "Northern Alaska Environmental Center v. Trump",
-        "court": "D. Alaska",
-        "docketNumber": "3:25-cv-00038",
-        "dateFiled": "2025-02-19",
-        "dateTerminated": "2026-08-24",
-        "url": "https://www.courtlistener.com/docket/69652665/northern-alaska-environmental-center-v-trump/"
-      },
-      "candidates": [
-        {
-          "docketId": 69652665,
-          "caseName": "Northern Alaska Environmental Center v. Trump",
-          "court": "D. Alaska",
-          "docketNumber": "3:25-cv-00038",
-          "dateFiled": "2025-02-19",
-          "dateTerminated": "2026-08-24",
-          "url": "https://www.courtlistener.com/docket/69652665/northern-alaska-environmental-center-v-trump/"
-        }
-      ]
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
     },
     {
-      "eoId": "a81d82bb-8380-4f3a-82a1-7e92d26266e7",
-      "eoNumber": "EO 14148",
-      "eoTitle": "Initial Rescissions of Harmful Executive Orders and Actions",
-      "caseName": "Environmental Defense Fund, Inc. v. Wright",
+      "eoId": "021e36d3-a28f-40f7-ab8f-46a82eb0578b",
+      "eoNumber": "EO 14165",
+      "eoTitle": "Securing Our Borders",
+      "caseName": "Doe v. Noem",
       "court": "D. Mass.",
       "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Mass.",
-      "link": {
-        "docketId": 71089266,
-        "caseName": "Environmental Defense Fund, Inc. v. Wright",
-        "court": "D. Mass.",
-        "docketNumber": "1:25-cv-12249",
-        "dateFiled": "2025-08-12",
-        "dateTerminated": "2026-01-30",
-        "url": "https://www.courtlistener.com/docket/71089266/environmental-defense-fund-inc-v-wright/"
-      },
-      "candidates": [
-        {
-          "docketId": 71089266,
-          "caseName": "Environmental Defense Fund, Inc. v. Wright",
-          "court": "D. Mass.",
-          "docketNumber": "1:25-cv-12249",
-          "dateFiled": "2025-08-12",
-          "dateTerminated": "2026-01-30",
-          "url": "https://www.courtlistener.com/docket/71089266/environmental-defense-fund-inc-v-wright/"
-        }
-      ]
-    },
-    {
-      "eoId": "a81d82bb-8380-4f3a-82a1-7e92d26266e7",
-      "eoNumber": "EO 14148",
-      "eoTitle": "Initial Rescissions of Harmful Executive Orders and Actions",
-      "caseName": "Lighthiser v. Trump",
-      "court": "D. Mont.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Mont.",
-      "link": {
-        "docketId": 70399441,
-        "caseName": "Lighthiser v. Trump",
-        "court": "D. Mont.",
-        "docketNumber": "2:25-cv-00054",
-        "dateFiled": "2025-05-29",
-        "dateTerminated": "2025-10-15",
-        "url": "https://www.courtlistener.com/docket/70399441/lighthiser-v-trump/"
-      },
-      "candidates": [
-        {
-          "docketId": 70399441,
-          "caseName": "Lighthiser v. Trump",
-          "court": "D. Mont.",
-          "docketNumber": "2:25-cv-00054",
-          "dateFiled": "2025-05-29",
-          "dateTerminated": "2025-10-15",
-          "url": "https://www.courtlistener.com/docket/70399441/lighthiser-v-trump/"
-        }
-      ]
-    },
-    {
-      "eoId": "a81d82bb-8380-4f3a-82a1-7e92d26266e7",
-      "eoNumber": "EO 14148",
-      "eoTitle": "Initial Rescissions of Harmful Executive Orders and Actions",
-      "caseName": "Kapaa, Conservation Council for Hawaii v. Trump",
-      "court": "D. Haw.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Haw.",
-      "link": {
-        "docketId": 70341271,
-        "caseName": "Kapaa, Conservation Council for Hawaii v. Trump",
-        "court": "D. Haw.",
-        "docketNumber": "1:25-cv-00209",
-        "dateFiled": "2025-05-22",
-        "dateTerminated": "2026-01-28",
-        "url": "https://www.courtlistener.com/docket/70341271/kapaa-conservation-council-for-hawaii-v-trump/"
-      },
-      "candidates": [
-        {
-          "docketId": 70341271,
-          "caseName": "Kapaa, Conservation Council for Hawaii v. Trump",
-          "court": "D. Haw.",
-          "docketNumber": "1:25-cv-00209",
-          "dateFiled": "2025-05-22",
-          "dateTerminated": "2026-01-28",
-          "url": "https://www.courtlistener.com/docket/70341271/kapaa-conservation-council-for-hawaii-v-trump/"
-        }
-      ]
-    },
-    {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "Legal challenge",
-      "court": "",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket matches this case name, and no court was recorded.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "Legal challenge",
-      "court": "",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket matches this case name, and no court was recorded.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "Legal challenge",
-      "court": "",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket matches this case name, and no court was recorded.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "Legal challenge",
-      "court": "",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket matches this case name, and no court was recorded.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "Doe v. Trump",
-      "court": "Massachusetts",
-      "chosenDocketId": null,
       "outcome": "ambiguous",
-      "reason": "4 different dockets in that court share this case name — a human has to pick.",
+      "reason": "2 different dockets in that court share this case name — a human has to pick.",
       "link": null,
       "candidates": [
         {
-          "docketId": 73453777,
-          "caseName": "Doe v. Trump",
+          "docketId": 69918650,
+          "caseName": "Doe v. Noem",
           "court": "D. Mass.",
-          "docketNumber": "1:26-cv-12597",
-          "dateFiled": "2026-06-08",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/73453777/doe-v-trump/"
+          "docketNumber": "1:25-cv-11037",
+          "dateFiled": "2025-04-21",
+          "dateTerminated": "2025-05-14",
+          "url": "https://www.courtlistener.com/docket/69918650/doe-v-noem/"
         },
         {
-          "docketId": 72071916,
-          "caseName": "Doe v. Trump",
+          "docketId": 69880636,
+          "caseName": "Doe v. Noem",
           "court": "D. Mass.",
-          "docketNumber": "1:25-cv-13946",
-          "dateFiled": "2025-12-23",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/72071916/doe-v-trump/"
-        },
-        {
-          "docketId": 69560579,
-          "caseName": "Doe v. Trump",
-          "court": "D. Mass.",
-          "docketNumber": "1:25-cv-10135",
-          "dateFiled": "2025-01-20",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69560579/doe-v-trump/"
-        },
-        {
-          "docketId": 69560588,
-          "caseName": "Doe v. Trump",
-          "court": "D. Mass.",
-          "docketNumber": "1:25-cv-10136",
-          "dateFiled": "2025-01-20",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69560588/doe-v-trump/"
-        },
-        {
-          "docketId": 72526389,
-          "caseName": "Doe v. Trump DO NOT DOCKET IN THIS CASE - ALL FILINGS ARE TO BE MADE IN LEAD CASE 25-CV-13946-JEK",
-          "court": "D. Mass.",
-          "docketNumber": "1:26-cv-11382",
-          "dateFiled": "2026-03-20",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/72526389/doe-v-trump-do-not-docket-in-this-case-all-filings-are-to-be-made-in/"
+          "docketNumber": "1:25-cv-10904",
+          "dateFiled": "2025-04-11",
+          "dateTerminated": "2025-07-10",
+          "url": "https://www.courtlistener.com/docket/69880636/doe-v-noem/"
         }
       ]
     },
     {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "State of New Jersey et al v. Trump",
-      "court": "Mass",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in Mass matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "OCA v. Rubio et al",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "County of Santa Clara v. Trump et al",
-      "court": "N.D. Cal",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in N.D. Cal matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "Le v. Trump",
-      "court": "C.D. Cal",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in C.D. Cal matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "New York Immigration Coalition v. Trump et al",
-      "court": "S.D.N.Y.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in S.D.N.Y. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
-      "eoNumber": "EO 14160",
-      "eoTitle": "Protecting the Meaning and Value of American Citizenship",
-      "caseName": "Barbara v. Trump",
-      "court": "D.N.H.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.N.H.",
-      "link": {
-        "docketId": 70651853,
-        "caseName": "Barbara v. Trump",
-        "court": "D.N.H.",
-        "docketNumber": "1:25-cv-00244",
-        "dateFiled": "2025-06-27",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/70651853/barbara-v-trump/"
-      },
-      "candidates": [
-        {
-          "docketId": 70651853,
-          "caseName": "Barbara v. Trump",
-          "court": "D.N.H.",
-          "docketNumber": "1:25-cv-00244",
-          "dateFiled": "2025-06-27",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/70651853/barbara-v-trump/"
-        }
-      ]
-    },
-    {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
-      "caseName": "Legal challenge",
-      "court": "",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket matches this case name, and no court was recorded.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
-      "caseName": "San Francisco v. Trump et al",
-      "court": "N.D. Cal",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in N.D. Cal matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
-      "caseName": "Organized Communities Against Deportations et al v. Huffman et al",
-      "court": "N.D. Illinois",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in N.D. Illinois matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
-      "caseName": "Amica Center et al v. DOJ",
-      "court": "D.DC",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.DC matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
+      "eoId": "021e36d3-a28f-40f7-ab8f-46a82eb0578b",
+      "eoNumber": "EO 14165",
+      "eoTitle": "Securing Our Borders",
       "caseName": "Centro de Trabajadores Unidos v. Bessent",
       "court": "D.D.C.",
       "chosenDocketId": null,
@@ -2047,70 +2798,9 @@
       ]
     },
     {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
-      "caseName": "Solutions In Hometown Connections v. Noem",
-      "court": "D. Md.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Maryland",
-      "link": {
-        "docketId": 69748413,
-        "caseName": "Solutions In Hometown Connections v. Noem",
-        "court": "D. Maryland",
-        "docketNumber": "8:25-cv-00885",
-        "dateFiled": "2025-03-17",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69748413/solutions-in-hometown-connections-v-noem/"
-      },
-      "candidates": [
-        {
-          "docketId": 69748413,
-          "caseName": "Solutions In Hometown Connections v. Noem",
-          "court": "D. Maryland",
-          "docketNumber": "8:25-cv-00885",
-          "dateFiled": "2025-03-17",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69748413/solutions-in-hometown-connections-v-noem/"
-        }
-      ]
-    },
-    {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
-      "caseName": "C.M. v. Noem",
-      "court": "S.D. Fla.",
-      "chosenDocketId": null,
-      "outcome": "ambiguous",
-      "reason": "2 different dockets in that court share this case name — a human has to pick.",
-      "link": null,
-      "candidates": [
-        {
-          "docketId": 70814838,
-          "caseName": "C.M. v. Noem",
-          "court": "S.D. Fla.",
-          "docketNumber": "1:25-cv-23182",
-          "dateFiled": "2025-07-16",
-          "dateTerminated": "2025-08-18",
-          "url": "https://www.courtlistener.com/docket/70814838/cm-v-noem/"
-        },
-        {
-          "docketId": 70826260,
-          "caseName": "C.M. v. Noem",
-          "court": "S.D. Fla.",
-          "docketNumber": "9:25-cv-80898",
-          "dateFiled": "2025-07-16",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/70826260/cm-v-noem/"
-        }
-      ]
-    },
-    {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
+      "eoId": "021e36d3-a28f-40f7-ab8f-46a82eb0578b",
+      "eoNumber": "EO 14165",
+      "eoTitle": "Securing Our Borders",
       "caseName": "State of California et al v. U.S. Department of Health and Human Services et al",
       "court": "N.D. Cal.",
       "chosenDocketId": null,
@@ -2120,124 +2810,9 @@
       "candidates": []
     },
     {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
-      "caseName": "American Gateways v. U.S. Department for Justice",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
-      "caseName": "CLEAR Clinic v. Noem",
-      "court": "D. Or.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Or.",
-      "link": {
-        "docketId": 71668495,
-        "caseName": "CLEAR Clinic v. Noem",
-        "court": "D. Or.",
-        "docketNumber": "6:25-cv-01906",
-        "dateFiled": "2025-10-16",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/71668495/clear-clinic-v-noem/"
-      },
-      "candidates": [
-        {
-          "docketId": 71668495,
-          "caseName": "CLEAR Clinic v. Noem",
-          "court": "D. Or.",
-          "docketNumber": "6:25-cv-01906",
-          "dateFiled": "2025-10-16",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/71668495/clear-clinic-v-noem/"
-        }
-      ]
-    },
-    {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
-      "caseName": "State of New York v. Noem",
-      "court": "S.D.N.Y.",
-      "chosenDocketId": null,
-      "outcome": "ambiguous",
-      "reason": "2 different dockets in that court share this case name — a human has to pick.",
-      "link": null,
-      "candidates": [
-        {
-          "docketId": 71507608,
-          "caseName": "State of New York v. Noem",
-          "court": "S.D.N.Y.",
-          "docketNumber": "1:25-cv-08106",
-          "dateFiled": "2025-09-30",
-          "dateTerminated": "2025-10-16",
-          "url": "https://www.courtlistener.com/docket/71507608/state-of-new-york-v-noem/"
-        },
-        {
-          "docketId": 71573860,
-          "caseName": "State of New York v. Noem",
-          "court": "S.D.N.Y.",
-          "docketNumber": "1:25-cv-08106",
-          "dateFiled": "2025-09-30",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/71573860/state-of-new-york-v-noem/"
-        }
-      ]
-    },
-    {
-      "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
-      "eoNumber": "EO 14159",
-      "eoTitle": "Protecting the American People Against Invasion",
-      "caseName": "State of Illinois v. Noem",
-      "court": "D.R.I.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.R.I.",
-      "link": {
-        "docketId": 71490307,
-        "caseName": "State of Illinois v. Noem",
-        "court": "D.R.I.",
-        "docketNumber": "1:25-cv-00495",
-        "dateFiled": "2025-09-29",
-        "dateTerminated": "2025-12-22",
-        "url": "https://www.courtlistener.com/docket/71490307/state-of-illinois-v-noem/"
-      },
-      "candidates": [
-        {
-          "docketId": 71490307,
-          "caseName": "State of Illinois v. Noem",
-          "court": "D.R.I.",
-          "docketNumber": "1:25-cv-00495",
-          "dateFiled": "2025-09-29",
-          "dateTerminated": "2025-12-22",
-          "url": "https://www.courtlistener.com/docket/71490307/state-of-illinois-v-noem/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "PFLAG, INC., et al v. Trump et al",
-      "court": "D.Md.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.Md. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
+      "eoId": "97091863-83df-4fd1-93e9-6caad5f4be48",
+      "eoNumber": null,
+      "eoTitle": "Guaranteeing the States Protection Against Invasion",
       "caseName": "Legal challenge",
       "court": "",
       "chosenDocketId": null,
@@ -2247,633 +2822,86 @@
       "candidates": []
     },
     {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Legal challenge",
-      "court": "",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket matches this case name, and no court was recorded.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Moe v. Trump et al",
-      "court": "D.Mass",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.Mass matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Doe v. McHenry",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 69593824,
-        "caseName": "DOE v. MCHENRY",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-00286",
-        "dateFiled": "2025-01-30",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69593824/doe-v-mchenry/"
-      },
-      "candidates": [
-        {
-          "docketId": 69593824,
-          "caseName": "DOE v. MCHENRY",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-00286",
-          "dateFiled": "2025-01-30",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69593824/doe-v-mchenry/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Orr v. Trump",
-      "court": "D. Mass",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Mass.",
-      "link": {
-        "docketId": 69623342,
-        "caseName": "Orr v. Trump",
-        "court": "D. Mass.",
-        "docketNumber": "1:25-cv-10313",
-        "dateFiled": "2025-02-07",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69623342/orr-v-trump/"
-      },
-      "candidates": [
-        {
-          "docketId": 69623342,
-          "caseName": "Orr v. Trump",
-          "court": "D. Mass.",
-          "docketNumber": "1:25-cv-10313",
-          "dateFiled": "2025-02-07",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69623342/orr-v-trump/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Doctors for America v. OPM et al",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "San Francisco AIDS Foundation et al v. Trump",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Chicago Women in Trades v. Trump",
-      "court": "N.D. Ill.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in N.D. Ill.",
-      "link": {
-        "docketId": 69675603,
-        "caseName": "Chicago Women in Trades v. Trump",
-        "court": "N.D. Ill.",
-        "docketNumber": "1:25-cv-02005",
-        "dateFiled": "2025-02-26",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69675603/chicago-women-in-trades-v-trump/"
-      },
-      "candidates": [
-        {
-          "docketId": 69675603,
-          "caseName": "Chicago Women in Trades v. Trump",
-          "court": "N.D. Ill.",
-          "docketNumber": "1:25-cv-02005",
-          "dateFiled": "2025-02-26",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69675603/chicago-women-in-trades-v-trump/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "American Association of Colleges for Teacher Education v. Carter",
-      "court": "D. Md.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D. Md. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Rhode Island Latino Arts v. National Endowment for the Arts",
-      "court": "D.R.I.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.R.I.",
-      "link": {
-        "docketId": 69710414,
-        "caseName": "Rhode Island Latino Arts v. National Endowment for the Arts",
-        "court": "D.R.I.",
-        "docketNumber": "1:25-cv-00079",
-        "dateFiled": "2025-03-06",
-        "dateTerminated": "2025-09-19",
-        "url": "https://www.courtlistener.com/docket/69710414/rhode-island-latino-arts-v-national-endowment-for-the-arts/"
-      },
-      "candidates": [
-        {
-          "docketId": 69710414,
-          "caseName": "Rhode Island Latino Arts v. National Endowment for the Arts",
-          "court": "D.R.I.",
-          "docketNumber": "1:25-cv-00079",
-          "dateFiled": "2025-03-06",
-          "dateTerminated": "2025-09-19",
-          "url": "https://www.courtlistener.com/docket/69710414/rhode-island-latino-arts-v-national-endowment-for-the-arts/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "State of California v. U.S Department of Education",
-      "court": "D. Mass.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Mass.",
-      "link": {
-        "docketId": 69711499,
-        "caseName": "State of California v. U.S Department of Education",
-        "court": "D. Mass.",
-        "docketNumber": "1:25-cv-10548",
-        "dateFiled": "2025-03-06",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69711499/state-of-california-v-us-department-of-education/"
-      },
-      "candidates": [
-        {
-          "docketId": 69711499,
-          "caseName": "State of California v. U.S Department of Education",
-          "court": "D. Mass.",
-          "docketNumber": "1:25-cv-10548",
-          "dateFiled": "2025-03-06",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69711499/state-of-california-v-us-department-of-education/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Kingdom v. Trump",
-      "court": "D.D.C",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 69717615,
-        "caseName": "KINGDOM v. TRUMP",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-00691",
-        "dateFiled": "2025-03-07",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69717615/kingdom-v-trump/"
-      },
-      "candidates": [
-        {
-          "docketId": 69717615,
-          "caseName": "KINGDOM v. TRUMP",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-00691",
-          "dateFiled": "2025-03-07",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69717615/kingdom-v-trump/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Doe v. Collins",
+      "eoId": "cc7986db-1c81-453b-be3e-4d964691ec04",
+      "eoNumber": "EO 14164",
+      "eoTitle": "Restoring the Death Penalty and Protecting Public Safety",
+      "caseName": "Taylor v. Trump",
       "court": "D.D.C.",
       "chosenDocketId": null,
       "outcome": "ambiguous",
-      "reason": "2 different dockets in that court share this case name — a human has to pick.",
+      "reason": "3 different dockets in that court share this case name — a human has to pick.",
       "link": null,
       "candidates": [
         {
-          "docketId": 69740178,
-          "caseName": "DOE v. COLLINS",
+          "docketId": 71717101,
+          "caseName": "TAYLOR v. TRUMP",
           "court": "D.D.C.",
-          "docketNumber": "1:25-cv-00760",
-          "dateFiled": "2025-03-14",
-          "dateTerminated": "2025-07-22",
-          "url": "https://www.courtlistener.com/docket/69740178/doe-v-collins/"
+          "docketNumber": "1:25-cv-03742",
+          "dateFiled": "2025-10-21",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/71717101/taylor-v-trump/"
         },
         {
-          "docketId": 69913121,
-          "caseName": "DOE v. COLLINS",
+          "docketId": 69903355,
+          "caseName": "TAYLOR v. TRUMP",
           "court": "D.D.C.",
-          "docketNumber": "1:25-cv-01196",
-          "dateFiled": "2025-04-18",
+          "docketNumber": "1:25-cv-01161",
+          "dateFiled": "2025-04-16",
           "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69913121/doe-v-collins/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Legal challenge",
-      "court": "",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket matches this case name, and no court was recorded.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Legal challenge",
-      "court": "",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket matches this case name, and no court was recorded.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Commonwealth of Massachusetts v. Trump",
-      "court": "D. Mass.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Mass.",
-      "link": {
-        "docketId": 70989506,
-        "caseName": "Commonwealth of Massachusetts v. Trump",
-        "court": "D. Mass.",
-        "docketNumber": "1:25-cv-12162",
-        "dateFiled": "2025-08-01",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/70989506/commonwealth-of-massachusetts-v-trump/"
-      },
-      "candidates": [
+          "url": "https://www.courtlistener.com/docket/69903355/taylor-v-trump/"
+        },
         {
-          "docketId": 70989506,
-          "caseName": "Commonwealth of Massachusetts v. Trump",
-          "court": "D. Mass.",
-          "docketNumber": "1:25-cv-12162",
-          "dateFiled": "2025-08-01",
+          "docketId": 72374239,
+          "caseName": "TAYLOR v. TRUMP",
+          "court": "D.D.C.",
+          "docketNumber": "1:26-cv-00421",
+          "dateFiled": "2026-01-12",
           "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/70989506/commonwealth-of-massachusetts-v-trump/"
+          "url": "https://www.courtlistener.com/docket/72374239/taylor-v-trump/"
         }
       ]
     },
     {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "FreeState Justice v. Equal Employment Opportunity Commission",
-      "court": "D. Md.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Maryland",
-      "link": {
-        "docketId": 70954220,
-        "caseName": "FreeState Justice v. Equal Employment Opportunity Commission",
-        "court": "D. Maryland",
-        "docketNumber": "1:25-cv-02482",
-        "dateFiled": "2025-07-29",
-        "dateTerminated": "2026-06-12",
-        "url": "https://www.courtlistener.com/docket/70954220/freestate-justice-v-equal-employment-opportunity-commission/"
-      },
-      "candidates": [
-        {
-          "docketId": 70954220,
-          "caseName": "FreeState Justice v. Equal Employment Opportunity Commission",
-          "court": "D. Maryland",
-          "docketNumber": "1:25-cv-02482",
-          "dateFiled": "2025-07-29",
-          "dateTerminated": "2026-06-12",
-          "url": "https://www.courtlistener.com/docket/70954220/freestate-justice-v-equal-employment-opportunity-commission/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "State of California v. Department of Justice",
-      "court": "N.D. Cal.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in N.D. Cal. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "King County v. Turner",
-      "court": "W.D. Wash.",
+      "eoId": "64c6b2a2-164a-4e44-a5a5-91a00fec2e27",
+      "eoNumber": "EO 14163",
+      "eoTitle": "Realigning the United States Refugee Admissions Program",
+      "caseName": "Pacito v. Trump",
+      "court": "W.D. Wash",
       "chosenDocketId": null,
       "outcome": "confident",
       "reason": "Exact case-name match, sole result in W.D. Wash.",
       "link": {
-        "docketId": 70062174,
-        "caseName": "King County v. Turner",
+        "docketId": 69626101,
+        "caseName": "Pacito v. Trump",
         "court": "W.D. Wash.",
-        "docketNumber": "2:25-cv-00814",
-        "dateFiled": "2025-05-02",
+        "docketNumber": "2:25-cv-00255",
+        "dateFiled": "2025-02-10",
         "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/70062174/king-county-v-turner/"
+        "url": "https://www.courtlistener.com/docket/69626101/pacito-v-trump/"
       },
       "candidates": [
         {
-          "docketId": 70062174,
-          "caseName": "King County v. Turner",
+          "docketId": 69626101,
+          "caseName": "Pacito v. Trump",
           "court": "W.D. Wash.",
-          "docketNumber": "2:25-cv-00814",
-          "dateFiled": "2025-05-02",
+          "docketNumber": "2:25-cv-00255",
+          "dateFiled": "2025-02-10",
           "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/70062174/king-county-v-turner/"
+          "url": "https://www.courtlistener.com/docket/69626101/pacito-v-trump/"
         }
       ]
     },
     {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Doe v. Department of Defense",
-      "court": "D. Md.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D. Maryland",
-      "link": {
-        "docketId": 71294148,
-        "caseName": "Doe v. Department of Defense",
-        "court": "D. Maryland",
-        "docketNumber": "8:25-cv-02947",
-        "dateFiled": "2025-09-08",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/71294148/doe-v-department-of-defense/"
-      },
-      "candidates": [
-        {
-          "docketId": 71294148,
-          "caseName": "Doe v. Department of Defense",
-          "court": "D. Maryland",
-          "docketNumber": "8:25-cv-02947",
-          "dateFiled": "2025-09-08",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/71294148/doe-v-department-of-defense/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "National Alliance to End Homelessness v. Turner",
-      "court": "D.R.I.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.R.I.",
-      "link": {
-        "docketId": 71316650,
-        "caseName": "National Alliance to End Homelessness v. Turner",
-        "court": "D.R.I.",
-        "docketNumber": "1:25-cv-00447",
-        "dateFiled": "2025-09-11",
-        "dateTerminated": "2026-04-29",
-        "url": "https://www.courtlistener.com/docket/71316650/national-alliance-to-end-homelessness-v-turner/"
-      },
-      "candidates": [
-        {
-          "docketId": 71316650,
-          "caseName": "National Alliance to End Homelessness v. Turner",
-          "court": "D.R.I.",
-          "docketNumber": "1:25-cv-00447",
-          "dateFiled": "2025-09-11",
-          "dateTerminated": "2026-04-29",
-          "url": "https://www.courtlistener.com/docket/71316650/national-alliance-to-end-homelessness-v-turner/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Fell v. Trump",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 71986673,
-        "caseName": "FELL v. TRUMP",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-04206",
-        "dateFiled": "2025-12-03",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/71986673/fell-v-trump/"
-      },
-      "candidates": [
-        {
-          "docketId": 71986673,
-          "caseName": "FELL v. TRUMP",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-04206",
-          "dateFiled": "2025-12-03",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/71986673/fell-v-trump/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Withrow v. United States",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "ambiguous",
-      "reason": "No exact name match; 1 docket(s) in that court have similar party names.",
-      "link": null,
-      "candidates": [
-        {
-          "docketId": 71939878,
-          "caseName": "WITHROW v. UNITED STATES OF AMERICA",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-04073",
-          "dateFiled": "2025-11-20",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/71939878/withrow-v-united-states-of-america/"
-        }
-      ]
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "Cross v. Equal Employment Opportunity Commission",
+      "eoId": "64c6b2a2-164a-4e44-a5a5-91a00fec2e27",
+      "eoNumber": "EO 14163",
+      "eoTitle": "Realigning the United States Refugee Admissions Program",
+      "caseName": "United States Conference of Catholic Bishops v. Department of State et al.",
       "court": "D.D.C.",
       "chosenDocketId": null,
       "outcome": "not_found",
       "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
       "link": null,
       "candidates": []
-    },
-    {
-      "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
-      "eoNumber": "EO 14168",
-      "eoTitle": "Defending Women From Gender Ideology Extremism and Restoring Biological Truth to the Federal Government",
-      "caseName": "State of Washington v. Health and Human Services",
-      "court": "D. Or.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D. Or. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
-      "eoNumber": "EO 14169",
-      "eoTitle": "Reevaluating and Realigning United States Foreign Aid",
-      "caseName": "American Foreign Service Association v. Trump",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 69853338,
-        "caseName": "AMERICAN FOREIGN SERVICE ASSOCIATION v. TRUMP",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-01030",
-        "dateFiled": "2025-04-07",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69853338/american-foreign-service-association-v-trump/"
-      },
-      "candidates": [
-        {
-          "docketId": 69853338,
-          "caseName": "AMERICAN FOREIGN SERVICE ASSOCIATION v. TRUMP",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-01030",
-          "dateFiled": "2025-04-07",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69853338/american-foreign-service-association-v-trump/"
-        }
-      ]
-    },
-    {
-      "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
-      "eoNumber": "EO 14169",
-      "eoTitle": "Reevaluating and Realigning United States Foreign Aid",
-      "caseName": "Global Health Council v. Trump",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
-      "eoNumber": "EO 14169",
-      "eoTitle": "Reevaluating and Realigning United States Foreign Aid",
-      "caseName": "AIDS Vaccine Advocacy Coalition v. Department of State",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
-      "eoNumber": "EO 14169",
-      "eoTitle": "Reevaluating and Realigning United States Foreign Aid",
-      "caseName": "Personal Services Contractor Association v. Trump et al",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
-      "eoNumber": "EO 14169",
-      "eoTitle": "Reevaluating and Realigning United States Foreign Aid",
-      "caseName": "Greene v. United States Agency for International Development",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 71991277,
-        "caseName": "GREENE v. UNITED STATES AGENCY FOR INTERNATIONAL DEVELOPMENT",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-04217",
-        "dateFiled": "2025-12-03",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/71991277/greene-v-united-states-agency-for-international-development/"
-      },
-      "candidates": [
-        {
-          "docketId": 71991277,
-          "caseName": "GREENE v. UNITED STATES AGENCY FOR INTERNATIONAL DEVELOPMENT",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-04217",
-          "dateFiled": "2025-12-03",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/71991277/greene-v-united-states-agency-for-international-development/"
-        }
-      ]
     },
     {
       "eoId": "f785fefd-4db7-4ffb-b7a6-099cdc32dbb5",
@@ -3475,78 +3503,6 @@
       ]
     },
     {
-      "eoId": "10915438-5100-425e-bfa4-f824a9623a73",
-      "eoNumber": null,
-      "eoTitle": "Expanding Migrant Operations Center at Naval Station Guantanamo Bay to Full Capacity",
-      "caseName": "Parra v. Castro",
-      "court": "D. NM",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D. NM matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "10915438-5100-425e-bfa4-f824a9623a73",
-      "eoNumber": null,
-      "eoTitle": "Expanding Migrant Operations Center at Naval Station Guantanamo Bay to Full Capacity",
-      "caseName": "Las Americas Immigrant Advocacy Center v. Noem",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 69633721,
-        "caseName": "LAS AMERICAS IMMIGRANT ADVOCACY CENTER v. NOEM",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-00418",
-        "dateFiled": "2025-02-12",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69633721/las-americas-immigrant-advocacy-center-v-noem/"
-      },
-      "candidates": [
-        {
-          "docketId": 69633721,
-          "caseName": "LAS AMERICAS IMMIGRANT ADVOCACY CENTER v. NOEM",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-00418",
-          "dateFiled": "2025-02-12",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69633721/las-americas-immigrant-advocacy-center-v-noem/"
-        }
-      ]
-    },
-    {
-      "eoId": "10915438-5100-425e-bfa4-f824a9623a73",
-      "eoNumber": null,
-      "eoTitle": "Expanding Migrant Operations Center at Naval Station Guantanamo Bay to Full Capacity",
-      "caseName": "Espinoza Escalona v. Noem",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 69696278,
-        "caseName": "ESPINOZA ESCALONA v. NOEM",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-00604",
-        "dateFiled": "2025-03-01",
-        "dateTerminated": "2025-05-27",
-        "url": "https://www.courtlistener.com/docket/69696278/espinoza-escalona-v-noem/"
-      },
-      "candidates": [
-        {
-          "docketId": 69696278,
-          "caseName": "ESPINOZA ESCALONA v. NOEM",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-00604",
-          "dateFiled": "2025-03-01",
-          "dateTerminated": "2025-05-27",
-          "url": "https://www.courtlistener.com/docket/69696278/espinoza-escalona-v-noem/"
-        }
-      ]
-    },
-    {
       "eoId": "49df5e82-f96a-4a4c-90dd-db8894e6c9a9",
       "eoNumber": "EO 14188",
       "eoTitle": "Additional Measures To Combat Anti-Semitism",
@@ -3864,6 +3820,78 @@
       ]
     },
     {
+      "eoId": "10915438-5100-425e-bfa4-f824a9623a73",
+      "eoNumber": null,
+      "eoTitle": "Expanding Migrant Operations Center at Naval Station Guantanamo Bay to Full Capacity",
+      "caseName": "Parra v. Castro",
+      "court": "D. NM",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D. NM matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "10915438-5100-425e-bfa4-f824a9623a73",
+      "eoNumber": null,
+      "eoTitle": "Expanding Migrant Operations Center at Naval Station Guantanamo Bay to Full Capacity",
+      "caseName": "Las Americas Immigrant Advocacy Center v. Noem",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69633721,
+        "caseName": "LAS AMERICAS IMMIGRANT ADVOCACY CENTER v. NOEM",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00418",
+        "dateFiled": "2025-02-12",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69633721/las-americas-immigrant-advocacy-center-v-noem/"
+      },
+      "candidates": [
+        {
+          "docketId": 69633721,
+          "caseName": "LAS AMERICAS IMMIGRANT ADVOCACY CENTER v. NOEM",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00418",
+          "dateFiled": "2025-02-12",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69633721/las-americas-immigrant-advocacy-center-v-noem/"
+        }
+      ]
+    },
+    {
+      "eoId": "10915438-5100-425e-bfa4-f824a9623a73",
+      "eoNumber": null,
+      "eoTitle": "Expanding Migrant Operations Center at Naval Station Guantanamo Bay to Full Capacity",
+      "caseName": "Espinoza Escalona v. Noem",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69696278,
+        "caseName": "ESPINOZA ESCALONA v. NOEM",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00604",
+        "dateFiled": "2025-03-01",
+        "dateTerminated": "2025-05-27",
+        "url": "https://www.courtlistener.com/docket/69696278/espinoza-escalona-v-noem/"
+      },
+      "candidates": [
+        {
+          "docketId": 69696278,
+          "caseName": "ESPINOZA ESCALONA v. NOEM",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00604",
+          "dateFiled": "2025-03-01",
+          "dateTerminated": "2025-05-27",
+          "url": "https://www.courtlistener.com/docket/69696278/espinoza-escalona-v-noem/"
+        }
+      ]
+    },
+    {
       "eoId": "1bddde95-33cb-4493-86b3-9a9d6d49d66a",
       "eoNumber": "EO 14201",
       "eoTitle": "Keeping Men Out of Women's Sports",
@@ -4057,6 +4085,66 @@
       ]
     },
     {
+      "eoId": "d4b32274-bd9a-4e2c-a8cc-1277462bd632",
+      "eoNumber": "EO 14219",
+      "eoTitle": "Ensuring Lawful Governance and Implementing the President's \"Department of Government Efficiency\" Deregulatory Initiative",
+      "caseName": "Japanese American Citizens League v. Musk",
+      "court": "D.D.C",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69706944,
+        "caseName": "JAPANESE AMERICAN CITIZENS LEAGUE v. MUSK",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00643",
+        "dateFiled": "2025-03-05",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69706944/japanese-american-citizens-league-v-musk/"
+      },
+      "candidates": [
+        {
+          "docketId": 69706944,
+          "caseName": "JAPANESE AMERICAN CITIZENS LEAGUE v. MUSK",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00643",
+          "dateFiled": "2025-03-05",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69706944/japanese-american-citizens-league-v-musk/"
+        }
+      ]
+    },
+    {
+      "eoId": "d4b32274-bd9a-4e2c-a8cc-1277462bd632",
+      "eoNumber": "EO 14219",
+      "eoTitle": "Ensuring Lawful Governance and Implementing the President's \"Department of Government Efficiency\" Deregulatory Initiative",
+      "caseName": "Center for Biological Diversity v. U.S. Department of Interior",
+      "court": "D.D.C",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69698261,
+        "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. U.S. DEPARTMENT OF INTERIOR",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00612",
+        "dateFiled": "2025-03-03",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69698261/center-for-biological-diversity-v-us-department-of-interior/"
+      },
+      "candidates": [
+        {
+          "docketId": 69698261,
+          "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. U.S. DEPARTMENT OF INTERIOR",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00612",
+          "dateFiled": "2025-03-03",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69698261/center-for-biological-diversity-v-us-department-of-interior/"
+        }
+      ]
+    },
+    {
       "eoId": "93c7d07b-409d-48e6-b6bb-db913d3f4998",
       "eoNumber": "EO 14217",
       "eoTitle": "Commencing the Reduction of the Federal Bureaucracy",
@@ -4185,66 +4273,6 @@
           "dateFiled": "2025-05-21",
           "dateTerminated": null,
           "url": "https://www.courtlistener.com/docket/70330112/rural-development-innovations-limited-v-marocco/"
-        }
-      ]
-    },
-    {
-      "eoId": "d4b32274-bd9a-4e2c-a8cc-1277462bd632",
-      "eoNumber": "EO 14219",
-      "eoTitle": "Ensuring Lawful Governance and Implementing the President's \"Department of Government Efficiency\" Deregulatory Initiative",
-      "caseName": "Japanese American Citizens League v. Musk",
-      "court": "D.D.C",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 69706944,
-        "caseName": "JAPANESE AMERICAN CITIZENS LEAGUE v. MUSK",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-00643",
-        "dateFiled": "2025-03-05",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69706944/japanese-american-citizens-league-v-musk/"
-      },
-      "candidates": [
-        {
-          "docketId": 69706944,
-          "caseName": "JAPANESE AMERICAN CITIZENS LEAGUE v. MUSK",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-00643",
-          "dateFiled": "2025-03-05",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69706944/japanese-american-citizens-league-v-musk/"
-        }
-      ]
-    },
-    {
-      "eoId": "d4b32274-bd9a-4e2c-a8cc-1277462bd632",
-      "eoNumber": "EO 14219",
-      "eoTitle": "Ensuring Lawful Governance and Implementing the President's \"Department of Government Efficiency\" Deregulatory Initiative",
-      "caseName": "Center for Biological Diversity v. U.S. Department of Interior",
-      "court": "D.D.C",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 69698261,
-        "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. U.S. DEPARTMENT OF INTERIOR",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-00612",
-        "dateFiled": "2025-03-03",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/69698261/center-for-biological-diversity-v-us-department-of-interior/"
-      },
-      "candidates": [
-        {
-          "docketId": 69698261,
-          "caseName": "CENTER FOR BIOLOGICAL DIVERSITY v. U.S. DEPARTMENT OF INTERIOR",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-00612",
-          "dateFiled": "2025-03-03",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/69698261/center-for-biological-diversity-v-us-department-of-interior/"
         }
       ]
     },
@@ -5325,6 +5353,60 @@
       ]
     },
     {
+      "eoId": "fa7c9130-4a77-4944-9304-1571b8d76265",
+      "eoNumber": "EO 14246",
+      "eoTitle": "Addressing Risks From Jenner & Block",
+      "caseName": "Jenner & Block v. Department of Justice",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "fa7c9130-4a77-4944-9304-1571b8d76265",
+      "eoNumber": "EO 14246",
+      "eoTitle": "Addressing Risks From Jenner & Block",
+      "caseName": "American Bar Association v. Trump",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "not_found",
+      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "link": null,
+      "candidates": []
+    },
+    {
+      "eoId": "fa7c9130-4a77-4944-9304-1571b8d76265",
+      "eoNumber": "EO 14246",
+      "eoTitle": "Addressing Risks From Jenner & Block",
+      "caseName": "Zaid v. Executive Office of the President",
+      "court": "D.D.C.",
+      "chosenDocketId": null,
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 70139392,
+        "caseName": "ZAID v. EXECUTIVE OFFICE OF THE PRESIDENT",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-01365",
+        "dateFiled": "2025-05-05",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/70139392/zaid-v-executive-office-of-the-president/"
+      },
+      "candidates": [
+        {
+          "docketId": 70139392,
+          "caseName": "ZAID v. EXECUTIVE OFFICE OF THE PRESIDENT",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-01365",
+          "dateFiled": "2025-05-05",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/70139392/zaid-v-executive-office-of-the-president/"
+        }
+      ]
+    },
+    {
       "eoId": "72a58915-9612-404c-b3a4-65f9632b11cb",
       "eoNumber": "EO 14248",
       "eoTitle": "Preserving and Protecting the Integrity of American Elections",
@@ -5424,60 +5506,6 @@
           "dateFiled": "2025-03-31",
           "dateTerminated": null,
           "url": "https://www.courtlistener.com/docket/69826986/democratic-national-committee-v-trump/"
-        }
-      ]
-    },
-    {
-      "eoId": "fa7c9130-4a77-4944-9304-1571b8d76265",
-      "eoNumber": "EO 14246",
-      "eoTitle": "Addressing Risks From Jenner & Block",
-      "caseName": "Jenner & Block v. Department of Justice",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "fa7c9130-4a77-4944-9304-1571b8d76265",
-      "eoNumber": "EO 14246",
-      "eoTitle": "Addressing Risks From Jenner & Block",
-      "caseName": "American Bar Association v. Trump",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
-    },
-    {
-      "eoId": "fa7c9130-4a77-4944-9304-1571b8d76265",
-      "eoNumber": "EO 14246",
-      "eoTitle": "Addressing Risks From Jenner & Block",
-      "caseName": "Zaid v. Executive Office of the President",
-      "court": "D.D.C.",
-      "chosenDocketId": null,
-      "outcome": "confident",
-      "reason": "Exact case-name match, sole result in D.D.C.",
-      "link": {
-        "docketId": 70139392,
-        "caseName": "ZAID v. EXECUTIVE OFFICE OF THE PRESIDENT",
-        "court": "D.D.C.",
-        "docketNumber": "1:25-cv-01365",
-        "dateFiled": "2025-05-05",
-        "dateTerminated": null,
-        "url": "https://www.courtlistener.com/docket/70139392/zaid-v-executive-office-of-the-president/"
-      },
-      "candidates": [
-        {
-          "docketId": 70139392,
-          "caseName": "ZAID v. EXECUTIVE OFFICE OF THE PRESIDENT",
-          "court": "D.D.C.",
-          "docketNumber": "1:25-cv-01365",
-          "dateFiled": "2025-05-05",
-          "dateTerminated": null,
-          "url": "https://www.courtlistener.com/docket/70139392/zaid-v-executive-office-of-the-president/"
         }
       ]
     },
