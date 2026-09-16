@@ -50,6 +50,12 @@ async function main() {
   console.log(`\nDuplicate eo_numbers: ${report.duplicateEoNumbers.length}`);
   for (const eoNumber of report.duplicateEoNumbers) console.log(`  ${eoNumber}`);
 
+  console.log(`\nDuplicate instruments (same title + signing date): ${report.duplicateInstruments.length}`);
+  for (const duplicate of report.duplicateInstruments) {
+    console.log(`  ${duplicate.dateSigned}  ${duplicate.title}`);
+    for (const id of duplicate.ids) console.log(`      ${id}`);
+  }
+
   console.log(`\nneeds_review: ${report.needsReviewTotal} of ${report.totalRows} executive_orders rows`);
   for (const [category, count] of Object.entries(report.needsReviewByCategory).sort((a, b) => b[1] - a[1])) {
     console.log(`  ${category}: ${count}`);

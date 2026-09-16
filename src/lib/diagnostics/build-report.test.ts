@@ -11,12 +11,78 @@ function makeRow(overrides: Partial<DiagnosticsRow> & { id: string }): Diagnosti
     id: overrides.id,
     eo_number: "eo_number" in overrides ? overrides.eo_number! : `EO ${overrides.id}`,
     title: overrides.title ?? "Some Order",
-    date_signed: overrides.date_signed ?? "2025-06-01",
+    date_signed: "date_signed" in overrides ? overrides.date_signed! : "2025-06-01",
     date_published: "date_published" in overrides ? overrides.date_published! : "2025-06-02",
     needs_review: overrides.needs_review ?? false,
     review_reason: overrides.review_reason ?? null,
   };
 }
+
+describe("buildDiagnosticsReport — duplicate instruments", () => {
+  it("catches two rows recording the same instrument when neither has an EO number", () => {
+    // The shape of all 62 duplicates merged on 2026-09-16: a proclamation
+    // recorded once from the spreadsheet and once from the Federal Register.
+    const report = buildDiagnosticsReport(
+      [
+        makeRow({ id: "legacy", eo_number: null, title: "National Donate Life Month, 2025", date_signed: "2025-04-03" }),
+        makeRow({ id: "ingested", eo_number: null, title: "National Donate Life Month, 2025", date_signed: "2025-04-03" }),
+      ],
+      TODAY,
+    );
+
+    expect(report.duplicateEoNumbers).toEqual([]); // invisible to the EO-number check
+    expect(report.duplicateInstruments).toHaveLength(1);
+    expect(report.duplicateInstruments[0].ids).toEqual(["legacy", "ingested"]);
+  });
+
+  it("matches across casing differences in the title", () => {
+    const report = buildDiagnosticsReport(
+      [
+        makeRow({ id: "a", eo_number: null, title: "Regulatory Relief To Promote American Energy", date_signed: "2025-07-17" }),
+        makeRow({ id: "b", eo_number: null, title: "Regulatory Relief to Promote American Energy", date_signed: "2025-07-17" }),
+      ],
+      TODAY,
+    );
+
+    expect(report.duplicateInstruments).toHaveLength(1);
+  });
+
+  it("does not report two same-titled orders signed on different dates", () => {
+    const report = buildDiagnosticsReport(
+      [
+        makeRow({ id: "eo-14310", title: "Further Extending the TikTok Enforcement Delay", date_signed: "2025-06-19" }),
+        makeRow({ id: "eo-14350", title: "Further Extending the TikTok Enforcement Delay", date_signed: "2025-09-16" }),
+      ],
+      TODAY,
+    );
+
+    expect(report.duplicateInstruments).toEqual([]);
+  });
+
+  it("skips rows with no signing date rather than matching them on title alone", () => {
+    const report = buildDiagnosticsReport(
+      [
+        makeRow({ id: "a", title: "Same Title", date_signed: null }),
+        makeRow({ id: "b", title: "Same Title", date_signed: null }),
+      ],
+      TODAY,
+    );
+
+    expect(report.duplicateInstruments).toEqual([]);
+  });
+
+  it("reports nothing for a clean corpus", () => {
+    const report = buildDiagnosticsReport(
+      [
+        makeRow({ id: "a", title: "One Order", date_signed: "2025-04-03" }),
+        makeRow({ id: "b", title: "Another Order", date_signed: "2025-04-03" }),
+      ],
+      TODAY,
+    );
+
+    expect(report.duplicateInstruments).toEqual([]);
+  });
+});
 
 describe("buildDiagnosticsReport", () => {
   it("reports total row count", () => {

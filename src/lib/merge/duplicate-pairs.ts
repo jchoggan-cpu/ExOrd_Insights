@@ -8,12 +8,11 @@
  * alongside the originals. `duplicate-eo-numbers.ts` cannot see any of them,
  * because it only compares EO numbers.
  *
- * Matching is on normalized title AND signing date, never title alone.
- * "Further Extending the TikTok Enforcement Delay" is the title of two
- * genuinely different orders (EO 14310, signed 2025-06-19, and EO 14350,
- * signed 2025-09-16); a title-only rule would merge them into one and lose a
- * real order.
+ * Matching is on normalized title AND signing date — see instrumentKey in
+ * src/lib/normalize-title.ts for why title alone is not enough.
  */
+
+import { instrumentKey } from "@/lib/normalize-title";
 
 /** Only the columns pairing needs. The merge itself reads every column, hence the open index signature. */
 export type OrderRow = Record<string, unknown> & {
@@ -44,22 +43,6 @@ export interface DuplicateScan {
   undatedCount: number;
 }
 
-/**
- * Case, punctuation and whitespace differences only. Deliberately not
- * fuzzy: two titles that differ by an actual word are two different
- * documents as far as this is concerned, and a human should look at them.
- */
-export function normalizeTitle(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
-export function pairKey(title: string, dateSigned: string): string {
-  return `${normalizeTitle(title)}|${dateSigned}`;
-}
-
 /** A row is the Federal Register side exactly when ingestion has given it a document_number. */
 function isFederalRegisterSide(row: OrderRow): boolean {
   return row.document_number !== null && row.document_number !== undefined;
@@ -83,7 +66,7 @@ export function findDuplicatePairs(rows: OrderRow[]): DuplicateScan {
       undatedCount++;
       continue;
     }
-    const key = pairKey(row.title, row.date_signed);
+    const key = instrumentKey(row.title, row.date_signed);
     const existing = groups.get(key);
     if (existing) existing.push(row);
     else groups.set(key, [row]);

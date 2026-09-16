@@ -154,6 +154,58 @@ describe("syncDocument", () => {
     expect(supabase.rows[0].needs_review).toBe(true);
   });
 
+  it("flags rather than duplicates a proclamation, which has no eo_number to match on", async () => {
+    // The regression behind the 62 duplicates merged on 2026-09-16: the
+    // guard used to run only when the incoming record had an eo_number, so
+    // every proclamation and memorandum walked straight past it and was
+    // inserted alongside the firm's existing row.
+    const supabase = createFakeSupabase({
+      rows: [
+        {
+          id: "legacy-row-1",
+          document_number: null,
+          eo_number: null,
+          title: "Martin Luther King, Jr., Federal Holiday, 2025",
+          date_signed: "2025-01-17",
+          manually_edited_fields: [],
+          applied_correction_document_numbers: [],
+          needs_review: false,
+        },
+      ],
+    });
+    const doc = loadDoc("proclamation-14988-detail.json");
+
+    const outcome = await syncDocument(supabase, doc, "raw text");
+
+    expect(outcome.action).toBe("flagged");
+    expect(outcome.detail).toContain("title_and_date");
+    expect(supabase.rows).toHaveLength(1); // no duplicate row inserted
+    expect(supabase.rows[0].needs_review).toBe(true);
+  });
+
+  it("still inserts a proclamation when no legacy row shares its title and date", async () => {
+    const supabase = createFakeSupabase({
+      rows: [
+        {
+          id: "legacy-row-1",
+          document_number: null,
+          eo_number: null,
+          title: "A Completely Different Proclamation",
+          date_signed: "2025-01-17",
+          manually_edited_fields: [],
+          applied_correction_document_numbers: [],
+          needs_review: false,
+        },
+      ],
+    });
+    const doc = loadDoc("proclamation-14988-detail.json");
+
+    const outcome = await syncDocument(supabase, doc, "raw text");
+
+    expect(outcome.action).toBe("inserted");
+    expect(supabase.rows).toHaveLength(2);
+  });
+
   it("does not clobber an existing, more specific review_reason on the unlinked legacy row", async () => {
     const supabase = createFakeSupabase({
       rows: [

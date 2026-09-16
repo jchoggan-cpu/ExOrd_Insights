@@ -2,6 +2,7 @@ import { categorizeReviewReason, type ReviewReasonCategory } from "@/lib/diagnos
 import { checkDateSanity } from "@/lib/federal-register/date-sanity";
 import { isPriorAdministrationHoldover } from "@/lib/federal-register/prior-administration";
 import { findDuplicateEoNumbers } from "@/lib/federal-register/reconcile-legacy";
+import { instrumentKey } from "@/lib/normalize-title";
 
 export interface DiagnosticsRow {
   id: string;
@@ -34,11 +35,25 @@ export interface PriorAdministrationHoldover {
   eoNumber: string | null;
 }
 
+/**
+ * Two or more rows recording what looks like the same instrument: same
+ * normalized title, same signing date. Distinct from duplicateEoNumbers,
+ * which catches only rows carrying an EO number — proclamations and
+ * memoranda have none, which is how 62 duplicates went unnoticed until
+ * 2026-09-16. A row can legitimately appear in both lists.
+ */
+export interface DuplicateInstrument {
+  title: string;
+  dateSigned: string;
+  ids: string[];
+}
+
 export interface DiagnosticsReport {
   totalRows: number;
   dateSanityFailures: DateSanityFailure[];
   priorAdministrationHoldovers: PriorAdministrationHoldover[];
   duplicateEoNumbers: string[];
+  duplicateInstruments: DuplicateInstrument[];
   needsReviewTotal: number;
   needsReviewByCategory: Partial<Record<ReviewReasonCategory, number>>;
 }
@@ -60,6 +75,23 @@ export function buildDiagnosticsReport(rows: DiagnosticsRow[], today: Date = new
     .map((row) => ({ id: row.id, eo_number: row.eo_number, title: row.title, date_signed: row.date_signed }));
   const duplicateEoNumbers = [...findDuplicateEoNumbers(eoRows)].sort();
 
+  // Rows with no signing date cannot be compared this way and are skipped
+  // rather than matched on title alone — see instrumentKey.
+  const byInstrument = new Map<string, DiagnosticsRow[]>();
+  for (const row of rows) {
+    if (!row.date_signed) continue;
+    const key = instrumentKey(row.title, row.date_signed);
+    byInstrument.set(key, [...(byInstrument.get(key) ?? []), row]);
+  }
+  const duplicateInstruments: DuplicateInstrument[] = [...byInstrument.values()]
+    .filter((group) => group.length > 1)
+    .map((group) => ({
+      title: group[0].title,
+      dateSigned: group[0].date_signed as string,
+      ids: group.map((row) => row.id),
+    }))
+    .sort((a, b) => (a.dateSigned < b.dateSigned ? -1 : 1));
+
   const needsReviewByCategory: Partial<Record<ReviewReasonCategory, number>> = {};
   let needsReviewTotal = 0;
   for (const row of rows) {
@@ -74,6 +106,7 @@ export function buildDiagnosticsReport(rows: DiagnosticsRow[], today: Date = new
     dateSanityFailures,
     priorAdministrationHoldovers,
     duplicateEoNumbers,
+    duplicateInstruments,
     needsReviewTotal,
     needsReviewByCategory,
   };

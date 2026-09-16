@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { cleanFederalRegisterText } from "@/lib/federal-register/clean-text";
+import { findUnlinkedLegacyRow, flagUnlinkedLegacyRow } from "@/lib/federal-register/find-unlinked-legacy";
 import { checkDateSanity } from "@/lib/federal-register/date-sanity";
 import { parseDispositionNotes } from "@/lib/federal-register/parse-disposition";
 import type { FederalRegisterDocument } from "@/lib/federal-register/types";
@@ -134,43 +135,25 @@ export async function syncDocument(
       return { documentNumber: doc.document_number, action: "unchanged" };
     }
 
-    // Before inserting a fresh row, check for a legacy row that's the same
-    // EO but hasn't been linked to a document_number yet (either
-    // backfill hasn't run yet, or it flagged this one as an ambiguous
-    // match rather than confidently reconciling it — see
-    // scripts/backfill-federal-register.ts). Blind-inserting here would
-    // silently duplicate that EO rather than surface it for review; this
-    // is the single guard that makes ingest/reconcile safe to run in any
-    // order relative to the one-time backfill, not just after it.
-    if (record.eo_number) {
-      const { data: unlinkedLegacyRow, error: legacyLookupError } = await supabase
-        .from("executive_orders")
-        .select("id, needs_review")
-        .eq("eo_number", record.eo_number)
-        .is("document_number", null)
-        .limit(1);
-      if (legacyLookupError) {
-        throw new Error(`Legacy-row lookup failed for ${doc.document_number}: ${legacyLookupError.message}`);
-      }
-      const legacyRow = unlinkedLegacyRow?.[0];
-      if (legacyRow) {
-        // Don't clobber a more specific reason a prior pass (e.g. the
-        // backfill script's title/date confidence check) already recorded
-        // — just confirm the row stays flagged rather than duplicated.
-        if (!legacyRow.needs_review) {
-          const { error: flagError } = await supabase
-            .from("executive_orders")
-            .update({
-              needs_review: true,
-              review_reason: `Federal Register document ${doc.document_number} matches this row's eo_number (${record.eo_number}) but isn't linked yet — run the backfill/reconciliation matching logic (or link manually) rather than treating this as a new order.`,
-            })
-            .eq("id", legacyRow.id);
-          if (flagError) {
-            throw new Error(`Failed to flag unlinked legacy match for ${doc.document_number}: ${flagError.message}`);
-          }
-        }
-        return { documentNumber: doc.document_number, action: "flagged", detail: "unlinked legacy row" };
-      }
+    // Before inserting a fresh row, check for a legacy row that is the same
+    // instrument but has not been linked to a document_number yet (either
+    // the backfill has not run, or it flagged this one as an ambiguous match
+    // rather than confidently reconciling it — see
+    // scripts/backfill-federal-register.ts). Blind-inserting here silently
+    // duplicates that order; this guard is what makes ingest/reconcile safe
+    // to run in any order relative to the one-time backfill.
+    //
+    // Matching on title-and-date as well as eo_number is not optional: the
+    // eo_number-only version of this guard let 62 proclamations and memoranda
+    // through, because those instruments carry no EO number at all.
+    const unlinkedLegacyRow = await findUnlinkedLegacyRow(supabase, record, doc.document_number);
+    if (unlinkedLegacyRow) {
+      await flagUnlinkedLegacyRow(supabase, unlinkedLegacyRow, doc.document_number, record);
+      return {
+        documentNumber: doc.document_number,
+        action: "flagged",
+        detail: `unlinked legacy row (matched on ${unlinkedLegacyRow.matchedOn})`,
+      };
     }
 
     const dateSanityReason = checkDateSanity(record);

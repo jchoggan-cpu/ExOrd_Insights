@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  findDuplicatePairs,
-  normalizeTitle,
-  pairKey,
-  type OrderRow,
-} from "@/lib/merge/duplicate-pairs";
+import { findDuplicatePairs, type OrderRow } from "@/lib/merge/duplicate-pairs";
 
 function row(overrides: Partial<OrderRow> & { id: string }): OrderRow {
   return {
@@ -14,29 +9,6 @@ function row(overrides: Partial<OrderRow> & { id: string }): OrderRow {
     ...overrides,
   };
 }
-
-describe("normalizeTitle", () => {
-  it("ignores case, punctuation and spacing differences", () => {
-    expect(normalizeTitle("Adjusting Imports of Steel Into the United States")).toBe(
-      normalizeTitle("adjusting imports of steel  into   the united states"),
-    );
-    expect(normalizeTitle("Regulatory Relief — Phase 2 (2025)")).toBe("regulatory relief phase 2 2025");
-  });
-
-  it("does not treat titles differing by a word as the same", () => {
-    expect(normalizeTitle("Adjusting Imports of Steel")).not.toBe(
-      normalizeTitle("Adjusting Imports of Aluminum and Steel"),
-    );
-  });
-});
-
-describe("pairKey", () => {
-  it("includes the signing date, so same-titled orders signed on different days stay apart", () => {
-    const june = pairKey("Further Extending the TikTok Enforcement Delay", "2025-06-19");
-    const september = pairKey("Further Extending the TikTok Enforcement Delay", "2025-09-16");
-    expect(june).not.toBe(september);
-  });
-});
 
 describe("findDuplicatePairs", () => {
   it("pairs a legacy row with its Federal Register counterpart", () => {
