@@ -1,4 +1,4 @@
-import { INDUSTRIES, PRACTICE_AREAS } from "@/lib/taxonomy";
+import { INDUSTRIES, PRACTICE_AREAS, PRACTICE_AREAS_WITH_SUBPRACTICES, subPracticeTag } from "@/lib/taxonomy";
 
 /**
  * Builds the system prompt for classification-only runs.
@@ -14,6 +14,31 @@ import { INDUSTRIES, PRACTICE_AREAS } from "@/lib/taxonomy";
  */
 
 /**
+ * At most this many subgroups of one practice area. Two allows the genuine
+ * overlaps — an export-control order is plausibly both National Security and
+ * International Trade — without letting a parent expand into a list that
+ * narrows nothing.
+ */
+const MAX_SUBPRACTICES_PER_AREA = 2;
+
+/**
+ * The guidance for one practice area's subgroups, telling the model to use
+ * the fuller name in place of the bare one.
+ */
+function subPracticeSection(parent: { name: string; subPractices?: { name: string; criteria?: string }[] }): string {
+  const lines = (parent.subPractices ?? [])
+    .filter((sub) => sub.criteria)
+    .map((sub) => `- ${subPracticeTag(parent.name, sub.name)}: ${sub.criteria}`)
+    .join("\n");
+
+  return `When you select ${parent.name}, say which part of it applies by using one of these fuller names INSTEAD OF the bare "${parent.name}":
+
+${lines}
+
+Give at most ${MAX_SUBPRACTICES_PER_AREA} of these. If none genuinely fits, use the bare "${parent.name}" — a subgroup chosen to satisfy the format is worse than no subgroup. Never return both the bare name and a subgroup of it.`;
+}
+
+/**
  * Identical on every call and large enough to be worth caching, exactly as
  * the summarization prompt is — see summarizeDocument's note on why a silent
  * caching failure doubles the bill.
@@ -22,6 +47,8 @@ export function buildClassifyPrompt(): string {
   const practiceAreaLines = PRACTICE_AREAS.map(
     (area) => `- ${area.name}: ${area.criteria ?? "(no criteria given)"}`,
   ).join("\n");
+
+  const subPracticeSections = PRACTICE_AREAS_WITH_SUBPRACTICES.map(subPracticeSection).join("\n\n");
 
   return `You classify U.S. presidential executive orders, proclamations and memoranda for a law firm's internal tracker. You assign two kinds of tag and write nothing else.
 
@@ -40,6 +67,8 @@ HOW TO DECIDE
 - Do not select a group merely because a topic is mentioned. The instrument must do something a lawyer in that group would act on.
 - An empty list is a legitimate answer when nothing applies, but it should be rare for practice areas — a presidential instrument that no practice group would advise on is unusual.
 - Use only the exact names listed above. Do not invent, abbreviate or rephrase a name.
+
+${subPracticeSections}
 
 Respond with JSON and nothing else, in exactly this shape:
 

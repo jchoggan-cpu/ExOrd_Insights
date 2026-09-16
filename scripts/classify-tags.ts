@@ -9,6 +9,7 @@
  *   npm run classify -- --limit 20 --apply      # writes those 20
  *   npm run classify -- --apply                 # the whole corpus
  *   npm run classify -- --apply --max-cost 25   # stop once today's recorded spend passes this
+ *   npm run classify -- --tagged-with Governmental --limit 20   # only rows already carrying that area
  *
  * Why this exists instead of re-running enrichment: classification currently
  * happens inside summarization, and the enrich job only selects rows whose
@@ -78,12 +79,19 @@ function numberFlag(args: string[], flag: string, fallback: number): number {
   return parsed;
 }
 
-async function fetchRows(supabase: SupabaseClient, onlyUntagged: boolean, limit: number | null): Promise<TagRow[]> {
+async function fetchRows(
+  supabase: SupabaseClient,
+  filter: { onlyUntagged: boolean; taggedWith: string | null },
+  limit: number | null,
+): Promise<TagRow[]> {
   let query = supabase
     .from("executive_orders")
     .select("id, eo_number, title, action_type, practice_areas, industries, full_text, ai_summary")
     .order("date_signed", { ascending: false });
-  if (onlyUntagged) query = query.eq("practice_areas", "{}");
+  if (filter.onlyUntagged) query = query.eq("practice_areas", "{}");
+  // Re-tagging just the rows that already carry one area — used to subdivide
+  // a practice into its subgroups without paying to re-run the whole corpus.
+  if (filter.taggedWith) query = query.contains("practice_areas", [filter.taggedWith]);
   if (limit) query = query.limit(limit);
 
   const { data, error } = await query;
@@ -118,7 +126,7 @@ async function main() {
   }
 
   const supabase = getServiceRoleClient();
-  const rows = await fetchRows(supabase, onlyUntagged, limit);
+  const rows = await fetchRows(supabase, { onlyUntagged, taggedWith: stringFlag(args, "--tagged-with") }, limit);
   const model = stringFlag(args, "--model") ?? getClassifyModel();
   const client = createAnthropicClient();
   const systemPrompt = buildClassifyPrompt();

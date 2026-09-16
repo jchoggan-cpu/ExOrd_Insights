@@ -85,6 +85,95 @@ describe("parseClassifyResponse", () => {
   });
 });
 
+describe("parseClassifyResponse — practice subgroups", () => {
+  const SUBGROUP = "Governmental--National Security";
+
+  it("accepts a subgroup tag", () => {
+    const result = parseClassifyResponse(JSON.stringify({ practiceAreas: [SUBGROUP], industries: [] }));
+    expect(result.practiceAreas).toEqual([SUBGROUP]);
+  });
+
+  it("drops the bare parent when a subgroup of it is also present", () => {
+    // "Governmental" alongside "Governmental--National Security" says nothing
+    // the subgroup doesn't, and would match a parent filter twice.
+    const result = parseClassifyResponse(
+      JSON.stringify({ practiceAreas: ["Governmental", SUBGROUP], industries: [] }),
+    );
+    expect(result.practiceAreas).toEqual([SUBGROUP]);
+  });
+
+  it("keeps a bare parent when no subgroup of it was chosen", () => {
+    const result = parseClassifyResponse(JSON.stringify({ practiceAreas: ["Governmental"], industries: [] }));
+    expect(result.practiceAreas).toEqual(["Governmental"]);
+  });
+
+  it("keeps two subgroups of the same parent", () => {
+    const both = [SUBGROUP, "Governmental--International Trade"];
+    const result = parseClassifyResponse(JSON.stringify({ practiceAreas: both, industries: [] }));
+    expect(result.practiceAreas).toEqual(both);
+  });
+
+  it("drops an invented subgroup of a real parent", () => {
+    const result = parseClassifyResponse(
+      JSON.stringify({ practiceAreas: ["Governmental--Space Law"], industries: [] }),
+    );
+    expect(result.practiceAreas).toEqual([]);
+  });
+
+  it("drops a subgroup of a parent that declares none", () => {
+    const result = parseClassifyResponse(JSON.stringify({ practiceAreas: ["Tax--Customs"], industries: [] }));
+    expect(result.practiceAreas).toEqual([]);
+  });
+
+  it("does not drop an unrelated area that merely shares a prefix word", () => {
+    const tags = ["Governmental--National Security", "Global Reach"];
+    const result = parseClassifyResponse(JSON.stringify({ practiceAreas: tags, industries: [] }));
+    expect(result.practiceAreas).toEqual(tags);
+  });
+});
+
+describe("parseClassifyResponse — practices that are also subgroups", () => {
+  // Sheppard lists Antitrust and White Collar both in their own right and
+  // inside Governmental. A row carrying both says the same thing twice.
+  it("keeps the subgroup and drops the standalone when both are returned", () => {
+    const result = parseClassifyResponse(
+      JSON.stringify({
+        practiceAreas: ["Antitrust and Competition", "Governmental--Antitrust and Competition"],
+        industries: [],
+      }),
+    );
+    expect(result.practiceAreas).toEqual(["Governmental--Antitrust and Competition"]);
+  });
+
+  it("matches across the & / and spelling difference", () => {
+    // The standalone is "White Collar Defense and Investigations"; the
+    // subgroup is "...Defense & Investigations".
+    const result = parseClassifyResponse(
+      JSON.stringify({
+        practiceAreas: [
+          "White Collar Defense and Investigations",
+          "Governmental--White Collar Defense & Investigations",
+        ],
+        industries: [],
+      }),
+    );
+    expect(result.practiceAreas).toEqual(["Governmental--White Collar Defense & Investigations"]);
+  });
+
+  it("keeps the standalone when no subgroup version was returned", () => {
+    const result = parseClassifyResponse(
+      JSON.stringify({ practiceAreas: ["Antitrust and Competition"], industries: [] }),
+    );
+    expect(result.practiceAreas).toEqual(["Antitrust and Competition"]);
+  });
+
+  it("leaves unrelated areas alone", () => {
+    const tags = ["Global Reach", "Governmental--International Trade"];
+    const result = parseClassifyResponse(JSON.stringify({ practiceAreas: tags, industries: [] }));
+    expect(result.practiceAreas).toEqual(tags);
+  });
+});
+
 describe("buildClassifyPrompt", () => {
   it("lists every practice area with its criteria", () => {
     const prompt = buildClassifyPrompt();

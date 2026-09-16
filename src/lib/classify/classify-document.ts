@@ -1,6 +1,11 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { extractTextBlock } from "@/lib/ai-model";
-import { INDUSTRIES, PRACTICE_AREA_NAMES } from "@/lib/taxonomy";
+import {
+  INDUSTRIES,
+  PRACTICE_AREA_TAGS,
+  STANDALONE_AREAS_DUPLICATED_AS_SUBPRACTICE,
+  parentPracticeOf,
+} from "@/lib/taxonomy";
 import { toTokenUsage, type TokenUsage } from "@/lib/usage/pricing";
 
 /**
@@ -92,9 +97,46 @@ export function parseClassifyResponse(rawText: string): ClassifyResult {
   }
 
   return {
-    practiceAreas: onlyFromList(value.practiceAreas, PRACTICE_AREA_NAMES),
+    practiceAreas: normalizePracticeAreas(onlyFromList(value.practiceAreas, PRACTICE_AREA_TAGS)),
     industries: onlyFromList(value.industries, INDUSTRIES),
   };
+}
+
+/**
+ * Removes a bare parent tag when a subgroup of it is also present:
+ * "Governmental" alongside "Governmental--National Security" says nothing
+ * the subgroup doesn't, and would make a row match a parent-only filter
+ * twice. The prompt asks for one or the other; this enforces it rather than
+ * trusting that it was obeyed.
+ */
+function dropRedundantParents(tags: string[]): string[] {
+  const parentsNamedBySubgroup = new Set(
+    tags.filter((tag) => parentPracticeOf(tag) !== tag).map((tag) => parentPracticeOf(tag)),
+  );
+  return tags.filter((tag) => !parentsNamedBySubgroup.has(tag));
+}
+
+/**
+ * Drops a standalone practice area when the same practice is already present
+ * as a subgroup — "Antitrust and Competition" alongside
+ * "Governmental--Antitrust and Competition".
+ *
+ * The subgroup wins because choosing it is the more specific judgement: the
+ * model has said this is the government-facing form of that practice. The
+ * prompt asks for one or the other and the model returned both anyway, which
+ * is why this is enforced here rather than left to instructions.
+ */
+function dropStandaloneDuplicatedAsSubPractice(tags: string[]): string[] {
+  const present = new Set(tags);
+  return tags.filter((tag) => {
+    const asSubPractice = STANDALONE_AREAS_DUPLICATED_AS_SUBPRACTICE.get(tag);
+    return !asSubPractice || !present.has(asSubPractice);
+  });
+}
+
+/** Every rule that decides which of two overlapping tags a row keeps. */
+function normalizePracticeAreas(tags: string[]): string[] {
+  return dropStandaloneDuplicatedAsSubPractice(dropRedundantParents(tags));
 }
 
 export interface ClassifyOutcome {

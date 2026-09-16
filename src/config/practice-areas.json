@@ -29,7 +29,45 @@
   },
   {
     "name": "Governmental",
-    "criteria": "sets conditions on federal contracts, grants, or funding, restructures an agency, or changes procurement, lobbying, or administrative procedure."
+    "criteria": "sets conditions on federal contracts, grants, or funding, restructures an agency, or changes procurement, lobbying, or administrative procedure.",
+    "subPractices": [
+      {
+        "name": "Antitrust and Competition",
+        "criteria": "federal antitrust enforcement — cartel investigations, merger review before the DOJ, FTC or state attorneys general, or competition policy set by government action. Use the standalone Antitrust and Competition area instead when the matter is private competition litigation rather than government enforcement."
+      },
+      {
+        "name": "Congressional Investigations",
+        "criteria": "congressional subpoenas, hearings, testimony, document demands, or legislative oversight directed at private parties or agencies."
+      },
+      {
+        "name": "Government Contracts",
+        "criteria": "federal procurement, contractor compliance obligations, bid protests, contract disputes, or suspension and debarment."
+      },
+      {
+        "name": "Healthcare Regulatory",
+        "criteria": "HHS, CMS or OIG regulation — reimbursement, coverage, fraud and abuse, provider compliance, or healthcare False Claims Act enforcement."
+      },
+      {
+        "name": "International Trade",
+        "criteria": "compliance with and enforcement of trade regulation — export controls, sanctions screening, customs classification, or foreign investment review such as CFIUS. Use the standalone Global Reach area instead when the order simply imposes tariffs, sanctions or trade restrictions; this subgroup is for the regulatory obligations they create."
+      },
+      {
+        "name": "Life Sciences / FDA",
+        "criteria": "FDA regulation of drugs, biologics or medical devices — approvals, labeling, marketing practices, clinical trials, manufacturing standards, or safety enforcement."
+      },
+      {
+        "name": "National Security",
+        "criteria": "defense, intelligence, classified information, security clearances, critical infrastructure, or cybersecurity and AI addressed in a national-security frame."
+      },
+      {
+        "name": "Public Policy and Government Affairs",
+        "criteria": "the structure and machinery of government itself — creating, reorganizing or directing agencies, rulemaking and administrative procedure, federal workforce policy, lobbying, or intergovernmental relations."
+      },
+      {
+        "name": "White Collar Defense & Investigations",
+        "criteria": "federal enforcement against companies or individuals — DOJ, SEC or CFPB investigations, FCPA, False Claims Act, fraud, or securities enforcement. Use the standalone White Collar Defense and Investigations area instead when the matter is not government-facing."
+      }
+    ]
   },
   {
     "name": "Intellectual Property",
@@ -47,14 +85,30 @@
     "name": "Litigation",
     "criteria": "creates or removes a private right of action, alters litigation procedure, evidence, remedies, or access to court, or directs enforcement or investigation against specifically identified parties. Do not select this merely because the order is controversial or may attract a legal challenge — nearly every executive order may.",
     "subPractices": [
-      "Bankruptcy Litigation & Distressed Loan Workouts",
-      "Brand and Reputation Management",
-      "Class Action Defense",
-      "False Claims Act",
-      "Financial Services Litigation",
-      "International Arbitration",
-      "Securities Enforcement",
-      "Securities Litigation"
+      {
+        "name": "Bankruptcy Litigation & Distressed Loan Workouts"
+      },
+      {
+        "name": "Brand and Reputation Management"
+      },
+      {
+        "name": "Class Action Defense"
+      },
+      {
+        "name": "False Claims Act"
+      },
+      {
+        "name": "Financial Services Litigation"
+      },
+      {
+        "name": "International Arbitration"
+      },
+      {
+        "name": "Securities Enforcement"
+      },
+      {
+        "name": "Securities Litigation"
+      }
     ]
   },
   {
