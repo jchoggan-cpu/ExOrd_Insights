@@ -2,10 +2,10 @@
   "generatedAt": "2026-09-16",
   "summary": {
     "total": 252,
-    "confident": 119,
-    "ambiguous": 27,
-    "notFound": 106,
-    "distinctCasesLinked": 72
+    "confident": 131,
+    "ambiguous": 30,
+    "notFound": 91,
+    "distinctCasesLinked": 81
   },
   "decisions": [
     {
@@ -388,10 +388,28 @@
       "caseName": "Moe v. Trump et al",
       "court": "D.Mass",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.Mass matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Mass.",
+      "link": {
+        "docketId": 69578269,
+        "caseName": "Moe v. Trump",
+        "court": "D. Mass.",
+        "docketNumber": "1:25-cv-10195",
+        "dateFiled": "2025-01-26",
+        "dateTerminated": "2025-02-07",
+        "url": "https://www.courtlistener.com/docket/69578269/moe-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69578269,
+          "caseName": "Moe v. Trump",
+          "court": "D. Mass.",
+          "docketNumber": "1:25-cv-10195",
+          "dateFiled": "2025-01-26",
+          "dateTerminated": "2025-02-07",
+          "url": "https://www.courtlistener.com/docket/69578269/moe-v-trump/"
+        }
+      ]
     },
     {
       "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
@@ -460,10 +478,20 @@
       "caseName": "Doctors for America v. OPM et al",
       "court": "D.D.C.",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "outcome": "ambiguous",
+      "reason": "Not found as written, but \"Doctors for America v. Office of Personnel Management et al\" matches — the agency name was abbreviated. Confirm this is the same case.",
       "link": null,
-      "candidates": []
+      "candidates": [
+        {
+          "docketId": 69608613,
+          "caseName": "DOCTORS FOR AMERICA v. OFFICE OF PERSONNEL MANAGEMENT",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00322",
+          "dateFiled": "2025-02-04",
+          "dateTerminated": "2025-08-01",
+          "url": "https://www.courtlistener.com/docket/69608613/doctors-for-america-v-office-of-personnel-management/"
+        }
+      ]
     },
     {
       "eoId": "292928e8-fc0c-40fa-9332-29380b4c96c0",
@@ -1015,10 +1043,28 @@
       "caseName": "State of New Jersey et al v. Trump",
       "court": "Mass",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in Mass matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Mass.",
+      "link": {
+        "docketId": 69561497,
+        "caseName": "State of New Jersey v. Trump",
+        "court": "D. Mass.",
+        "docketNumber": "1:25-cv-10139",
+        "dateFiled": "2025-01-21",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69561497/state-of-new-jersey-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69561497,
+          "caseName": "State of New Jersey v. Trump",
+          "court": "D. Mass.",
+          "docketNumber": "1:25-cv-10139",
+          "dateFiled": "2025-01-21",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69561497/state-of-new-jersey-v-trump/"
+        }
+      ]
     },
     {
       "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
@@ -1039,10 +1085,28 @@
       "caseName": "County of Santa Clara v. Trump et al",
       "court": "N.D. Cal",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in N.D. Cal matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in N.D. Cal.",
+      "link": {
+        "docketId": 69594402,
+        "caseName": "County of Santa Clara v. Trump",
+        "court": "N.D. Cal.",
+        "docketNumber": "5:25-cv-00981",
+        "dateFiled": "2025-01-30",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69594402/county-of-santa-clara-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69594402,
+          "caseName": "County of Santa Clara v. Trump",
+          "court": "N.D. Cal.",
+          "docketNumber": "5:25-cv-00981",
+          "dateFiled": "2025-01-30",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69594402/county-of-santa-clara-v-trump/"
+        }
+      ]
     },
     {
       "eoId": "29d8a64e-067c-4f96-8845-dfb84988be9f",
@@ -1159,10 +1223,28 @@
       "caseName": "Personal Services Contractor Association v. Trump et al",
       "court": "D.D.C.",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69650768,
+        "caseName": "PERSONAL SERVICES CONTRACTOR ASSOCIATION v. TRUMP",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00469",
+        "dateFiled": "2025-02-18",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69650768/personal-services-contractor-association-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69650768,
+          "caseName": "PERSONAL SERVICES CONTRACTOR ASSOCIATION v. TRUMP",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00469",
+          "dateFiled": "2025-02-18",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69650768/personal-services-contractor-association-v-trump/"
+        }
+      ]
     },
     {
       "eoId": "7ff2fcb5-1329-40e2-a6fb-7f35d0f7d2a0",
@@ -1345,10 +1427,29 @@
       "caseName": "Lentini et al v. DOGE",
       "court": "D.D.C.",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
+      "outcome": "ambiguous",
+      "reason": "Not found as written, but \"Lentini et al v. Department of Government Efficiency\" matches — the agency name was abbreviated. Confirm this is the same case.",
       "link": null,
-      "candidates": []
+      "candidates": [
+        {
+          "docketId": 69559444,
+          "caseName": "LENTINI v. DEPARTMENT OF GOVERNMENT EFFICIENCY",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00164",
+          "dateFiled": "2025-01-20",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69559444/lentini-v-department-of-government-efficiency/"
+        },
+        {
+          "docketId": 69559476,
+          "caseName": "LENTINI v. DEPARTMENT OF GOVERNMENT EFFICIENCY",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00166",
+          "dateFiled": "2025-01-20",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69559476/lentini-v-department-of-government-efficiency/"
+        }
+      ]
     },
     {
       "eoId": "5d8a3caf-c664-4367-8f34-25df385a8777",
@@ -1523,10 +1624,28 @@
       "caseName": "State of California et al v. U.S. Department of Health and Human Services et al",
       "court": "N.D. Cal.",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in N.D. Cal. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in N.D. Cal.",
+      "link": {
+        "docketId": 70687026,
+        "caseName": "State of California v. U.S. Department of Health and Human Services",
+        "court": "N.D. Cal.",
+        "docketNumber": "3:25-cv-05536",
+        "dateFiled": "2025-07-01",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/70687026/state-of-california-v-us-department-of-health-and-human-services/"
+      },
+      "candidates": [
+        {
+          "docketId": 70687026,
+          "caseName": "State of California v. U.S. Department of Health and Human Services",
+          "court": "N.D. Cal.",
+          "docketNumber": "3:25-cv-05536",
+          "dateFiled": "2025-07-01",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/70687026/state-of-california-v-us-department-of-health-and-human-services/"
+        }
+      ]
     },
     {
       "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
@@ -1674,10 +1793,28 @@
       "caseName": "State of California et al v. U.S. Department of Health and Human Services et al",
       "court": "N.D. Cal.",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in N.D. Cal. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in N.D. Cal.",
+      "link": {
+        "docketId": 70687026,
+        "caseName": "State of California v. U.S. Department of Health and Human Services",
+        "court": "N.D. Cal.",
+        "docketNumber": "3:25-cv-05536",
+        "dateFiled": "2025-07-01",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/70687026/state-of-california-v-us-department-of-health-and-human-services/"
+      },
+      "candidates": [
+        {
+          "docketId": 70687026,
+          "caseName": "State of California v. U.S. Department of Health and Human Services",
+          "court": "N.D. Cal.",
+          "docketNumber": "3:25-cv-05536",
+          "dateFiled": "2025-07-01",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/70687026/state-of-california-v-us-department-of-health-and-human-services/"
+        }
+      ]
     },
     {
       "eoId": "e9160111-fc7f-49b5-85b6-82d4df928f27",
@@ -2564,10 +2701,20 @@
       "caseName": "FBI Agents Association et al v. DOJ",
       "court": "D.D.C",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C matches this case name — it may have been renamed, or may not be in RECAP.",
+      "outcome": "ambiguous",
+      "reason": "Not found as written, but \"Federal Bureau of Investigation Agents Association et al v. Department of Justice\" matches — the agency name was abbreviated. Confirm this is the same case.",
       "link": null,
-      "candidates": []
+      "candidates": [
+        {
+          "docketId": 69609596,
+          "caseName": "FEDERAL BUREAU OF INVESTIGATION AGENTS ASSOCIATION v. DEPARTMENT OF JUSTICE",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00328",
+          "dateFiled": "2025-02-04",
+          "dateTerminated": "2025-07-18",
+          "url": "https://www.courtlistener.com/docket/69609596/federal-bureau-of-investigation-agents-association-v-department-of-justice/"
+        }
+      ]
     },
     {
       "eoId": "2bfa9db3-0d43-48da-a334-9b8968a202ae",
@@ -2647,10 +2794,28 @@
       "caseName": "Vizguerra-Ramirez v. Choate et al",
       "court": "D. Colorado",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D. Colorado matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Colo.",
+      "link": {
+        "docketId": 69750515,
+        "caseName": "Vizguerra-Ramirez v. Choate",
+        "court": "D. Colo.",
+        "docketNumber": "1:25-cv-00881",
+        "dateFiled": "2025-03-18",
+        "dateTerminated": "2026-02-19",
+        "url": "https://www.courtlistener.com/docket/69750515/vizguerra-ramirez-v-choate/"
+      },
+      "candidates": [
+        {
+          "docketId": 69750515,
+          "caseName": "Vizguerra-Ramirez v. Choate",
+          "court": "D. Colo.",
+          "docketNumber": "1:25-cv-00881",
+          "dateFiled": "2025-03-18",
+          "dateTerminated": "2026-02-19",
+          "url": "https://www.courtlistener.com/docket/69750515/vizguerra-ramirez-v-choate/"
+        }
+      ]
     },
     {
       "eoId": "2bfa9db3-0d43-48da-a334-9b8968a202ae",
@@ -2804,10 +2969,28 @@
       "caseName": "State of California et al v. U.S. Department of Health and Human Services et al",
       "court": "N.D. Cal.",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in N.D. Cal. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in N.D. Cal.",
+      "link": {
+        "docketId": 70687026,
+        "caseName": "State of California v. U.S. Department of Health and Human Services",
+        "court": "N.D. Cal.",
+        "docketNumber": "3:25-cv-05536",
+        "dateFiled": "2025-07-01",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/70687026/state-of-california-v-us-department-of-health-and-human-services/"
+      },
+      "candidates": [
+        {
+          "docketId": 70687026,
+          "caseName": "State of California v. U.S. Department of Health and Human Services",
+          "court": "N.D. Cal.",
+          "docketNumber": "3:25-cv-05536",
+          "dateFiled": "2025-07-01",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/70687026/state-of-california-v-us-department-of-health-and-human-services/"
+        }
+      ]
     },
     {
       "eoId": "97091863-83df-4fd1-93e9-6caad5f4be48",
@@ -2934,10 +3117,28 @@
       "caseName": "Public Employees for Environmental Responsibility v. Trump et al",
       "court": "D. Md",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D. Md matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Maryland",
+      "link": {
+        "docketId": 69586644,
+        "caseName": "Public Employees for Environmental Responsibility v. Trump",
+        "court": "D. Maryland",
+        "docketNumber": "8:25-cv-00260",
+        "dateFiled": "2025-01-28",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69586644/public-employees-for-environmental-responsibility-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69586644,
+          "caseName": "Public Employees for Environmental Responsibility v. Trump",
+          "court": "D. Maryland",
+          "docketNumber": "8:25-cv-00260",
+          "dateFiled": "2025-01-28",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69586644/public-employees-for-environmental-responsibility-v-trump/"
+        }
+      ]
     },
     {
       "eoId": "f785fefd-4db7-4ffb-b7a6-099cdc32dbb5",
@@ -2946,10 +3147,28 @@
       "caseName": "American Federation of Government Employees et al v. Trump et al",
       "court": "D.D.C.",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69619544,
+        "caseName": "AMERICAN FEDERATION OF GOVERNMENT EMPLOYEES v. TRUMP",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00352",
+        "dateFiled": "2025-02-06",
+        "dateTerminated": "2025-07-25",
+        "url": "https://www.courtlistener.com/docket/69619544/american-federation-of-government-employees-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69619544,
+          "caseName": "AMERICAN FEDERATION OF GOVERNMENT EMPLOYEES v. TRUMP",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00352",
+          "dateFiled": "2025-02-06",
+          "dateTerminated": "2025-07-25",
+          "url": "https://www.courtlistener.com/docket/69619544/american-federation-of-government-employees-v-trump/"
+        }
+      ]
     },
     {
       "eoId": "8e42c30a-b6f9-49f5-8b5a-aad0055f0380",
@@ -3353,10 +3572,28 @@
       "caseName": "Talbott et al v. Trump et al",
       "court": "D.D.C.",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D.D.C. matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D.D.C.",
+      "link": {
+        "docketId": 69583866,
+        "caseName": "TALBOTT v. TRUMP",
+        "court": "D.D.C.",
+        "docketNumber": "1:25-cv-00240",
+        "dateFiled": "2025-01-28",
+        "dateTerminated": null,
+        "url": "https://www.courtlistener.com/docket/69583866/talbott-v-trump/"
+      },
+      "candidates": [
+        {
+          "docketId": 69583866,
+          "caseName": "TALBOTT v. TRUMP",
+          "court": "D.D.C.",
+          "docketNumber": "1:25-cv-00240",
+          "dateFiled": "2025-01-28",
+          "dateTerminated": null,
+          "url": "https://www.courtlistener.com/docket/69583866/talbott-v-trump/"
+        }
+      ]
     },
     {
       "eoId": "a4d41b35-01d5-4872-84af-84b38e466588",
@@ -3610,10 +3847,28 @@
       "caseName": "Vizguerra-Ramirez v. Choate et al",
       "court": "D. Colorado",
       "chosenDocketId": null,
-      "outcome": "not_found",
-      "reason": "No docket in D. Colorado matches this case name — it may have been renamed, or may not be in RECAP.",
-      "link": null,
-      "candidates": []
+      "outcome": "confident",
+      "reason": "Exact case-name match, sole result in D. Colo.",
+      "link": {
+        "docketId": 69750515,
+        "caseName": "Vizguerra-Ramirez v. Choate",
+        "court": "D. Colo.",
+        "docketNumber": "1:25-cv-00881",
+        "dateFiled": "2025-03-18",
+        "dateTerminated": "2026-02-19",
+        "url": "https://www.courtlistener.com/docket/69750515/vizguerra-ramirez-v-choate/"
+      },
+      "candidates": [
+        {
+          "docketId": 69750515,
+          "caseName": "Vizguerra-Ramirez v. Choate",
+          "court": "D. Colo.",
+          "docketNumber": "1:25-cv-00881",
+          "dateFiled": "2025-03-18",
+          "dateTerminated": "2026-02-19",
+          "url": "https://www.courtlistener.com/docket/69750515/vizguerra-ramirez-v-choate/"
+        }
+      ]
     },
     {
       "eoId": "49df5e82-f96a-4a4c-90dd-db8894e6c9a9",
