@@ -3,6 +3,7 @@ import { formatError } from "@/lib/format-error";
 import { fetchAllDocuments, fetchDocumentDetail, fetchRawText, MINIMAL_FIELDS } from "@/lib/federal-register/client";
 import { ADMINISTRATION_START_DATE } from "@/lib/federal-register/constants";
 import { finishRunSafely, startRun } from "@/lib/federal-register/ingestion-run";
+import { resolveRunStatus } from "@/lib/federal-register/run-status";
 import { syncDocument } from "@/lib/federal-register/sync";
 
 export interface ReconcileJobResult {
@@ -85,7 +86,7 @@ export async function runReconcileJob(
       }
     }
 
-    const status = errors.length > 0 ? "partial" : "success";
+    const status = resolveRunStatus({ attempted: missing.length, failed: errors.length });
     const errorMessage = errors.length > 0 ? errors.join("; ") : undefined;
     await finishRunSafely(supabase, runId, { status, newCount, updatedCount, errorMessage });
 

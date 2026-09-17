@@ -75,6 +75,26 @@ describe("runIngestJob", () => {
     expect(supabase.ingestionRuns[0].error_message).toContain(badDoc.document_number);
   });
 
+  it("reports failure — not partial — when every document in the run failed", async () => {
+    // A systematically broken run (the Federal Register erroring on every
+    // raw-text fetch) must not read as a mostly-healthy "partial". This is
+    // the signal anything watching run status for alerting depends on.
+    const supabase = createFakeSupabase({});
+    const docs = [loadDoc("eo-14421-detail.json"), loadDoc("proclamation-14988-detail.json")];
+
+    const result = await runIngestJob(supabase, {
+      fetchAllDocuments: async () => docs,
+      fetchRawText: async () => {
+        throw new Error("raw text fetch failed");
+      },
+    });
+
+    expect(result.status).toBe("failure");
+    expect(result.newCount).toBe(0);
+    expect(supabase.rows).toHaveLength(0);
+    expect(supabase.ingestionRuns[0]).toMatchObject({ status: "failure", new_count: 0 });
+  });
+
   it("reports failure without attempting any item when the list request itself fails", async () => {
     const supabase = createFakeSupabase({});
 

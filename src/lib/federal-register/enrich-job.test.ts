@@ -145,6 +145,39 @@ describe("runEnrichJob", () => {
     expect(supabase.rows[0].deliverable).toBe("Importers to pay the new tariff (30 days).");
   });
 
+  it("reports failure — not partial — when every row in the batch failed", async () => {
+    // A systematically broken run (a bad credential, the model erroring on
+    // everything) must not read as a mostly-healthy "partial". This is the
+    // signal anything watching run status for alerting depends on.
+    const supabase = createFakeSupabase({
+      rows: [
+        {
+          id: "row-a",
+          title: "Order A",
+          action_type: "Executive Order",
+          full_text: "text",
+          manually_edited_fields: [],
+          ai_summary: null,
+        },
+        {
+          id: "row-b",
+          title: "Order B",
+          action_type: "Executive Order",
+          full_text: "text",
+          manually_edited_fields: [],
+          ai_summary: null,
+        },
+      ],
+    });
+    const anthropic = createFakeAnthropic([{ throw: "model call failed" }, { throw: "model call failed" }]);
+
+    const result = await runEnrichJob(supabase, anthropic);
+
+    expect(result.status).toBe("failure");
+    expect(result.updatedCount).toBe(0);
+    expect(supabase.ingestionRuns[0]).toMatchObject({ status: "failure", updated_count: 0 });
+  });
+
   it("isolates a per-row failure: one bad row doesn't abort the batch, and is reported in errors/partial status", async () => {
     const supabase = createFakeSupabase({
       rows: [

@@ -8,6 +8,7 @@ import { recordApiUsage } from "@/lib/usage/record";
 import { formatError } from "@/lib/format-error";
 import { ENRICH_BATCH_SIZE } from "@/lib/federal-register/constants";
 import { finishRunSafely, startRun } from "@/lib/federal-register/ingestion-run";
+import { resolveRunStatus } from "@/lib/federal-register/run-status";
 import { findUnverifiedQuotes } from "@/lib/federal-register/quote-verify";
 import { summarizeDocument } from "@/lib/federal-register/summarize";
 
@@ -158,7 +159,7 @@ export async function runEnrichJob(
       }
     }
 
-    const status = errors.length > 0 ? "partial" : "success";
+    const status = resolveRunStatus({ attempted: rows.length, failed: errors.length });
     const errorMessage = errors.length > 0 ? errors.join("; ") : undefined;
     await finishRunSafely(supabase, runId, { status, newCount: 0, updatedCount, errorMessage });
 

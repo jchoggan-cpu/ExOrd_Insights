@@ -74,6 +74,30 @@ describe("runReconcileJob", () => {
     expect(result.newCount).toBe(0);
   });
 
+  it("reports failure — not partial — when every gap failed", async () => {
+    // A systematically broken run must not read as a mostly-healthy
+    // "partial". This is the signal anything watching run status for
+    // alerting depends on.
+    const supabase = createFakeSupabase({ rows: [] });
+
+    const result = await runReconcileJob(supabase, {
+      fetchAllDocuments: async () =>
+        [
+          { document_number: "bad-doc-1", correction_of: null },
+          { document_number: "bad-doc-2", correction_of: null },
+        ] as FederalRegisterDocument[],
+      fetchDocumentDetail: async () => {
+        throw new Error("detail fetch failed");
+      },
+      fetchRawText: async () => "unused",
+    });
+
+    expect(result.status).toBe("failure");
+    expect(result.gapsFound).toBe(2);
+    expect(result.newCount).toBe(0);
+    expect(supabase.ingestionRuns[0]).toMatchObject({ status: "failure", new_count: 0 });
+  });
+
   it("isolates a per-gap failure: one bad gap doesn't abort the run, and is reported in errors/partial status", async () => {
     const supabase = createFakeSupabase({ rows: [] });
     const goodDoc = loadDoc("eo-14421-detail.json");

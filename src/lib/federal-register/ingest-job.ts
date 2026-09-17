@@ -3,6 +3,7 @@ import { formatError } from "@/lib/format-error";
 import { fetchAllDocuments, fetchRawText } from "@/lib/federal-register/client";
 import { INGEST_TRAILING_WINDOW_DAYS } from "@/lib/federal-register/constants";
 import { finishRunSafely, startRun } from "@/lib/federal-register/ingestion-run";
+import { resolveRunStatus } from "@/lib/federal-register/run-status";
 import { syncDocument } from "@/lib/federal-register/sync";
 
 function isoDateDaysAgo(days: number): string {
@@ -44,10 +45,16 @@ export async function runIngestJob(supabase: SupabaseClient, deps: IngestJobDeps
   let updatedCount = 0;
   let flaggedCount = 0;
   let skippedCount = 0;
+  // Declared out here, not inside the try, because the status resolved
+  // after the try/catch needs to know how many documents the run actually
+  // worked through — the difference between "one of forty failed" and
+  // "all forty failed".
+  let attemptedCount = 0;
   const errors: string[] = [];
 
   try {
     const documents = await deps.fetchAllDocuments({ publicationDateGte: isoDateDaysAgo(INGEST_TRAILING_WINDOW_DAYS) });
+    attemptedCount = documents.length;
 
     for (const doc of documents) {
       try {
@@ -68,7 +75,7 @@ export async function runIngestJob(supabase: SupabaseClient, deps: IngestJobDeps
     return { runId, status: "failure", newCount, updatedCount, flaggedCount, skippedCount, errorMessage };
   }
 
-  const status = errors.length > 0 ? "partial" : "success";
+  const status = resolveRunStatus({ attempted: attemptedCount, failed: errors.length });
   const errorMessage = errors.length > 0 ? errors.join("; ") : undefined;
   await finishRunSafely(supabase, runId, { status, newCount, updatedCount, errorMessage });
 
