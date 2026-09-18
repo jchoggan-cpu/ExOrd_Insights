@@ -25,6 +25,7 @@ import { getServiceRoleClient } from "../src/lib/supabase";
 import { getSummaryModel, describeAiProvider, hasAiCredentials } from "../src/lib/ai-model";
 import { loadActiveSummaryPrompt } from "../src/lib/summary-prompt/store";
 import { getUsageSummary } from "../src/lib/usage/daily";
+import { applyEnrichQueueFilter } from "../src/lib/federal-register/enrich-queue";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 /**
@@ -45,11 +46,11 @@ function parseNumberFlag(args: string[], flag: string, fallback: number): number
 }
 
 async function queueDepth(supabase: SupabaseClient): Promise<number> {
-  const { count, error } = await supabase
-    .from("executive_orders")
-    .select("id", { count: "exact", head: true })
-    .is("ai_summary", null)
-    .not("full_text", "is", null);
+  // Shares the predicate with the enrichment job and the watchdog — see
+  // enrich-queue.ts for why all three must agree.
+  const { count, error } = await applyEnrichQueueFilter(
+    supabase.from("executive_orders").select("id", { count: "exact", head: true }),
+  );
   if (error) throw new Error(`Failed to count the enrichment queue: ${error.message}`);
   return count ?? 0;
 }

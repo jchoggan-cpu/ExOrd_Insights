@@ -14,7 +14,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 type Row = Record<string, unknown> & { id?: string };
 type Predicate = (row: Row) => boolean;
-type QueryResult<T> = { data: T | null; error: { message: string } | null };
+type QueryResult<T> = { data: T | null; error: { message: string } | null; count?: number | null };
 
 function parseOrFilter(filterString: string): Predicate {
   const clauses = filterString.split(",").map((clause) => {
@@ -39,6 +39,11 @@ class FakeQueryBuilder {
   constructor(
     private rows: Row[],
     private forcedError?: string,
+    // Mirrors supabase-js's select(columns, { count, head }): `count`
+    // asks for the number of matching rows, `head` asks for that count
+    // *without* transferring any rows. The watchdog counts the enrichment
+    // queue that way, so the fake has to express it.
+    private countOptions: { count?: "exact"; head?: boolean } = {},
   ) {}
 
   eq(column: string, value: unknown) {
@@ -57,7 +62,11 @@ class FakeQueryBuilder {
   }
 
   not(column: string, _operator: "is", value: null) {
-    this.predicates.push((row) => row[column] !== value);
+    // `row[column] ?? null` matches is() above, and matters: without it an
+    // absent key reads as undefined, so a fixture row that simply omits a
+    // nullable column would satisfy `not(col, "is", null)` here while real
+    // Postgres excluded it — a test passing for the wrong reason.
+    this.predicates.push((row) => (row[column] ?? null) !== value);
     return this;
   }
 
@@ -92,7 +101,13 @@ class FakeQueryBuilder {
 
   async limit(count: number): Promise<QueryResult<Row[]>> {
     if (this.forcedError) return { data: null, error: { message: this.forcedError } };
-    return { data: this.matching().slice(0, count), error: null };
+    return this.result(this.matching().slice(0, count));
+  }
+
+  /** Shapes a result the way select()'s count/head options ask for. */
+  private result(rows: Row[]): QueryResult<Row[]> {
+    const count = this.countOptions.count ? this.matching().length : null;
+    return { data: this.countOptions.head ? null : rows, error: null, count };
   }
 
   // Real supabase-js query builders are themselves thenable — awaiting one
@@ -104,7 +119,7 @@ class FakeQueryBuilder {
   ): Promise<TResult1 | TResult2> {
     const result: QueryResult<Row[]> = this.forcedError
       ? { data: null, error: { message: this.forcedError } }
-      : { data: this.matching(), error: null };
+      : this.result(this.matching());
     return Promise.resolve(result).then(onFulfilled, onRejected);
   }
 }
@@ -217,7 +232,8 @@ export function createFakeSupabase({
     from(table: string) {
       const tableRows = tables[table] ?? (tables[table] = []);
       return {
-        select: () => new FakeQueryBuilder(tableRows, failSelect[table]),
+        select: (_columns?: string, options?: { count?: "exact"; head?: boolean }) =>
+          new FakeQueryBuilder(tableRows, failSelect[table], options ?? {}),
         insert: (record: Record<string, unknown>) => new FakeInsertBuilder(tableRows, record),
         update: (patch: Record<string, unknown>) => new FakeUpdateBuilder(tableRows, patch, failUpdate[table]),
       };

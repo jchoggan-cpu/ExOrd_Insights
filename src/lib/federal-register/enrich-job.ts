@@ -7,6 +7,7 @@ import { formatDeliverables } from "@/lib/federal-register/format-deliverables";
 import { recordApiUsage } from "@/lib/usage/record";
 import { formatError } from "@/lib/format-error";
 import { ENRICH_BATCH_SIZE } from "@/lib/federal-register/constants";
+import { applyEnrichQueueFilter } from "@/lib/federal-register/enrich-queue";
 import { finishRunSafely, startRun } from "@/lib/federal-register/ingestion-run";
 import { resolveRunStatus } from "@/lib/federal-register/run-status";
 import { findUnverifiedQuotes } from "@/lib/federal-register/quote-verify";
@@ -67,12 +68,9 @@ export async function runEnrichJob(
   const runId = await startRun(supabase, "federal_register_enrichment");
 
   try {
-    const { data, error } = await supabase
-      .from("executive_orders")
-      .select("id, title, action_type, full_text, manually_edited_fields")
-      .is("ai_summary", null)
-      .not("full_text", "is", null)
-      .limit(ENRICH_BATCH_SIZE);
+    const { data, error } = await applyEnrichQueueFilter(
+      supabase.from("executive_orders").select("id, title, action_type, full_text, manually_edited_fields"),
+    ).limit(ENRICH_BATCH_SIZE);
     if (error) throw new Error(`Failed to load rows needing enrichment: ${error.message}`);
 
     const rows = (data ?? []) as EnrichableRow[];

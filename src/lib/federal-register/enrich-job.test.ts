@@ -53,6 +53,7 @@ describe("runEnrichJob", () => {
           full_text: "The order directs agencies to review the policy.",
           manually_edited_fields: [],
           ai_summary: null,
+          needs_review: false,
         },
       ],
     });
@@ -88,6 +89,7 @@ describe("runEnrichJob", () => {
           full_text: "The order directs agencies to review the policy.",
           manually_edited_fields: [],
           ai_summary: null,
+          needs_review: false,
         },
       ],
     });
@@ -121,6 +123,7 @@ describe("runEnrichJob", () => {
           full_text: "The order directs agencies to review the policy.",
           manually_edited_fields: [],
           ai_summary: null,
+          needs_review: false,
           deliverable: "Importers to pay the new tariff (30 days).",
         },
       ],
@@ -158,6 +161,7 @@ describe("runEnrichJob", () => {
           full_text: "text",
           manually_edited_fields: [],
           ai_summary: null,
+          needs_review: false,
         },
         {
           id: "row-b",
@@ -166,6 +170,7 @@ describe("runEnrichJob", () => {
           full_text: "text",
           manually_edited_fields: [],
           ai_summary: null,
+          needs_review: false,
         },
       ],
     });
@@ -188,6 +193,7 @@ describe("runEnrichJob", () => {
           full_text: "text",
           manually_edited_fields: [],
           ai_summary: null,
+          needs_review: false,
         },
         {
           id: "good-row",
@@ -196,6 +202,7 @@ describe("runEnrichJob", () => {
           full_text: "The order directs agencies to comply.",
           manually_edited_fields: [],
           ai_summary: null,
+          needs_review: false,
         },
       ],
     });
@@ -224,6 +231,7 @@ describe("runEnrichJob", () => {
           full_text: "The order directs agencies to review the policy.",
           manually_edited_fields: [],
           ai_summary: null,
+          needs_review: false,
         },
       ],
     });
