@@ -17,6 +17,10 @@ export {
   getFlaggedExecutiveOrders,
 } from "@/lib/executive-orders";
 
+// The client is a defaulted parameter on every read below rather than
+// something each one reaches for (rule 3), so a test can hand in a fake
+// and exercise the failure paths — which is what these reads get wrong
+// when they get anything wrong.
 export const isUsingLocalData = () => getSupabaseClient() === null;
 
 // --- Rescinded prior orders & agency actions -------------------------------
@@ -24,8 +28,9 @@ export const isUsingLocalData = () => getSupabaseClient() === null;
 // tables); no dedicated UI yet, but the data is imported and available for
 // upcoming pages/features.
 
-export async function getRescindedPriorOrders(): Promise<RescindedPriorOrder[]> {
-  const supabase = getSupabaseClient();
+export async function getRescindedPriorOrders(
+  supabase = getSupabaseClient(),
+): Promise<RescindedPriorOrder[]> {
   if (!supabase) {
     return legacyRescindedPriorOrders as RescindedPriorOrder[];
   }
@@ -34,8 +39,9 @@ export async function getRescindedPriorOrders(): Promise<RescindedPriorOrder[]> 
     .select("*")
     .order("date_signed", { ascending: false });
   if (error || !data) {
-    console.error("Failed to fetch rescinded prior orders, falling back to local data:", error);
-    return legacyRescindedPriorOrders as RescindedPriorOrder[];
+    // Never the legacy snapshot on a failed query — see getExecutiveOrders.
+    console.error("Failed to fetch rescinded prior orders:", error);
+    throw new Error(`Failed to fetch rescinded prior orders: ${error?.message ?? "no data returned"}`);
   }
   return data as RescindedPriorOrder[];
 }
@@ -63,8 +69,10 @@ interface IngestionRunRow {
 }
 
 /** Most recent ingestion_runs entries, newest first. Empty (not an error) when Supabase isn't configured — there's nothing to log against local JSON data. */
-export async function getRecentIngestionRuns(limit = 20): Promise<IngestionRunSummary[]> {
-  const supabase = getSupabaseClient();
+export async function getRecentIngestionRuns(
+  limit = 20,
+  supabase = getSupabaseClient(),
+): Promise<IngestionRunSummary[]> {
   if (!supabase) return [];
 
   const { data, error } = await supabase
@@ -73,8 +81,11 @@ export async function getRecentIngestionRuns(limit = 20): Promise<IngestionRunSu
     .order("started_at", { ascending: false })
     .limit(limit);
   if (error || !data) {
+    // An empty list here reads as "nothing has ever run", which is the
+    // opposite of what a failed query means — and it would say it on the one
+    // page someone opens to check whether the pipeline is alive.
     console.error("Failed to fetch ingestion runs:", error);
-    return [];
+    throw new Error(`Failed to fetch ingestion runs: ${error?.message ?? "no data returned"}`);
   }
 
   return (data as IngestionRunRow[]).map((row) => ({
@@ -89,8 +100,9 @@ export async function getRecentIngestionRuns(limit = 20): Promise<IngestionRunSu
   }));
 }
 
-export async function getAgencyActions(): Promise<AgencyAction[]> {
-  const supabase = getSupabaseClient();
+export async function getAgencyActions(
+  supabase = getSupabaseClient(),
+): Promise<AgencyAction[]> {
   if (!supabase) {
     return legacyAgencyActions as AgencyAction[];
   }
@@ -99,8 +111,9 @@ export async function getAgencyActions(): Promise<AgencyAction[]> {
     .select("*")
     .order("key_date", { ascending: false });
   if (error || !data) {
-    console.error("Failed to fetch agency actions, falling back to local data:", error);
-    return legacyAgencyActions as AgencyAction[];
+    // Never the legacy snapshot on a failed query — see getExecutiveOrders.
+    console.error("Failed to fetch agency actions:", error);
+    throw new Error(`Failed to fetch agency actions: ${error?.message ?? "no data returned"}`);
   }
   return data as AgencyAction[];
 }

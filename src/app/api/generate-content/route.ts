@@ -56,7 +56,24 @@ export async function POST(request: Request) {
   // generateContent needs eo.fullText (see content-generation.ts) to verify
   // quoted material against source text, so this can't use the list-shaped
   // getExecutiveOrders() the rest of the app reads from.
-  const selected = await getExecutiveOrdersByIds(eoIds);
+  // In its own try: this read throws on a failed query rather than quietly
+  // returning the January snapshot, and every other failure in this handler
+  // answers with structured JSON. Letting it escape would hand the browser a
+  // bare 500 whose body is not JSON, and the drafter parses the body before
+  // checking res.ok — so the attorney would see a JSON syntax error instead
+  // of being told the database is unreachable.
+  let selected;
+  try {
+    selected = await getExecutiveOrdersByIds(eoIds);
+  } catch (err) {
+    console.error("Failed to load the selected executive orders:", err);
+    // Deliberately not err.message: a Postgres error can name columns and
+    // policies, and this response goes to a browser.
+    return NextResponse.json(
+      { error: "Can't reach the database right now, so nothing was drafted. Try again shortly." },
+      { status: 503 },
+    );
+  }
 
   if (selected.length === 0) {
     return NextResponse.json({ error: "No matching executive orders found." }, { status: 404 });

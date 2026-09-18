@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   flagDuplicateEoNumbers,
+  getAgencyActions,
   getExecutiveOrderById,
   getExecutiveOrders,
   getExecutiveOrdersByIds,
+  getRecentIngestionRuns,
+  getRescindedPriorOrders,
 } from "@/lib/data";
 import { createFakeSupabase } from "@/lib/federal-register/test-support/fake-supabase";
 import type { ExecutiveOrder } from "@/lib/types";
@@ -135,16 +138,17 @@ describe("getExecutiveOrders (list path)", () => {
     expect(orders.every((eo) => eo.needsReview)).toBe(true);
   });
 
-  it("falls back to local data when the query errors", async () => {
+  it("throws when the query errors, rather than serving the January spreadsheet", async () => {
+    // The whole point: the "showing spreadsheet data" banner is gated on
+    // whether Supabase is CONFIGURED, so a configured project whose query
+    // failed used to render 340 nine-month-old rows as though they were
+    // live, with nothing on the page to say otherwise.
     const supabase = createFakeSupabase({
       rows: [makeRow({ id: "1" })],
       failSelect: { executive_orders: "boom" },
     });
 
-    const orders = await getExecutiveOrders(supabase);
-
-    // Local fallback data is non-empty and unaffected by the forced error.
-    expect(orders.length).toBeGreaterThan(0);
+    await expect(getExecutiveOrders(supabase)).rejects.toThrow(/Failed to fetch executive orders: boom/);
   });
 });
 
@@ -213,5 +217,68 @@ describe("getExecutiveOrdersByIds", () => {
     const orders = await getExecutiveOrdersByIds([], supabase);
 
     expect(orders).toEqual([]);
+  });
+});
+
+describe("a failed query never degrades into stale or empty data", () => {
+  // Six reads used to swallow a query error. Each degraded differently and
+  // every one of them lied: the list served January's spreadsheet, the
+  // detail read reported "not found" (legacy ids are "legacy-eo-N" and live
+  // ids are uuids, so find() could never match), and the run history read
+  // as "nothing has ever run". searchExecutiveOrders already threw; these
+  // now match it.
+
+  it("still resolves to an empty list for a healthy but empty table", async () => {
+    // The regression this change could plausibly have introduced. The guard
+    // is `if (error || !data)`, and it must not fire on a table that simply
+    // has no rows: supabase-js returns data: [] there, not null. An empty
+    // tracker and an unreadable one mean opposite things.
+    const supabase = createFakeSupabase({ rows: [] });
+
+    await expect(getExecutiveOrders(supabase)).resolves.toEqual([]);
+    await expect(getExecutiveOrdersByIds(["1"], supabase)).resolves.toEqual([]);
+  });
+
+  it("getExecutiveOrderById throws rather than reporting a missing order", async () => {
+    const supabase = createFakeSupabase({
+      rows: [makeRow({ id: "1" })],
+      failSelect: { executive_orders: "boom" },
+    });
+
+    await expect(getExecutiveOrderById("1", supabase)).rejects.toThrow(/Failed to fetch executive order 1: boom/);
+  });
+
+  it("getExecutiveOrderById still returns null for a row that genuinely is not there", async () => {
+    // A real 404 must stay a 404 — only a FAILED query becomes a throw.
+    const supabase = createFakeSupabase({ rows: [makeRow({ id: "1" })] });
+
+    await expect(getExecutiveOrderById("nope", supabase)).resolves.toBeNull();
+  });
+
+  it("getExecutiveOrdersByIds throws rather than returning no orders", async () => {
+    // This one feeds content generation, which quote-checks drafts against
+    // fullText. Silently returning nothing risks a client alert grounded in
+    // the wrong text.
+    const supabase = createFakeSupabase({
+      rows: [makeRow({ id: "1" })],
+      failSelect: { executive_orders: "boom" },
+    });
+
+    await expect(getExecutiveOrdersByIds(["1"], supabase)).rejects.toThrow(/Failed to fetch executive orders by id/);
+  });
+
+  it("getRescindedPriorOrders throws rather than serving the spreadsheet", async () => {
+    const supabase = createFakeSupabase({ failSelect: { rescinded_prior_orders: "boom" } });
+    await expect(getRescindedPriorOrders(supabase)).rejects.toThrow(/Failed to fetch rescinded prior orders/);
+  });
+
+  it("getAgencyActions throws rather than serving the spreadsheet", async () => {
+    const supabase = createFakeSupabase({ failSelect: { agency_actions: "boom" } });
+    await expect(getAgencyActions(supabase)).rejects.toThrow(/Failed to fetch agency actions/);
+  });
+
+  it("getRecentIngestionRuns throws rather than reading as an empty run history", async () => {
+    const supabase = createFakeSupabase({ failSelect: { ingestion_runs: "boom" } });
+    await expect(getRecentIngestionRuns(20, supabase)).rejects.toThrow(/Failed to fetch ingestion runs/);
   });
 });

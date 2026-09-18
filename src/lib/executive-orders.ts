@@ -176,8 +176,14 @@ export async function getExecutiveOrders(
     .order("date_signed", { ascending: false });
 
   if (error || !data) {
-    console.error("Failed to fetch executive orders from Supabase, falling back to local data:", error);
-    return LOCAL_EXECUTIVE_ORDERS;
+    // Loud, not silent, and never the legacy snapshot. Serving January's 340
+    // rows here showed stale text with no way for a reader to tell: the
+    // "showing spreadsheet data" banner is gated on isUsingLocalData(),
+    // which asks only whether Supabase is CONFIGURED, so a configured
+    // project whose query failed rendered stale rows as though live. Matches
+    // searchExecutiveOrders, which already throws.
+    console.error("Failed to fetch executive orders from Supabase:", error);
+    throw new Error(`Failed to fetch executive orders: ${error?.message ?? "no data returned"}`);
   }
 
   return flagDuplicateEoNumbers((data as unknown as ExecutiveOrderListRow[]).map(mapListRow));
@@ -204,9 +210,14 @@ export async function getExecutiveOrderById(
     .maybeSingle();
 
   if (error) {
-    console.error(`Failed to fetch executive order ${id} from Supabase, falling back to local data:`, error);
-    return LOCAL_EXECUTIVE_ORDERS.find((eo) => eo.id === id) ?? null;
+    // A failed query must not be reported as "this order does not exist".
+    // The legacy fallback could never have worked here anyway: live ids are
+    // uuids and legacy ids are "legacy-eo-N", so find() never matched and
+    // this branch returned null — a database outage wearing a 404's clothes.
+    console.error(`Failed to fetch executive order ${id} from Supabase:`, error);
+    throw new Error(`Failed to fetch executive order ${id}: ${error.message}`);
   }
+  // A genuinely absent row, as opposed to a failed query, really is a 404.
   if (!data) return null;
 
   const eo = mapRow(data as ExecutiveOrderRow);
@@ -232,8 +243,12 @@ export async function getExecutiveOrdersByIds(
   const { data, error } = await supabase.from("executive_orders").select("*").in("id", ids);
 
   if (error || !data) {
-    console.error("Failed to fetch executive orders by id from Supabase, falling back to local data:", error);
-    return LOCAL_EXECUTIVE_ORDERS.filter((eo) => ids.includes(eo.id));
+    // This feeds content generation, which reads fullText to verify quoted
+    // material against source text. Returning anything other than the real
+    // rows risks a draft an attorney sends to a client being grounded in —
+    // and quote-checked against — the wrong text.
+    console.error("Failed to fetch executive orders by id from Supabase:", error);
+    throw new Error(`Failed to fetch executive orders by id: ${error?.message ?? "no data returned"}`);
   }
 
   return (data as ExecutiveOrderRow[]).map(mapRow);
