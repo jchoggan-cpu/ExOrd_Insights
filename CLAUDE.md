@@ -40,7 +40,7 @@ without being asked again.
 |---|---|
 | Cloud CI blocks bad changes | ✅ `.github/workflows/ci.yml` — lint, typecheck, test, build on every push/PR. Extend this file's steps rather than inventing a parallel check. |
 | Pin every tool version | ✅ All of `package.json` pinned exact (no `^`/`latest`); `engines.node` and the CI workflow's `setup-node` both pin `24.19.0` so local and CI never drift apart. Repin both together when Node is upgraded. |
-| Local ports <49152 | ✅ N/A today — Supabase is hosted, dev server is Next's default (3000). Revisit only if a local service is ever added. |
+| Local ports <49152 | ✅ N/A — Supabase is hosted, dev server is Next's default (3000). |
 | Generated files saved + CI-compared | ⚠️ Now applicable, not done. Supabase is live, so `supabase gen types typescript` output could be committed and CI could regenerate + diff it. Today the schema is mirrored by hand in `src/lib/types.ts`, which is exactly the drift this rule exists to catch. |
 | Manual-steps ledger | ✅ See below. |
 | Environment fully documented | ✅ README.md's "Environment variables" + "Setting up Supabase" sections; CI proves the recipe actually works headless. |
@@ -57,19 +57,15 @@ without being asked again.
   test coverage.** Not being retrofitted en masse — rule 9 applies to code
   written or touched from here forward; bring a file under test when you're
   already in it for another reason, not as a separate sweep.
-- **A failed query silently serves January's spreadsheet** (rule 4 violation,
-  found 2026-09-16, unfixed). `getExecutiveOrders`, `getExecutiveOrderById`,
-  `getExecutiveOrdersByIds` and both reads in `data.ts` fall back to the
-  bundled legacy JSON on error with only a `console.error`; the "showing
-  spreadsheet data" banner is gated on `isUsingLocalData()`, which asks only
-  whether Supabase is *configured*. So a query failure shows 340 stale rows
-  that look live — on the EO detail page and the content drafter, the two
-  places stale text reaches a client. `searchExecutiveOrders` already throws
-  instead; these should too, or the banner must learn the difference.
-- ~~Federal Register job orchestration is not integration-tested~~ **Closed
-  2026-09-09** — all three jobs plus the overlap guard are covered via
-  `test-support/fake-supabase.ts`, with every network dependency injectable
-  (rule 3). See `git log 2026-09-09`.
+- **A flagged row is re-summarized every night, forever** (2026-09-17,
+  unfixed, ~$0.08 a row a night). The queue selects `ai_summary IS NULL` and
+  a quote-flagged row keeps that null, so it is retried and re-billed
+  indefinitely. Adding `needs_review = false` to `applyEnrichQueueFilter` is
+  the obvious fix and **wrong alone**: nothing here can clear a flag —
+  `needs_review` is not in `CORRECTABLE_FIELDS`, `/needs-attention` is
+  read-only, only `reconcile-legacy.ts` writes `false`. That would trade a
+  visible leak for silent starvation. Fix un-flagging first; the watchdog
+  surfaces a stuck row within two nights meanwhile.
 - **`ingest-job.ts`/`enrich-job.ts`/`reconcile-job.ts` share a lot of
   structural duplication** (near-identical fetch/sync/tally loop, result
   interfaces, and try/catch/finishRun boilerplate) that an adversarial review
@@ -78,15 +74,14 @@ without being asked again.
   parked one. Note the jobs are no longer as symmetrical as they look:
   `enrich` builds an Anthropic client and loads the stored prompt, and
   `ingest` carries the duplicate guard, so consolidate the shared shell only.
+  `run-status.ts` (2026-09-17) is the first slice: the status expression all
+  three repeated, extracted and fixed in one place.
 
 ## Resolved — RLS anon-read gap (2026-09-07)
 
-SELECT policies on `executive_orders`, `ingestion_runs`,
-`rescinded_prior_orders` and `agency_actions` required an authenticated role
-that Phase 5 hasn't built, so no anon read could ever satisfy them — every
-tracker and detail read would have been RLS-denied and fallen back to stale
-JSON with no error anywhere. Loosened to `using (true)` in
-`0002_loosen_read_policies.sql`; there is no read boundary today at all.
+SELECT policies on the four read tables required a role Phase 5 hasn't
+built, so no anon read could ever satisfy them. Loosened to `using (true)`
+in `0002_loosen_read_policies.sql` — there is no read boundary today at all.
 Writes are unchanged, `is_admin()`-gated and service-role only.
 
 **Revisit at Phase 5**: once real per-user accounts ship, tighten those four
@@ -98,44 +93,35 @@ Project `tjnenceabzlvgozplpsp` ("EO Tracking Tool"). Migrations through 0008
 are live — **verify directly** against `pg_policies`/`information_schema`/
 `pg_proc`, never the migration-history log alone; that is what caught both
 issues below. `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
-`SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET`, `ANTHROPIC_API_KEY` and
-`REQUEST_TOKEN_SECRET` are set in `.env.local`; those six plus
-`EO_TRACKER_MODEL` are in Vercel (`SITE_PASSWORD` removed 2026-09-16).
+`SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET`, `ANTHROPIC_API_KEY`,
+`REQUEST_TOKEN_SECRET` and `SLACK_ALERT_WEBHOOK_URL` are in `.env.local`;
+those seven plus `EO_TRACKER_MODEL` are in Vercel (`SITE_PASSWORD` removed).
 **Vercel won't read a Secret-type value back via CLI, so "the variable is
 listed" is not evidence it holds anything** — see Production environment
 below for the eight nights that cost.
 
-**Important workflow change**: the Supabase project's GitHub integration
-auto-deploys everything in `supabase/migrations/` on every push to
-`claude/eo-tracker-planning-z0unry` — confirmed by observing migration
-`0002` go live immediately after an ordinary `git push`, with no separate
-apply step. A new migration file is no longer a "safe until manually run in
-the SQL Editor" change — **pushing it to this branch is the apply step.**
-Review migration SQL as carefully as you would a direct production change,
-before pushing, not after.
+**Important**: the GitHub integration auto-deploys everything in
+`supabase/migrations/` on every push to `claude/eo-tracker-planning-z0unry`
+— observed with `0002`, no separate apply step. **Pushing a migration to
+this branch IS the apply step**, so review its SQL as carefully as a direct
+production change, before pushing rather than after.
 
 **New rule: never edit an already-applied migration file in place.**
-`0001_init.sql` was edited across four commits as the schema grew (Phase 1
-→ legacy import → safety mitigations → Phase 2), instead of being extended
-via new migration files each time. Supabase's push/GitHub-integration
-tracking works by filename, not content — once "0001" was recorded as
-applied (against an early version of the file), every later edit to that
-same file silently never reached the live database, and `create table if
-not exists` masked it further by no-op'ing instead of erroring. This wasn't
-caught until the Federal Register backfill failed with a missing-column
-error — see `0004_reconcile_executive_orders_drift.sql` for the fix and the
-full diagnosis. Going forward: always add a new migration file for schema
-changes, even a small one, never edit a migration that may already be live.
+Supabase's tracking works by filename, not content — once "0001" was
+recorded as applied, every later edit to that same file silently never
+reached the live database, and `create table if not exists` masked it by
+no-op'ing instead of erroring. Not caught until the backfill failed on a
+missing column; `0004_reconcile_executive_orders_drift.sql` carries the fix
+and the full diagnosis. Always add a new file, even for a small change.
 
 **Also discovered (0003)**: default table privileges for
-`anon`/`authenticated`/`service_role` were missing entirely — a Postgres
-grant gap, not an RLS issue, most likely because the project came via
-Vercel's Marketplace rather than supabase.com. Fixed and defaulted forward;
-expect and check for it if this project is ever recreated.
+`anon`/`authenticated`/`service_role` were missing entirely — a grant gap,
+not RLS, likely because the project came via Vercel's Marketplace. Fixed and
+defaulted forward; check for it if this project is ever recreated.
 
 **Also present, unused**: the marketplace integration added ~16 further env
-vars (`*JCHLQSUPABASE*`, `*PUBLISHABLE*`, `SUPABASE_JWT_SECRET`,
-`POSTGRES_*`); this app reads only the three in `src/lib/supabase.ts`.
+vars (`*JCHLQSUPABASE*`, `*PUBLISHABLE*`, `POSTGRES_*`); this app reads only
+the three in `src/lib/supabase.ts`.
 
 ## Lessons that change how to work here
 
@@ -148,6 +134,9 @@ that silently never applied (`0004`), the stuck `running` row that jammed
 the ingest guard, RLS policies no anon read could satisfy, 62 duplicate rows
 nothing flagged, and a production cron that failed eight nights running.
 Counts and costs written here are the first thing to re-check, never to cite.
+This file has been wrong too: it named the detail page and drafter as where a
+failed query leaked stale text, but uuid-vs-`legacy-eo-N` ids meant both
+degraded to not-found and empty instead.
 
 **Match on a field and you have decided which records you cannot see.** The
 backfill reconciled the two data sources on `eo_number`; proclamations and
@@ -158,7 +147,11 @@ matching on any field, ask which rows lack it.
 **A guard that defaults instead of stopping guesses wrong quietly.**
 `merge-rules.ts` refuses to run when a column has no explicit rule, because
 the first version defaulted to one side and would have kept four stale
-`"Pending Federal Register Publication"` values without a word.
+`"Pending Federal Register Publication"` values without a word. Same shape,
+fixed 2026-09-17: six reads answered a failed Supabase query with January's
+spreadsheet or an empty list, and the "spreadsheet data" banner only ever
+knew whether Supabase was *configured*. They throw now. A fallback is only
+honest when the thing it falls back to is what the page claims to show.
 
 **Price a run from a full pass, not a sample.** Six calls projected $8–9
 against an actual $15.98. `/usage` records what this app has *spent*, never
@@ -171,25 +164,23 @@ minutes, so a single call never reads one back.
 
 **A tag on most of the corpus cannot filter, and fixing criteria beats
 changing models.** Tightening Litigation and Tax moved tags per row 2.40 →
-1.95 with the model held constant; `Governmental` hit 70% and had to be
-subdivided into `Governmental--National Security` form. **Any future
-compound tag must also update `search_executive_orders` in migration 0008** —
-introducing that separator silently broke the tracker's filter until 0008
-fixed it. Which tag form wins is enforced in `classify-document.ts`, not the
-prompt: the pilot proved the model returns both when merely asked not to.
+1.95 with the model held constant; `Governmental` hit 70% and was subdivided
+into `Governmental--National Security` form. **Any future compound tag must
+also update `search_executive_orders` in migration 0008** — that separator
+silently broke the filter until 0008 fixed it. Which form wins is enforced in
+`classify-document.ts`, not the prompt: the model returns both regardless.
 
 **Read a verification flag as "look at this", never "this is wrong".**
-`verify-facts.ts` found 759 checkable facts across the summarized corpus and
-**zero confirmed fabrications** in the AI-written summaries; the one genuine
-defect was the firm's own (`EO 14183`, corrected via `npm run correct`). It
-only asks whether a figure appears in the source, not whether it attaches to
+`verify-facts.ts` found 759 checkable facts and **zero confirmed
+fabrications**; the one genuine defect was the firm's own (`EO 14183`). It
+asks only whether a figure appears in the source, not whether it attaches to
 the right actor.
 
 **Enrichment is always safe to interrupt.** Every pass selects only
-`ai_summary IS NULL`, so Ctrl-C, a spend cap or an outage leaves finished
-rows finished.
+`ai_summary IS NULL`, so a Ctrl-C, spend cap or outage leaves finished rows
+finished — and re-queues nothing that was already done.
 
-## Production environment (2026-09-16)
+## Production environment (2026-09-17)
 
 - **`SITE_PASSWORD` was removed 2026-09-16** so the tracker could be shared
   freely; the gate machinery stays in the repo, dormant, and re-adding the
@@ -210,9 +201,17 @@ rows finished.
   key returns 401 from Anthropic; our own "No AI credentials configured"
   error means the stored value is empty. And env changes reach only new
   deployments — a redeploy is part of the fix, not optional.
-- **Nothing alerts.** Every failure — dead cron, flagged hallucination, API
-  outage — surfaces only on `/needs-attention`, which a human has to open.
-  The single biggest structural gap in the project.
+- **Alerting exists as of 2026-09-17** — `src/lib/alerts/`,
+  `/api/cron/watchdog` at 12:00 UTC, posting to Slack
+  (`SLACK_ALERT_WEBHOOK_URL`). It reads `ingestion_runs` from *outside* the
+  three jobs and must: all three call `startRun()` before their try, so a job
+  dying earlier leaves no row, and a cron that never fires leaves no trace.
+  Writes nothing. Reports a run missing, never run, stuck at `running`, newest
+  failed/partial, or rows queued while the last **two** enrichment runs moved
+  none. Quiet otherwise, plus a Monday all-clear.
+- **It cannot report its own death** — it is a cron too. A Monday with no
+  all-clear is itself the alarm. `?verify=1` forces a send, since a quiet
+  watchdog cannot tell you it works and the webhook is an unreadable Secret.
 
 ## Manual-steps ledger
 
@@ -225,8 +224,8 @@ Steps that need a human, can't be automated away, and how to tell they're done:
 | Review `data/legal-challenge-links.json`, paste a candidate's `docketId` into `chosenDocketId` for the 30 entries marked `ambiguous`, then `npm run link:dockets -- --from-file --apply` | editor, then local machine | Docket links show on EO detail pages; the file's `ambiguous` count is 0 or knowingly accepted |
 | Fix the 3 rows with malformed `action_type` (two `"Pending Federal Register Publication"`, one `"Proclamation 10973"`) — none has a Federal Register counterpart to correct it automatically | `npm run correct` | `npm run diagnostics` shows only real instrument types |
 | Decide whether `Congressional Investigations` earns its place — it drew 0 of 553 rows, so it is a filter option that never matches | `src/config/practice-areas.json` | Kept deliberately, or removed |
-| Run `npm run draft:summaries -- --apply --limit N` in batches against the 221 curated rows that have full text, then compare on each EO page. Watch `/usage` between batches | local machine | Drafts visible beneath the curated summaries |
-| Set `REQUEST_TOKEN_SECRET` in Vercel (`openssl rand -hex 32`) — without it `/api/generate-content` and `/api/summary-prompt` refuse every request and the Generate/Save buttons render disabled | `vercel env add` + redeploy | Generating a draft on the deployed site works |
+| Run `npm run draft:summaries -- --apply --limit N` in batches against the 221 curated rows with full text, watching `/usage` between batches | local machine | Drafts visible beneath the curated summaries |
+| Confirm `REQUEST_TOKEN_SECRET` in Vercel actually holds a value — it is registered, but a Secret cannot be read back, and without it both write routes refuse every request | `vercel env add` + redeploy | Generating a draft on the deployed site works |
 | Optional: set `AI_GATEWAY_API_KEY` to route Claude calls through Vercel's AI Gateway instead of the Anthropic API directly | Vercel dashboard / `vercel env add` | An enrichment run logs "Vercel AI Gateway" |
 | Optional: set `COURTLISTENER_API_TOKEN` (free) to lift the anonymous rate limit | `.env.local` | A full `link:dockets` run finishes with no 429 backoffs |
 
