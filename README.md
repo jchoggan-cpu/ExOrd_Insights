@@ -25,11 +25,11 @@ Verified against the live database on 2026-09-16.
 | Quote verification | ✅ A summary or draft quoting text not found verbatim in the source is never saved |
 | Content-drafting UI (4 content types, single & multi-EO) | ✅ Live, producing real AI output |
 | Copy / .docx / markdown export | ✅ Gated behind a "reviewed for accuracy" confirmation |
-| Shared-password access gate | ✅ Live in production (`SITE_PASSWORD`) — see "Interim access" |
+| Shared-password access gate | ⚠️ Built, **dormant** — `SITE_PASSWORD` was removed 2026-09-16 so the URL could be shared. Re-adding it plus a redeploy turns it back on; see "Interim access" |
 | Litigation docket linking (CourtListener) | ⚠️ Partly — **131 of 252** recorded challenges linked; 30 need a human decision, 91 unmatched |
 | Legal-challenge *discovery* (orders with no recorded challenge) | ❌ Not started — everything so far only links cases the firm already found |
 | News mentions | ❌ Not started — the `NewsMention` type exists and is unused |
-| Alerting when a scheduled job fails | ❌ Not built — `/needs-attention` is the only surface, and you have to go look |
+| Alerting when a scheduled job fails | ✅ Live — a fourth cron posts to Slack when a job fails, goes missing, sticks, or stalls; see "Alerting" |
 | Email digest | ❌ Not started (Phase 5) |
 | Auth / admin vs. general user roles | ❌ Not started (Phase 5) — RLS policies for it already exist in the schema |
 
@@ -145,12 +145,19 @@ EO_TRACKER_SUMMARY_MODEL=
 EO_TRACKER_CLASSIFY_MODEL=
 
 # Optional: gates the whole app behind a single shared password (see "Interim
-# access before real auth" below). Leave unset for local development.
+# access before real auth" below). Leave unset for local development; it is
+# deliberately unset in production too, as of 2026-09-16.
 SITE_PASSWORD=
 
 # Required in production once the /api/cron/* jobs are scheduled (see
 # "Federal Register ingestion" below) — generate with `openssl rand -hex 32`.
 CRON_SECRET=
+
+# Slack incoming webhook the watchdog posts to when a scheduled job fails,
+# goes missing, sticks, or stalls (see "Alerting"). Treat it as a secret:
+# anyone holding it can post into that channel. Without it the watchdog
+# refuses to run at all rather than checking and having nowhere to report.
+SLACK_ALERT_WEBHOOK_URL=
 
 # Signs the short-lived tokens that gate /api/generate-content and
 # /api/summary-prompt — the two routes that spend money and write. Generate
@@ -194,13 +201,15 @@ scratch.
 
 ### Interim access before real auth
 
-There's no user accounts system yet (that's Phase 5). Until then, `SITE_PASSWORD` in the
+There's no user accounts system yet (that's Phase 5). `SITE_PASSWORD` in the
 deployment's environment variables gates the whole app: `src/proxy.ts` redirects anyone
-without the right cookie to `/gate`, a single shared-password prompt. **This is live in
-production.** It is **not** a real accounts system — no per-user identity, no roles —
-just enough to keep a deployed URL from being fully open. Leave it unset for local
-development. Remove `src/proxy.ts`, `src/app/gate/`, `src/app/api/gate/`, and
-`src/lib/site-auth.ts` once Supabase Auth ships.
+without the right cookie to `/gate`, a single shared-password prompt. **It is not set
+today** — it was removed on 2026-09-16 so the tracker could be shared freely, and the
+machinery sits dormant in the repo. Setting the variable again and redeploying re-enables
+it in about thirty seconds, which is why none of it has been deleted. It is **not** a
+real accounts system — no per-user identity, no roles — just enough to keep a deployed
+URL from being fully open. Remove `src/proxy.ts`, `src/app/gate/`, `src/app/api/gate/`,
+and `src/lib/site-auth.ts` once Supabase Auth ships.
 
 Two things worth knowing about it:
 
@@ -302,14 +311,91 @@ ran at all for proclamations and memoranda, which have no EO number, and that
 is exactly how 62 duplicates came to exist.
 
 **Needs Attention** (`/needs-attention` in the app) shows every flagged row
-and recent run history — the only place any of this is actually visible
-day to day.
+and recent run history. It used to be the only place any of this was visible;
+the watchdog below now comes to you instead. Each of its two sections loads
+independently, so one broken query can't take the page down — which matters
+because a database problem is exactly what sends you here.
 
 **A note on source reliability**: FederalRegister.gov states its own text is
 ["not an official legal edition"](https://www.federalregister.gov/reader-aids/government-policy-and-ofr-procedures/about-this-site#legal-status) —
 the official version is the linked govinfo.gov PDF (`federal_register_url`
 on each order). Fine for summarization and drafting; anywhere content is
 asserted as authoritative, cite the PDF.
+
+## Alerting
+
+Three cron jobs keep the data fresh; a fourth watches *them*. `/api/cron/watchdog`
+runs daily at 12:00 UTC (after all three) and posts to Slack when something is
+wrong — see `src/lib/alerts/`.
+
+**Why a separate job rather than checks inside the three.** All three
+orchestrators call `startRun()` *before* their `try` block. A job that dies
+earlier than that — Supabase unreachable, the overlap guard refusing, a denied
+write — leaves no `ingestion_runs` row at all, and a cron that never fires
+leaves no trace anywhere. Nothing inside a job can report that the job didn't
+run. Absence is only visible from outside.
+
+It reads `ingestion_runs` and the enrichment queue and **writes nothing** — not
+even a row saying it ran. A logged run would have to pass through `startRun()`'s
+overlap guard, so the one job meant to notice other jobs jamming could itself
+jam. Its record is the message it sends.
+
+What it reports, at most one problem per job type so a single cause can never
+produce two messages:
+
+| Check | Fires when |
+|---|---|
+| Never run | No run of that type has ever been recorded |
+| Missing | Newest run older than its allowance — 20h for the daily jobs, a week plus two hours for weekly reconcile |
+| Stuck | Newest run still at `running` past `STALE_RUN_THRESHOLD_MINUTES`, which is what a platform timeout after `startRun` leaves behind |
+| Failed | Newest run recorded `failure` or `partial` |
+| Enrichment stalled | Rows queued while the last **two** enrichment runs summarized none |
+| Unreadable | It couldn't read the database — reported *to Slack*, since a watchdog that can only speak when its database answers is silent exactly when the database is the problem |
+
+**Quiet when healthy, plus one all-clear every Monday.** Silence alone is
+ambiguous — it could mean "nothing is wrong" or "the watchdog is dead" — so the
+Monday note is what makes the other six days' silence mean something. A Monday
+that arrives without it is itself the alarm.
+
+**Two thresholds worth understanding before changing them.** The daily allowance
+is 20h, not 25h, because lateness works *against* detection: if yesterday's run
+started an hour late and today's never fires at all, the observed gap is 25h,
+not 26h, so a tight allowance misses the case it exists for. The weekly
+allowance takes the opposite trade (a week plus two hours) because a false alarm
+is worse than a day's delay there. The values live in
+`src/lib/alerts/thresholds.ts` and are derived from `vercel.json`'s schedules —
+change a schedule without changing them and you get either a recurring false
+alarm or a blind check.
+
+**Enrichment stalling needs two consecutive runs, not one.** Ingest and enrich
+are half an hour apart but Vercel does not guarantee their order within the
+hour, so enrich can legitimately run against an empty queue moments before
+ingest inserts a document. Alerting on one such run would cry wolf on a healthy
+pipeline, and the next night picks the row up normally.
+
+**Proving the channel.** A quiet watchdog can never tell you it still works, and
+`SLACK_ALERT_WEBHOOK_URL` is a Vercel Secret whose value cannot be read back —
+so "the variable is listed" is not evidence it holds a working URL. Force a send
+any time:
+
+```bash
+curl -s -H "Authorization: Bearer $env:CRON_SECRET" "https://ex-ord-insights.vercel.app/api/cron/watchdog?verify=1"
+```
+
+(PowerShell syntax, since that is the shell this project is developed in — use
+`$CRON_SECRET` in bash. A healthy forced send answers
+`{"problemCount":0,"sent":true,"forced":true,"verify":true}`.)
+
+That sends even when everything is healthy, worded as a channel test rather than
+an all-clear — a test that read like the Monday note would be worse than sending
+nothing.
+
+**What it still cannot do.** It is a cron itself, so it cannot report its own
+death; the Monday all-clear is the only signal for that. And `flagged_count` /
+`skipped_count` are computed by the jobs but never persisted to
+`ingestion_runs`, so the watchdog is blind to both — flagged rows it reads from
+`executive_orders.needs_review` instead, and skipped corrections it cannot see
+at all.
 
 ## Firm-specific tagging lists
 
@@ -527,7 +613,8 @@ src/
     prompt/page.tsx           Edit the summarization prompt, no deploy needed
     usage/page.tsx            What the AI has cost, by day and by feature
     api/generate-content/     Content generation API route
-    api/cron/                 Federal Register ingest/enrich/reconcile jobs (CRON_SECRET-gated)
+    api/cron/                 Federal Register ingest/enrich/reconcile + the watchdog (CRON_SECRET-gated)
+    error.tsx                 Shown when a page throws — in practice a failed Supabase read
   components/                 UI components (table, filters, tags, badges, drafter, header)
   config/                     Fixed Practice Area / Industry / Subject Area lists
   data/legacy-import/         Extracted spreadsheet data (generated — see scripts/ above)
@@ -541,6 +628,7 @@ src/
     taxonomy.ts                Typed accessors for the Practice Area / Industry config
     content-generation.ts      Prompt construction + Claude API call for drafting
     cron-auth.ts               Verifies a request came from Vercel Cron (CRON_SECRET)
+    alerts/                    The watchdog: health checks, Slack delivery, thresholds
     federal-register/          Federal Register client, sync/ingest/enrich/reconcile, the duplicate guard
     courtlistener/             CourtListener docket search + the deterministic case-matching gate
     classify/                  Practice-area and industry classification (tags only, never summaries)
@@ -551,7 +639,7 @@ src/
     usage/                     Token/cost metering and the pricing table
 supabase/
   migrations/0001…0008       Schema, RLS, grants, search index, and the tracker's search function
-vercel.json                  Cron schedules for the three /api/cron/* jobs
+vercel.json                  Cron schedules for the four /api/cron/* jobs
 ```
 
 ## Fixing data by hand
@@ -607,10 +695,12 @@ none. Three details worth knowing before running it again:
 
 ## Next steps (in rough order)
 
-1. **Alerting.** Every failure mode — a dead cron, a flagged hallucination, a Federal
-   Register outage — surfaces only on `/needs-attention`, which someone has to remember
-   to open. A production cron once failed eight nights running before anyone noticed.
-   This is the highest-value unbuilt thing.
+1. **Make a review flag clearable.** Nothing in the app can set `needs_review` back to
+   false — it isn't in `CORRECTABLE_FIELDS`, `/needs-attention` is read-only, and only
+   `reconcile-legacy.ts` ever writes `false`. That blocks a real fix: a quote-flagged row
+   keeps `ai_summary` null, so it is re-summarized and re-billed every night forever
+   (~$0.08 a row a night). Smallest version is adding `needsReview` to
+   `CORRECTABLE_FIELDS`; then `applyEnrichQueueFilter` can safely exclude flagged rows.
 2. **Resolve the 30 ambiguous docket matches** (see "Legal challenges"), then decide
    how to approach the 91 unmatched.
 3. **Legal-challenge discovery** for the orders with no recorded challenge at all —
