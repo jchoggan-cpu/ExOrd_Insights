@@ -14,6 +14,8 @@ const RUN_HISTORY_LIMIT = 50;
 export interface WatchdogResult {
   problemCount: number;
   sent: boolean;
+  /** True when a healthy pipeline was reported anyway, to prove the channel. */
+  forced?: boolean;
   deliveryDetail?: string;
   /** Present when the watchdog could not read the state it needs. */
   readError?: string;
@@ -22,6 +24,12 @@ export interface WatchdogResult {
 export interface WatchdogDeps {
   now?: Date;
   fetchImpl?: FetchLike;
+  /**
+   * Send even when nothing is wrong, to prove the channel works on demand
+   * rather than waiting for the next weekly all-clear. Never set by the
+   * schedule — only by an explicit ?verify=1 on the route.
+   */
+  forceSend?: boolean;
 }
 
 async function loadRuns(supabase: SupabaseClient): Promise<RunSummary[]> {
@@ -101,18 +109,22 @@ export async function runWatchdogJob(
   }
 
   const report = checkHealth({ now, runs, enrichQueueDepth });
-  if (report.shouldStaySilent) {
+  if (report.shouldStaySilent && !deps.forceSend) {
     return { problemCount: 0, sent: false };
   }
 
-  const delivery = await sendSlackAlert({ webhookUrl, text: formatAlert(report, siteUrl) }, deps.fetchImpl);
+  const forced = report.shouldStaySilent && Boolean(deps.forceSend);
+  const delivery = await sendSlackAlert(
+    { webhookUrl, text: formatAlert(report, siteUrl, { forced }) },
+    deps.fetchImpl,
+  );
   if (!delivery.delivered) {
     // The alert exists and could not be delivered — the one failure this
     // system cannot announce through itself, so it must at least be loud in
     // the function's logs (rule 4).
     console.error(`Watchdog found ${report.problems.length} problem(s) but could not deliver: ${delivery.detail}`);
   }
-  return { problemCount: report.problems.length, sent: delivery.delivered, deliveryDetail: delivery.detail };
+  return { problemCount: report.problems.length, sent: delivery.delivered, deliveryDetail: delivery.detail, forced };
 }
 
 // Re-exported so a caller can explain the thresholds without importing two

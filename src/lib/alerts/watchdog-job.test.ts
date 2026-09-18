@@ -136,6 +136,41 @@ describe("runWatchdogJob", () => {
     expect(sentText(fetchImpl)).toContain("2 rows are waiting");
   });
 
+  it("sends a channel test on a healthy day when explicitly forced", async () => {
+    const supabase = createFakeSupabase({ ingestionRuns: healthyRunRows() });
+    const fetchImpl = okFetch();
+
+    const result = await runWatchdogJob(
+      supabase,
+      { webhookUrl: WEBHOOK, siteUrl: SITE },
+      { now: NOW, fetchImpl, forceSend: true },
+    );
+
+    expect(result.problemCount).toBe(0);
+    expect(result.sent).toBe(true);
+    expect(result.forced).toBe(true);
+    expect(sentText(fetchImpl)).toContain("channel test");
+  });
+
+  it("does not mark a forced run as a channel test when there are real problems to report", async () => {
+    // Forcing must not relabel a genuine alert. If something is actually
+    // wrong, the message is the alert, not a test.
+    const runs = healthyRunRows().filter((r) => r.run_type !== "federal_register");
+    runs.push({ ...healthyRunRows()[0], started_at: hoursBefore(30) });
+    const supabase = createFakeSupabase({ ingestionRuns: runs });
+    const fetchImpl = okFetch();
+
+    const result = await runWatchdogJob(
+      supabase,
+      { webhookUrl: WEBHOOK, siteUrl: SITE },
+      { now: NOW, fetchImpl, forceSend: true },
+    );
+
+    expect(result.forced).toBe(false);
+    expect(sentText(fetchImpl)).toContain("has not run since");
+    expect(sentText(fetchImpl)).not.toContain("channel test");
+  });
+
   it("still speaks when it cannot read the database at all", async () => {
     // The blind spot in every naive version of this idea: a watchdog that
     // can only speak when its database answers is silent exactly when the
