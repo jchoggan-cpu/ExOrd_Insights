@@ -101,6 +101,18 @@ async function findRowForCorrectionTarget(
   return ((byEoNumber as ExistingRow[] | null) ?? [])[0] ?? null;
 }
 
+/**
+ * A way to get the document's raw text, rather than the text itself.
+ *
+ * Most of the branches below never need it: on a normal night every one of
+ * the ~47 documents in the ingest window is already stored, and eagerly
+ * downloading each one's full text only to return "unchanged" is what
+ * exposed the job to federalregister.gov's rate limiter (2026-09-19, 47
+ * requests, 47 429s). Passing the fetch instead of the result lets each
+ * branch pay for the text only when it is actually going to store it.
+ */
+export type FetchRawFullText = () => Promise<string>;
+
 export type SyncAction = "inserted" | "updated" | "flagged" | "skipped_correction_target_missing" | "unchanged";
 
 export interface SyncOutcome {
@@ -120,10 +132,8 @@ export interface SyncOutcome {
 export async function syncDocument(
   supabase: SupabaseClient,
   doc: FederalRegisterDocument,
-  rawFullText: string,
+  fetchRawFullText: FetchRawFullText,
 ): Promise<SyncOutcome> {
-  const record = buildRecordFromDocument(doc, rawFullText);
-
   if (!doc.correction_of) {
     const { data: existing, error: lookupError } = await supabase
       .from("executive_orders")
@@ -132,8 +142,12 @@ export async function syncDocument(
       .maybeSingle();
     if (lookupError) throw new Error(`Lookup failed for ${doc.document_number}: ${lookupError.message}`);
     if (existing) {
+      // Deliberately before any fetch: this is the overwhelmingly common
+      // case, and it needs nothing but the document_number.
       return { documentNumber: doc.document_number, action: "unchanged" };
     }
+
+    const record = buildRecordFromDocument(doc, await fetchRawFullText());
 
     // Before inserting a fresh row, check for a legacy row that is the same
     // instrument but has not been linked to a document_number yet (either
@@ -181,6 +195,10 @@ export async function syncDocument(
   const conflicting = CORRECTION_TOUCHES_FIELDS.filter((field) => manuallyEdited.has(field));
 
   if (conflicting.length > 0) {
+    // Also before any fetch. Whether a correction collides with an
+    // attorney's edit is decided entirely by field names; downloading the
+    // text we have just decided not to apply would only be one more
+    // request to be refused.
     const { error } = await supabase
       .from("executive_orders")
       .update({
@@ -198,6 +216,9 @@ export async function syncDocument(
     if (error) throw new Error(`Failed to flag correction conflict for ${doc.document_number}: ${error.message}`);
     return { documentNumber: doc.document_number, action: "flagged", detail: conflicting.join(", ") };
   }
+
+  // Only now is the text certain to be stored.
+  const record = buildRecordFromDocument(doc, await fetchRawFullText());
 
   // record.document_number is deliberately not applied here — the row
   // keeps its original document_number as its stable identity; the

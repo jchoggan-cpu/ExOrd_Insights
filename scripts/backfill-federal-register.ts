@@ -80,8 +80,7 @@ async function ingestAll(documents: FederalRegisterDocument[]) {
   let skippedCount = 0;
 
   for (const doc of documents) {
-    const rawText = await fetchRawText(doc.raw_text_url);
-    const outcome = await syncDocument(supabase, doc, rawText);
+    const outcome = await syncDocument(supabase, doc, () => fetchRawText(doc.raw_text_url));
     if (outcome.action === "inserted") newCount++;
     else if (outcome.action === "updated") updatedCount++;
     else if (outcome.action === "flagged") flaggedCount++;

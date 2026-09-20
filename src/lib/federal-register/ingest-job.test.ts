@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { STALE_RUN_THRESHOLD_MINUTES } from "@/lib/federal-register/constants";
 import { runIngestJob } from "@/lib/federal-register/ingest-job";
 import type { FederalRegisterDocument } from "@/lib/federal-register/types";
@@ -45,6 +45,32 @@ describe("runIngestJob", () => {
       updated_count: 0,
       error_message: null,
     });
+  });
+
+  // Reproduces the 2026-09-19 production failure at job level. On a normal
+  // night every document in the 90-day window is already stored, and the
+  // job used to download all 47 full texts anyway before discarding them.
+  // Those downloads were the only thing federalregister.gov rate-limited.
+  it("makes no raw-text request at all on a night where every document is already stored", async () => {
+    const doc = loadDoc("eo-14421-detail.json");
+    const supabase = createFakeSupabase({
+      rows: [
+        {
+          id: "row-1",
+          document_number: doc.document_number,
+          manually_edited_fields: [],
+          applied_correction_document_numbers: [],
+        },
+      ],
+    });
+    const fetchRawText = vi.fn(async () => "raw text");
+
+    const result = await runIngestJob(supabase, { fetchAllDocuments: async () => [doc], fetchRawText });
+
+    expect(result.status).toBe("success");
+    expect(result.newCount).toBe(0);
+    expect(result.errorMessage).toBeUndefined();
+    expect(fetchRawText).not.toHaveBeenCalled();
   });
 
   it("isolates a per-document failure: one bad document doesn't abort the run, and is reported in errors/partial status", async () => {

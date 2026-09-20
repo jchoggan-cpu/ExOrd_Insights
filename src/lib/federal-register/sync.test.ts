@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { buildRecordFromDocument, extractDocumentNumber, syncDocument } from "@/lib/federal-register/sync";
 import type { FederalRegisterDocument } from "@/lib/federal-register/types";
 import { createFakeSupabase } from "@/lib/federal-register/test-support/fake-supabase";
@@ -56,7 +56,7 @@ describe("syncDocument", () => {
     const supabase = createFakeSupabase({ rows: [] });
     const doc = loadDoc("eo-14421-detail.json");
 
-    const outcome = await syncDocument(supabase, doc, "raw text");
+    const outcome = await syncDocument(supabase, doc, async () => "raw text");
 
     expect(outcome).toEqual({ documentNumber: "2026-17843", action: "inserted" });
     expect(supabase.rows).toHaveLength(1);
@@ -69,10 +69,90 @@ describe("syncDocument", () => {
     });
     const doc = loadDoc("eo-14421-detail.json");
 
-    const outcome = await syncDocument(supabase, doc, "raw text");
+    const outcome = await syncDocument(supabase, doc, async () => "raw text");
 
     expect(outcome.action).toBe("unchanged");
     expect(supabase.rows).toHaveLength(1);
+  });
+
+  // The 2026-09-19 outage: 47 documents in the ingest window, all 47
+  // already stored, all 47 raw-text downloads refused with a 429 — every
+  // one of them for text that was about to be discarded.
+  it("never downloads the text of a document it already has", async () => {
+    const supabase = createFakeSupabase({
+      rows: [{ id: "row-1", document_number: "2026-17843", manually_edited_fields: [], applied_correction_document_numbers: [] }],
+    });
+    const fetchRawFullText = vi.fn(async () => "raw text");
+
+    const outcome = await syncDocument(supabase, loadDoc("eo-14421-detail.json"), fetchRawFullText);
+
+    expect(outcome.action).toBe("unchanged");
+    expect(fetchRawFullText).not.toHaveBeenCalled();
+  });
+
+  it("does not download the text of a correction it has decided not to apply", async () => {
+    const supabase = createFakeSupabase({
+      rows: [
+        {
+          id: "row-1",
+          document_number: "2026-03829",
+          eo_number: "EO 14388",
+          manually_edited_fields: ["title"],
+          applied_correction_document_numbers: [],
+        },
+      ],
+    });
+    const fetchRawFullText = vi.fn(async () => "corrected raw text");
+
+    const outcome = await syncDocument(supabase, loadDoc("eo-14388-correction-document.json"), fetchRawFullText);
+
+    expect(outcome.action).toBe("flagged");
+    expect(fetchRawFullText).not.toHaveBeenCalled();
+  });
+
+  it("does not download the text of a correction whose target is missing", async () => {
+    const supabase = createFakeSupabase({ rows: [] });
+    const fetchRawFullText = vi.fn(async () => "corrected raw text");
+
+    const outcome = await syncDocument(supabase, loadDoc("eo-14388-correction-document.json"), fetchRawFullText);
+
+    expect(outcome.action).toBe("skipped_correction_target_missing");
+    expect(fetchRawFullText).not.toHaveBeenCalled();
+  });
+
+  // The other half of the guarantee: skipping the fetch must not become
+  // skipping the text. Every branch that stores a row still pays for it.
+  it("downloads the text exactly once for a document it does store", async () => {
+    const supabase = createFakeSupabase({ rows: [] });
+    const fetchRawFullText = vi.fn(async () => "Executive Order 14421 text.");
+
+    const outcome = await syncDocument(supabase, loadDoc("eo-14421-detail.json"), fetchRawFullText);
+
+    expect(outcome.action).toBe("inserted");
+    expect(fetchRawFullText).toHaveBeenCalledTimes(1);
+    expect(supabase.rows[0].full_text).toContain("Executive Order 14421");
+  });
+
+  it("downloads the text exactly once for a correction it does apply", async () => {
+    const supabase = createFakeSupabase({
+      rows: [
+        {
+          id: "row-1",
+          document_number: "2026-03829",
+          eo_number: "EO 14388",
+          manually_edited_fields: [],
+          applied_correction_document_numbers: [],
+          full_text: "old text",
+        },
+      ],
+    });
+    const fetchRawFullText = vi.fn(async () => "corrected raw text");
+
+    const outcome = await syncDocument(supabase, loadDoc("eo-14388-correction-document.json"), fetchRawFullText);
+
+    expect(outcome.action).toBe("updated");
+    expect(fetchRawFullText).toHaveBeenCalledTimes(1);
+    expect(supabase.rows[0].full_text).toContain("corrected raw text");
   });
 
   it("applies a correction to the row it targets, recording the correction's document_number", async () => {
@@ -90,7 +170,7 @@ describe("syncDocument", () => {
     });
     const correction = loadDoc("eo-14388-correction-document.json");
 
-    const outcome = await syncDocument(supabase, correction, "corrected raw text");
+    const outcome = await syncDocument(supabase, correction, async () => "corrected raw text");
 
     expect(outcome.action).toBe("updated");
     expect(supabase.rows[0].applied_correction_document_numbers).toEqual(["R1-2026-03829"]);
@@ -111,7 +191,7 @@ describe("syncDocument", () => {
     });
     const correction = loadDoc("eo-14388-correction-document.json");
 
-    const outcome = await syncDocument(supabase, correction, "corrected raw text");
+    const outcome = await syncDocument(supabase, correction, async () => "corrected raw text");
 
     expect(outcome.action).toBe("flagged");
     expect(supabase.rows[0].needs_review).toBe(true);
@@ -125,7 +205,7 @@ describe("syncDocument", () => {
     const supabase = createFakeSupabase({ rows: [] });
     const correction = loadDoc("eo-14388-correction-document.json");
 
-    const outcome = await syncDocument(supabase, correction, "corrected raw text");
+    const outcome = await syncDocument(supabase, correction, async () => "corrected raw text");
 
     expect(outcome.action).toBe("skipped_correction_target_missing");
   });
@@ -147,7 +227,7 @@ describe("syncDocument", () => {
     });
     const doc = loadDoc("eo-14421-detail.json");
 
-    const outcome = await syncDocument(supabase, doc, "raw text");
+    const outcome = await syncDocument(supabase, doc, async () => "raw text");
 
     expect(outcome.action).toBe("flagged");
     expect(supabase.rows).toHaveLength(1); // no duplicate row inserted
@@ -175,7 +255,7 @@ describe("syncDocument", () => {
     });
     const doc = loadDoc("proclamation-14988-detail.json");
 
-    const outcome = await syncDocument(supabase, doc, "raw text");
+    const outcome = await syncDocument(supabase, doc, async () => "raw text");
 
     expect(outcome.action).toBe("flagged");
     expect(outcome.detail).toContain("title_and_date");
@@ -200,7 +280,7 @@ describe("syncDocument", () => {
     });
     const doc = loadDoc("proclamation-14988-detail.json");
 
-    const outcome = await syncDocument(supabase, doc, "raw text");
+    const outcome = await syncDocument(supabase, doc, async () => "raw text");
 
     expect(outcome.action).toBe("inserted");
     expect(supabase.rows).toHaveLength(2);
@@ -222,7 +302,7 @@ describe("syncDocument", () => {
     });
     const doc = loadDoc("eo-14421-detail.json");
 
-    await syncDocument(supabase, doc, "raw text");
+    await syncDocument(supabase, doc, async () => "raw text");
 
     expect(supabase.rows[0].review_reason).toBe("Backfill's own specific reason.");
   });

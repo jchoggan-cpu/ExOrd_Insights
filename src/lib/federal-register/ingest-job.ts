@@ -58,8 +58,10 @@ export async function runIngestJob(supabase: SupabaseClient, deps: IngestJobDeps
 
     for (const doc of documents) {
       try {
-        const rawText = await deps.fetchRawText(doc.raw_text_url);
-        const outcome = await syncDocument(supabase, doc, rawText);
+        // Passed as a fetch, not a result: syncDocument only calls it for
+        // a document it is actually going to store, and on a normal night
+        // every document in this window is already stored.
+        const outcome = await syncDocument(supabase, doc, () => deps.fetchRawText(doc.raw_text_url));
         if (outcome.action === "inserted") newCount++;
         else if (outcome.action === "updated") updatedCount++;
         else if (outcome.action === "flagged") flaggedCount++;
