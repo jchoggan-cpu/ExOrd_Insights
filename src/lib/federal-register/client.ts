@@ -1,3 +1,4 @@
+import { retryingFetch, type RetryingFetch } from "@/lib/federal-register/fetch-with-retry";
 import type { FederalRegisterDocument, FederalRegisterListResponse } from "@/lib/federal-register/types";
 
 const LIST_URL = "https://www.federalregister.gov/api/v1/documents.json";
@@ -57,19 +58,25 @@ function buildQuery(params: {
 /**
  * Fetches every Executive Order / Proclamation / Memorandum published in
  * the given date range, following the API's own cursor-based pagination.
- * No API key required (see README "Fair-use terms"). Pass MINIMAL_FIELDS for
- * a cheap existence-only check (reconciliation); defaults to FULL_FIELDS.
+ * No API key required. Pass MINIMAL_FIELDS for a cheap existence-only check
+ * (reconciliation); defaults to FULL_FIELDS.
+ *
+ * Every request here goes through the retrying GET (see fetch-with-retry.ts);
+ * it is injectable so these three can be tested without a network call.
  */
-export async function fetchAllDocuments(params: {
-  publicationDateGte?: string;
-  publicationDateLte?: string;
-  fields?: readonly string[];
-}): Promise<FederalRegisterDocument[]> {
+export async function fetchAllDocuments(
+  params: {
+    publicationDateGte?: string;
+    publicationDateLte?: string;
+    fields?: readonly string[];
+  },
+  fetchUrl: RetryingFetch = retryingFetch,
+): Promise<FederalRegisterDocument[]> {
   const documents: FederalRegisterDocument[] = [];
   let url: string | null = buildQuery({ ...params, perPage: 1000, fields: params.fields ?? FULL_FIELDS });
 
   while (url) {
-    const response = await fetch(url);
+    const response = await fetchUrl(url);
     if (!response.ok) {
       throw new Error(`Federal Register API request failed (${response.status}): ${url}`);
     }
@@ -82,8 +89,11 @@ export async function fetchAllDocuments(params: {
 }
 
 /** Fetches one document's full detail by document_number — used by reconciliation to fetch only the gaps it finds. */
-export async function fetchDocumentDetail(documentNumber: string): Promise<FederalRegisterDocument> {
-  const response = await fetch(`${DETAIL_BASE_URL}/${documentNumber}.json`);
+export async function fetchDocumentDetail(
+  documentNumber: string,
+  fetchUrl: RetryingFetch = retryingFetch,
+): Promise<FederalRegisterDocument> {
+  const response = await fetchUrl(`${DETAIL_BASE_URL}/${documentNumber}.json`);
   if (!response.ok) {
     throw new Error(`Failed to fetch document detail for ${documentNumber} (${response.status})`);
   }
@@ -91,8 +101,11 @@ export async function fetchDocumentDetail(documentNumber: string): Promise<Feder
 }
 
 /** Fetches and returns the raw (uncleaned) full text for one document. */
-export async function fetchRawText(rawTextUrl: string): Promise<string> {
-  const response = await fetch(rawTextUrl);
+export async function fetchRawText(
+  rawTextUrl: string,
+  fetchUrl: RetryingFetch = retryingFetch,
+): Promise<string> {
+  const response = await fetchUrl(rawTextUrl);
   if (!response.ok) {
     throw new Error(`Failed to fetch raw text (${response.status}): ${rawTextUrl}`);
   }
