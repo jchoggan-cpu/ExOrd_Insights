@@ -271,7 +271,11 @@ sync with [federalregister.gov's API](https://www.federalregister.gov/developers
 - **`ingest`** (daily, `/api/cron/ingest`) — re-checks the trailing 90-day
   publication window for new documents and corrections. "New" is
   existence-based (an unseen `document_number`), not date-based — the window
-  just keeps each run's query cheap.
+  just keeps each run's query cheap. A document already stored costs one
+  database lookup and **no network request**: its full text is fetched only
+  when the job is actually going to store it. Until 2026-09-19 all ~47
+  documents in the window were downloaded in full every night and then
+  discarded, which is how a run came to die on 47 consecutive 429s.
 - **`enrich`** (daily, `/api/cron/enrich`) — fully decoupled from ingestion.
   Summarizes and tags ~20 orders per run (conservative, to control Anthropic
   cost), verifying any quoted text against the order's stored `full_text` in
@@ -285,6 +289,15 @@ sync with [federalregister.gov's API](https://www.federalregister.gov/developers
 
 All three are Vercel Cron jobs (see `vercel.json`), authenticated via
 `CRON_SECRET` (see `.env.example`) — never open endpoints.
+
+**Rate limiting**: every Federal Register request goes through
+`src/lib/federal-register/fetch-with-retry.ts`, which identifies the client,
+gives the request a deadline of its own, and retries a 429 or a transient
+5xx three times from a 2-second backoff. Deliberately less patient than the
+CourtListener client — these run inside cron functions with a hard execution
+cap, and ingest is idempotent, so a throttle that outlasts a few seconds is
+reported (the watchdog posts it to Slack) rather than waited out. Each retry
+is logged, so a tightening limit shows up before it breaks a run.
 
 **Corrections** are merged into the row they correct (matched via the
 correction's `correction_of` field, falling back to `eo_number` for
