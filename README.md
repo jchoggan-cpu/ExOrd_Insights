@@ -16,11 +16,13 @@ Verified against the live database on 2026-09-22.
 
 | Piece | Status |
 |---|---|
-| Supabase | ✅ Connected. Migrations `0001`–`0008` applied — see "Setting up Supabase" |
+| Supabase | ✅ Connected. Migrations `0001`–`0009` applied — see "Setting up Supabase" |
 | Tracker table + EO detail pages | ✅ Live — **559 orders**, signed 2025-01-17 → 2026-09-17 |
 | Search, multi-select filters, signing-date range | ✅ Live, executed in Postgres (`search_executive_orders`, migrations `0007`/`0008`) |
 | Relevance ranking | ✅ Live — a search now ranks by relevance automatically; see "How search is ordered" |
-| Subject-area filter | ❌ Not built — `subject_area` is on all 559 rows and is the one tag with no filter. Needs a migration (`0009`) |
+| Subject-area filter | ✅ Live — a dropdown with find-as-you-type over all 26 subjects (`p_subjects`, migration `0009`) |
+| Search snippets | ✅ Live — the matching passage of the order's text appears under the title with the matched words marked (`ts_headline`, migration `0009`) |
+| Clickable tags | ✅ Live — a subject or practice tag filters to itself; "Undo tag filter" restores what was there |
 | Firm branding in the UI | ⚠️ Deliberately absent — see "Branding and the placeholder palette" |
 | Federal Register ingestion | ✅ Live — three Vercel Cron jobs, see "Federal Register ingestion" |
 | Summaries | ✅ **All 559 rows** have one; the enrichment queue is empty. **275** are the firm's hand-written text, protected from automated overwrite via `manually_edited_fields`; the rest are AI-written |
@@ -53,6 +55,57 @@ when it matches the default *for that state*, so on a search an explicit
 `date` is written to the URL rather than dropped and re-defaulted back to
 relevance on the next read. Changing the search text re-decides the sort;
 changing a filter or turning a page does not.
+
+## Filtering, and one rule about filter values
+
+Every filter lives in the URL, so a filtered view can be shared, bookmarked
+and reached with the back button. Subjects, practice areas and industries
+are multi-select: values OR within a field and AND across fields, which is
+how a reader expects checkboxes to behave.
+
+**One parameter per value. Commas are not separators.** `?industry=A&industry=B`,
+never `?industry=A,B`. Until 2026-09-22 the parser split on commas as a
+convenience for hand-written URLs, and it silently broke the three real
+industries whose names contain one: ticking "Aerospace, Defense & Government
+Services" parsed back as two values that match nothing, so the tracker
+showed **0 orders** and two invented filter chips with nothing to explain
+it. "AI, Robotics and Quantum" and "Retail, Fashion & Beauty" failed the
+same way. Nothing the app generates is comma-joined, so the convenience only
+ever damaged values produced by clicking. If you add a taxonomy value
+containing a comma, it now works; if you re-introduce comma splitting, it
+will not.
+
+Clicking a tag on a result row **replaces** the current filters rather than
+adding to them, so a click can never land on an empty page by stacking onto
+filters that share no rows. Because that is destructive, the link carries
+the previous query string and the results bar offers "Undo tag filter". The
+undo value is rebuilt through the tracker's own parser rather than pasted
+into a link, so an edited `?undo=https://elsewhere` cannot send a reader off
+the site.
+
+**Known cost**: selecting "All" *and* searching makes Postgres build a
+snippet for every matching row rather than for one page — measured 1.67s
+against 0.65s for a page of 25, on 559 rows. It works; it is simply the one
+combination the migration's paging trick does not cover. Fixing it properly
+needs another migration.
+
+## Accessibility notes
+
+Not audited end to end, but these were measured and fixed on 2026-09-22, and
+are worth not regressing:
+
+- `--border` is for decorative hairlines; `--control-border` is for the edge
+  of an input, select or dropdown, and clears WCAG 1.4.11's 3:1 against both
+  the white fill (3.41:1) and the cream page (3.10:1). The old single border
+  was 1.30:1 and read as no border at all.
+- Controls carry a real focus ring. Do not replace one with `outline-none`
+  plus a border-colour swap; that removes the focus indicator in forced-
+  colours mode too.
+- Touch sizing keys off `pointer: coarse`, not a width breakpoint — a tablet
+  in portrait is a touch device at 660px wide.
+- `aria-label` on an element **overrides** its visible text. The filter
+  dropdown once carried `aria-label={label}`, so a screen reader announced
+  "Subjects" and never "3 selected".
 
 ## Branding and the placeholder palette
 
@@ -700,6 +753,9 @@ src/
     executive-orders-search.ts  One page of tracker results, searched and filtered in Postgres
     tracker-query.ts           The tracker's URL state: search, filters, sort, paging
     tracker-filter-chips.ts    Which filters are active, and how to remove one
+    tag-filter-link.ts         Where a clickable tag goes, and how to undo it
+    highlight-snippet.ts       Turns the database's [[hl]] markers into plain segments
+    tag-label.ts               How a stored tag is spelled on screen
     eo-selection.ts / eo-selection-store.ts  Which orders are ticked, held in sessionStorage
     ai-model.ts                Per-task model routing + the single AI-credentials access point
     normalize-title.ts         How two records are compared for being the same instrument
@@ -716,7 +772,7 @@ src/
     summary-prompt/            The stored, editable summarization prompt
     usage/                     Token/cost metering and the pricing table
 supabase/
-  migrations/0001…0008       Schema, RLS, grants, search index, and the tracker's search function
+  migrations/0001…0009       Schema, RLS, grants, search index, and the tracker's search function
 vercel.json                  Cron schedules for the four /api/cron/* jobs
 ```
 
@@ -793,8 +849,12 @@ none. Three details worth knowing before running it again:
 6. **Auth** (Supabase Auth) with the admin/general role split the schema already
    supports, and the email digest — Phase 5. Tighten the four SELECT policies `0002`
    loosened at the same time.
-7. **UI pages for the Rescinded Prior Orders (112) and Agency Actions (32) data** —
+7. **Cap snippet building when "All" is selected.** With no page limit,
+   `search_executive_orders` builds a `ts_headline` for every matching row rather
+   than for one page — 1.67s against 0.65s today, and it grows with the corpus.
+   Needs a migration: clamp the rows the snippet CTE sees, independently of paging.
+8. **UI pages for the Rescinded Prior Orders (112) and Agency Actions (32) data** —
    imported and available via `src/lib/data.ts`, but surfaced nowhere.
-8. **An end-to-end test.** Nothing automatically proves a user can go tracker → EO
+9. **An end-to-end test.** Nothing automatically proves a user can go tracker → EO
    detail → draft content → export. Accepted while there is one user; revisit the
    moment there are two.
