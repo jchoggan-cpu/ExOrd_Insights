@@ -1,0 +1,111 @@
+import { activeFilterChips, CLEARED_FILTERS, hasActiveFilters } from "@/lib/tracker-filter-chips";
+import { PAGE_SIZES, type PageSize, type TrackerQuery } from "@/lib/tracker-query";
+
+/**
+ * The line between the filters and the results: how many matched, what is
+ * being applied, how it is sorted, and how many to a page.
+ *
+ * Split out of tracker-controls.tsx, which owns the state and the
+ * navigation. Which chips to show is decided by tracker-filter-chips.ts, so
+ * that logic is covered by tests without rendering anything.
+ */
+
+const CONTROL_CLASS =
+  "rounded border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-link";
+
+interface TrackerResultBarProps {
+  query: TrackerQuery;
+  total: number;
+  onChange: (change: Partial<TrackerQuery>) => void;
+}
+
+export function TrackerResultBar({ query, total, onChange }: TrackerResultBarProps) {
+  const filtered = hasActiveFilters(query);
+  const chips = activeFilterChips(query);
+
+  return (
+    <div className="flex flex-col gap-2 border-t border-border pt-3">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
+        <span className="font-medium text-foreground">
+          {total.toLocaleString()} {total === 1 ? "order" : "orders"}
+          {filtered && " match"}
+        </span>
+
+        {chips.map((chip) => (
+          <button
+            key={chip.key}
+            type="button"
+            onClick={() => onChange(chip.clears)}
+            title={`Remove filter: ${chip.label}`}
+            className="inline-flex items-center gap-1.5 rounded bg-muted px-2 py-0.5 text-xs text-foreground hover:bg-border"
+          >
+            {chip.label}
+            <span aria-hidden="true" className="text-muted-foreground">
+              &times;
+            </span>
+            <span className="sr-only">Remove this filter</span>
+          </button>
+        ))}
+
+        {filtered && (
+          <button
+            type="button"
+            onClick={() => onChange(CLEARED_FILTERS)}
+            className="text-link hover:underline"
+          >
+            Clear all
+          </button>
+        )}
+
+        <span className="ml-auto flex flex-wrap items-center gap-x-3 gap-y-2">
+          {query.sort === "relevance" && query.search && (
+            <span>
+              Sorted by <span className="font-medium text-foreground">relevance</span> (switched on
+              because you searched)
+            </span>
+          )}
+
+          <label className="flex items-center gap-1.5">
+            Sort
+            <select
+              value={query.sort}
+              onChange={(e) => onChange({ sort: e.target.value as TrackerQuery["sort"] })}
+              aria-label="Sort results"
+              className={CONTROL_CLASS}
+            >
+              <option value="date">Newest first</option>
+              {/* With no search term every row ranks equally, so relevance
+                  really would behave as date order. Searching now selects
+                  this automatically, so the disabled case is only reached by
+                  someone opening the dropdown with an empty search box. */}
+              <option value="relevance" disabled={!query.search}>
+                Most relevant{!query.search ? " (type a search first)" : ""}
+              </option>
+            </select>
+          </label>
+
+          <label className="flex items-center gap-1.5">
+            Show
+            <select
+              value={String(query.pageSize)}
+              onChange={(e) =>
+                onChange({
+                  pageSize: (e.target.value === "all" ? "all" : Number(e.target.value)) as PageSize,
+                })
+              }
+              aria-label="Orders per page"
+              className={CONTROL_CLASS}
+            >
+              {PAGE_SIZES.map((size) => (
+                <option key={size} value={size}>
+                  {size} per page
+                </option>
+              ))}
+              <option value="all">All</option>
+            </select>
+          </label>
+        </span>
+      </div>
+    </div>
+  );
+}

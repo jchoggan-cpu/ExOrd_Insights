@@ -33,7 +33,7 @@ interface MultiSelectFilterProps {
 }
 
 const SUMMARY_CLASS =
-  "cursor-pointer select-none rounded-md border border-border bg-surface px-3 py-2 text-sm outline-none marker:content-none focus:border-link";
+  "cursor-pointer select-none rounded border border-border bg-surface px-3 py-2 text-sm outline-none marker:content-none focus:border-link";
 
 export function MultiSelectFilter({ label, emptyLabel, options, selected, onChange }: MultiSelectFilterProps) {
   const toggle = (value: string) => {
@@ -55,7 +55,9 @@ export function MultiSelectFilter({ label, emptyLabel, options, selected, onChan
         {summaryText}
       </summary>
 
-      <div className="absolute z-10 mt-1 max-h-80 w-72 overflow-y-auto rounded-md border border-border bg-surface p-2 shadow-lg">
+      {/* Never wider than the screen it opens on: at 390px a fixed 18rem
+            panel opening near the right edge pushed the whole page sideways. */}
+      <div className="absolute z-10 mt-1 max-h-80 w-[min(18rem,calc(100vw-2.5rem))] overflow-y-auto rounded border border-border bg-surface p-2 shadow-lg">
         {selected.length > 0 && (
           <button
             type="button"

@@ -1,3 +1,5 @@
+import { formatTagLabel } from "@/lib/tag-label";
+
 type TagKind = "subject" | "practice" | "industry";
 
 /**
@@ -19,7 +21,7 @@ export function TagPill({ label, kind = "subject" }: { label: string; kind?: Tag
     <span
       className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-medium whitespace-nowrap ${KIND_STYLES[kind]}`}
     >
-      {label}
+      {formatTagLabel(label)}
     </span>
   );
 }
