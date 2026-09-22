@@ -56,6 +56,40 @@ when it matches the default *for that state*, so on a search an explicit
 relevance on the next read. Changing the search text re-decides the sort;
 changing a filter or turning a page does not.
 
+## How an order's status is decided
+
+Federal Register disposition notes come in two voices, and only one of them
+says anything about the document carrying it:
+
+```
+Revokes: EO 14036          EO 14337 revoked 14036. ACTIVE voice -- it says
+                           nothing about 14337, which is in force.
+Revoked by: EO 14244       EO 14237 was revoked.   PASSIVE voice -- this is
+                           the one that changes a status.
+```
+
+`parseDispositionNotes` read `^Revokes:` as "this order is revoked" until
+2026-09-22, so all 24 orders that had revoked something were displayed as
+revoked -- "Protecting the American People Against Invasion" and
+"Unleashing American Energy" among them -- while "Addressing Risks From
+Paul Weiss", whose notes read "Revoked by: EO 14244", stayed active because
+no pattern matched it. The tracker was wrong in both directions at once. 42
+rows were corrected; live counts went from 24 revoked / 22 amended to 2 / 9.
+
+**Only passive forms change a status.** The recognized vocabulary is taken
+from the corpus rather than guessed -- count the line prefixes before adding
+one. "Continued by" is deliberately not a downgrade: being continued means
+still in force.
+
+**A status can change long after publication**, which is why it is re-read
+at all. An order is ingested as active and revoked months later, and the
+revocation appears on the original's own notes. Two things make that land:
+`syncDocument` re-reads the disposition instead of returning "unchanged" the
+moment a document_number matches, and the weekly reconcile job re-checks
+every stored row, because the daily job's trailing window is long past an
+order revoked in September. Neither downloads any text to do it -- see the
+rate-limit note in fetch-with-retry.ts.
+
 ## Filtering, and one rule about filter values
 
 Every filter lives in the URL, so a filtered view can be shared, bookmarked
