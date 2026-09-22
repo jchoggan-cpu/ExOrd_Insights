@@ -30,9 +30,14 @@ export function TrackerResultBar({ query, total, undoFilters, onChange }: Tracke
   return (
     <div className="flex flex-col gap-2 border-t border-border pt-3">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
-        <span className="font-medium text-foreground">
-          {total.toLocaleString()} {total === 1 ? "order" : "orders"}
-          {filtered && " match"}
+        <span className="flex flex-col leading-tight">
+          <span className="font-medium text-foreground">
+            {total.toLocaleString()} {total === 1 ? "order" : "orders"}
+            {filtered && " match"}
+          </span>
+          {/* The row checkboxes are easy to miss, and nothing else on the
+              page says what they are for. */}
+          <span className="text-xs">(select to create alert/content)</span>
         </span>
 
         {chips.map((chip) => (

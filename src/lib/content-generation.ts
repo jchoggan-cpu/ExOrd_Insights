@@ -1,6 +1,7 @@
 import type { ContentType, ExecutiveOrder } from "@/lib/types";
 import { CONTENT_TYPE_LABELS } from "@/lib/types";
 import { findUnverifiedQuotes } from "@/lib/federal-register/quote-verify";
+import { assembleDraft } from "@/lib/content-header";
 import { createAnthropicClient, extractTextBlock, getConfiguredModel, hasAiCredentials } from "@/lib/ai-model";
 import { toTokenUsage, type TokenUsage } from "@/lib/usage/pricing";
 
@@ -19,12 +20,12 @@ const CONTENT_TYPE_GUIDANCE: Record<ContentType, { instructions: string; maxToke
   },
   talking_points: {
     instructions:
-      "Write a short internal briefing: 5-10 concise bullet points an attorney could use in a client conversation, covering what changed, who's affected, and any open legal risk (e.g. pending litigation). No headline needed.",
+      "Write a short internal briefing: 5-10 concise bullet points an attorney could use in a client conversation, covering what changed, who's affected, and any open legal risk (e.g. pending litigation). After the title line, go straight to the bullets -- no further headline.",
     maxTokens: 2048,
   },
   social_post: {
     instructions:
-      "Write one LinkedIn-style post (roughly 80-150 words): a hook, the key takeaway in plain language, and a soft call-to-action to read more or contact the firm. No hashtags unless natural. No headline.",
+      "Write one LinkedIn-style post (roughly 80-150 words): a hook, the key takeaway in plain language, and a soft call-to-action to read more or contact the firm. No hashtags unless natural. After the title line, go straight to the post -- no further headline.",
     maxTokens: 1024,
   },
 };
@@ -72,7 +73,10 @@ function buildSystemPrompt(styleGuide: string): string {
     "",
     `Firm style guide: ${styleGuide}`,
     "",
-    "Output only the draft content itself — no preamble like 'Here is a draft', no meta-commentary, no markdown headers unless natural for the content type.",
+    "Begin your response with a single line containing ONLY a short, descriptive title for this piece -- under about 12 words, no quotation marks, no markdown '#', and no label such as 'Title:'. Then a blank line, then the content.",
+    "Do NOT include any URL or link. The application adds links to the source documents itself, from its own records; a link you write cannot be trusted and will be discarded.",
+    "Do NOT restate which executive orders this covers -- the application lists them under the title.",
+    "Otherwise output only the draft content itself — no preamble like 'Here is a draft', and no meta-commentary.",
   ].join("\n");
 }
 
@@ -104,14 +108,19 @@ export interface GenerateContentResult {
 }
 
 function buildStubDraft(orders: ExecutiveOrder[], contentType: ContentType): string {
-  const titles = orders.map((eo) => `${eo.eoNumber ?? eo.actionType ?? "Action"} — ${eo.title}`).join("; ");
-  return [
-    `[Stub draft — ${CONTENT_TYPE_LABELS[contentType]}]`,
-    "",
-    `This is placeholder text standing in for an AI-generated draft about: ${titles}.`,
-    "",
-    "Set AI_GATEWAY_API_KEY (Vercel AI Gateway) or ANTHROPIC_API_KEY to enable real AI-generated drafts (see README).",
-  ].join("\n");
+  // Assembled the same way as a real draft, header and all, so the shape a
+  // developer sees without credentials is the shape attorneys get.
+  return assembleDraft(
+    orders,
+    contentType,
+    [
+      "Stub draft",
+      "",
+      "This is placeholder text standing in for an AI-generated draft.",
+      "",
+      "Set AI_GATEWAY_API_KEY (Vercel AI Gateway) or ANTHROPIC_API_KEY to enable real AI-generated drafts (see README).",
+    ].join("\n"),
+  );
 }
 
 /**
@@ -152,7 +161,7 @@ export async function generateContent({
     messages: [{ role: "user", content: userPrompt }],
   });
 
-  const draftText = extractTextBlock(response);
+  const draftText = assembleDraft(orders, contentType, extractTextBlock(response));
 
   return {
     draftText,

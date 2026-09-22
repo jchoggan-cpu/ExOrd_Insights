@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * A filter that allows several values at once, shown as a disclosure with
@@ -9,8 +9,15 @@ import { useState } from "react";
  * A native <select multiple> was the cheaper option and was rejected: it
  * needs ctrl-click to add a second value, shows about four rows at a time,
  * and gives no indication of what is selected once it loses focus. A
- * <details> disclosure needs no click-outside handling, no focus trap, and
- * no JavaScript to open, while the summary can say how many are selected.
+ * <details> disclosure needs no focus trap and no JavaScript to open, while
+ * the summary can say how many are selected.
+ *
+ * It does need closing, though. Left to itself a <details> stays open until
+ * its own summary is clicked again, so opening Subjects and then Practice
+ * Areas left two overlapping panels on screen at once. Clicking anywhere
+ * outside an open panel now closes it, which is what a dropdown is expected
+ * to do -- and it makes the panels mutually exclusive for free, since one
+ * summary is "outside" another's panel.
  */
 
 export interface FilterOption {
@@ -79,6 +86,45 @@ export function MultiSelectFilter({
   findPlaceholder,
 }: MultiSelectFilterProps) {
   const [findTerm, setFindTerm] = useState("");
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Only listens while this panel is open, so a closed tracker carries no
+  // document-level handlers at all.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const details = detailsRef.current;
+    if (!details) return;
+
+    function closeIfOutside(event: Event) {
+      const target = event.target;
+      // Clicks inside the panel, and on the summary itself, are the
+      // element's own business -- <details> already toggles on those.
+      if (target instanceof Node && details!.contains(target)) return;
+      details!.open = false;
+      setIsOpen(false);
+    }
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      details!.open = false;
+      setIsOpen(false);
+      // Put focus back where it came from rather than dropping it to the
+      // body, so a keyboard user does not lose their place in the filters.
+      details!.querySelector("summary")?.focus();
+    }
+
+    // pointerdown rather than click: it fires before the browser's own
+    // toggle, so clicking a second filter's summary closes this one and
+    // opens that one in the same gesture instead of fighting over it.
+    document.addEventListener("pointerdown", closeIfOutside);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeIfOutside);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isOpen]);
   const visibleOptions = findPlaceholder ? filterOptions(options, findTerm, selected) : options;
 
   const toggle = (value: string) => {
@@ -95,7 +141,11 @@ export function MultiSelectFilter({
         : `${selected.length} selected`;
 
   return (
-    <details className="group relative">
+    <details
+      ref={detailsRef}
+      className="group relative"
+      onToggle={(event) => setIsOpen((event.currentTarget as HTMLDetailsElement).open)}
+    >
       <summary className={SUMMARY_CLASS} aria-label={`${label}: ${summaryText}`}>
         {summaryText}
         {/* The native disclosure triangle is removed by marker:content-none,
