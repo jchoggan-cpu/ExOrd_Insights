@@ -1,20 +1,31 @@
 @import "tailwindcss";
 
 /*
- * Approximated Sheppard-style theme: warm neutral background, ink-navy text,
- * a muted taupe/gold accent, serif display headings over a clean sans body.
- * This is a placeholder palette inferred from the public site — swap these
- * values (and the logo in src/components/site-header.tsx) once real brand
- * assets (hex codes, logo file, font names) are available.
+ * Approximated law-firm theme: warm neutral background, ink-navy text, a
+ * muted taupe/gold brand colour, serif display headings over a clean sans
+ * body. This is a placeholder palette inferred from a public firm site —
+ * swap these values (and the wordmark in src/components/site-header.tsx)
+ * once real brand assets (hex codes, logo file, font names) are available.
+ *
+ * Token names follow shadcn/ui's vocabulary so the two can share one
+ * palette: `muted` is a surface and `muted-foreground` is the grey text on
+ * it, `primary` is the colour of a primary action, and `accent` is reserved
+ * for shadcn's own hover states. `brand` is this app's decorative colour
+ * (tag pills, info banners) and is deliberately NOT `accent`, because
+ * shadcn components style their hovers with `bg-accent`.
  */
 :root {
   --background: #fbfaf7;
   --surface: #ffffff;
   --foreground: #1c2430;
-  --muted: #6b6f76;
+  --muted: #f3f1ec;
+  --muted-foreground: #6b6f76;
   --border: #e4e1d9;
-  --accent: #8a7355;
-  --accent-strong: #6b5842;
+  --brand: #8a7355;
+  --primary: #6b5842;
+  --primary-foreground: #ffffff;
+  --accent: #f3f1ec;
+  --accent-foreground: #1c2430;
   --link: #33507a;
   --danger: #a4392f;
   --success: #3d6b4f;
@@ -25,9 +36,13 @@
   --color-surface: var(--surface);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-brand: var(--brand);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
   --color-accent: var(--accent);
-  --color-accent-strong: var(--accent-strong);
+  --color-accent-foreground: var(--accent-foreground);
   --color-link: var(--link);
   --color-danger: var(--danger);
   --color-success: var(--success);

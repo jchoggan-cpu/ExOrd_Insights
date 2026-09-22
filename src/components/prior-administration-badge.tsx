@@ -9,7 +9,7 @@ export function PriorAdministrationBadge({ dateSigned }: { dateSigned?: string }
   return (
     <span
       title={title}
-      className="inline-flex items-center gap-1 rounded-full border border-border bg-border/40 px-2.5 py-0.5 text-xs font-medium text-muted"
+      className="inline-flex items-center gap-1 rounded-full border border-border bg-border/40 px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
     >
       Prior administration
     </span>

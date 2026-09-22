@@ -8,8 +8,8 @@ import { NeedsReviewBadge } from "@/components/needs-review-badge";
 export const dynamic = "force-dynamic";
 
 const RUN_STATUS_STYLES: Record<string, string> = {
-  success: "text-accent-strong",
-  running: "text-muted",
+  success: "text-primary",
+  running: "text-muted-foreground",
   partial: "text-danger",
   failure: "text-danger",
 };
@@ -57,7 +57,7 @@ export default async function NeedsAttentionPage() {
       <div className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">
         <div className="mb-6">
           <h1 className="font-display text-3xl font-semibold text-foreground">Needs Attention</h1>
-          <p className="mt-1 text-muted">
+          <p className="mt-1 text-muted-foreground">
             Rows flagged for human review, and recent Federal Register ingestion runs. Nothing here
             is automatic — this is what to check.
           </p>
@@ -70,7 +70,7 @@ export default async function NeedsAttentionPage() {
           {flaggedOrders === null ? (
             <SectionUnavailable what="flagged orders" />
           ) : flaggedOrders.length === 0 ? (
-            <p className="mt-3 text-sm text-muted">Nothing flagged right now.</p>
+            <p className="mt-3 text-sm text-muted-foreground">Nothing flagged right now.</p>
           ) : (
             <div className="mt-3 overflow-hidden rounded-lg border border-border bg-surface">
               {flaggedOrders.map((eo) => (
@@ -84,7 +84,7 @@ export default async function NeedsAttentionPage() {
                     </Link>
                     <NeedsReviewBadge reason={eo.needsReviewReason ?? eo.ingestionFlagReason} />
                   </div>
-                  <p className="text-xs text-muted">{eo.needsReviewReason ?? eo.ingestionFlagReason}</p>
+                  <p className="text-xs text-muted-foreground">{eo.needsReviewReason ?? eo.ingestionFlagReason}</p>
                 </div>
               ))}
             </div>
@@ -96,13 +96,13 @@ export default async function NeedsAttentionPage() {
           {recentRuns === null ? (
             <SectionUnavailable what="the run history" />
           ) : recentRuns.length === 0 ? (
-            <p className="mt-3 text-sm text-muted">
+            <p className="mt-3 text-sm text-muted-foreground">
               No runs logged yet — either Supabase isn&apos;t connected, or nothing has run.
             </p>
           ) : (
             <div className="mt-3 overflow-x-auto rounded-lg border border-border bg-surface">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-border text-xs uppercase text-muted">
+                <thead className="border-b border-border text-xs uppercase text-muted-foreground">
                   <tr>
                     <th className="px-4 py-2 font-medium">Type</th>
                     <th className="px-4 py-2 font-medium">Status</th>
@@ -118,7 +118,7 @@ export default async function NeedsAttentionPage() {
                       <td className={`px-4 py-2 font-medium ${RUN_STATUS_STYLES[run.status] ?? ""}`}>
                         {run.status}
                       </td>
-                      <td className="px-4 py-2 text-muted">{new Date(run.startedAt).toLocaleString()}</td>
+                      <td className="px-4 py-2 text-muted-foreground">{new Date(run.startedAt).toLocaleString()}</td>
                       <td className="px-4 py-2">
                         {run.newCount} / {run.updatedCount}
                       </td>

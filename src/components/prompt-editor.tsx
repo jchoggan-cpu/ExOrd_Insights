@@ -79,7 +79,7 @@ export function PromptEditor({
               type="button"
               onClick={() => setBody(defaultBody)}
               disabled={body === defaultBody}
-              className="text-link hover:underline disabled:cursor-not-allowed disabled:text-muted disabled:no-underline"
+              className="text-link hover:underline disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline"
             >
               Reset to default
             </button>
@@ -98,12 +98,12 @@ export function PromptEditor({
 
       {showPreview && (
         <div className="rounded-lg border border-border bg-surface">
-          <p className="border-b border-border px-4 py-2.5 text-sm text-muted">
+          <p className="border-b border-border px-4 py-2.5 text-sm text-muted-foreground">
             The saved prompt with the firm&apos;s taxonomy lists substituted in — this exact text is
             sent as the system prompt. Editing above changes the template; the lists themselves come
             from <code className="font-mono text-xs">src/config/</code>.
           </p>
-          <pre className="max-h-96 overflow-auto px-4 py-3 font-mono text-xs leading-relaxed whitespace-pre-wrap text-muted">
+          <pre className="max-h-96 overflow-auto px-4 py-3 font-mono text-xs leading-relaxed whitespace-pre-wrap text-muted-foreground">
             {renderedPreview}
           </pre>
         </div>
@@ -115,18 +115,18 @@ export function PromptEditor({
           value={note}
           onChange={(e) => setNote(e.target.value)}
           placeholder="What changed, and why (optional)"
-          className="min-w-64 flex-1 rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted focus:border-link"
+          className="min-w-64 flex-1 rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-link"
         />
         <button
           type="button"
           onClick={handleSave}
           disabled={!isDirty || save.status === "saving" || !requestToken}
-          className="rounded-md bg-accent-strong px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
           {save.status === "saving" ? "Saving…" : "Save as new version"}
         </button>
         {isDirty && save.status !== "saving" && (
-          <span className="text-sm text-muted">Unsaved changes</span>
+          <span className="text-sm text-muted-foreground">Unsaved changes</span>
         )}
       </div>
 

@@ -52,7 +52,7 @@ export function TrackerPagination({
 
   const linkClass =
     "rounded-md border border-border px-3 py-1.5 text-sm text-foreground hover:border-link hover:text-link";
-  const disabledClass = "rounded-md border border-border/50 px-3 py-1.5 text-sm text-muted/50";
+  const disabledClass = "rounded-md border border-border/50 px-3 py-1.5 text-sm text-muted-foreground/50";
 
   return (
     <nav className="flex flex-wrap items-center justify-center gap-1.5" aria-label="Pagination">
@@ -66,7 +66,7 @@ export function TrackerPagination({
 
       {paginationRange(page, totalPages).map((entry, index) =>
         entry === "gap" ? (
-          <span key={`gap-${index}`} className="px-1 text-sm text-muted">
+          <span key={`gap-${index}`} className="px-1 text-sm text-muted-foreground">
             …
           </span>
         ) : entry === page ? (

@@ -138,7 +138,7 @@ export function TrackerControls({ query, total }: { query: TrackerQuery; total: 
           ))}
         </select>
 
-        <label className="flex items-center gap-2 text-sm text-muted">
+        <label className="flex items-center gap-2 text-sm text-muted-foreground">
           Signed
           <input
             type="date"
@@ -160,7 +160,7 @@ export function TrackerControls({ query, total }: { query: TrackerQuery; total: 
         </label>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 text-sm text-muted">
+      <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
         <span>
           {total.toLocaleString()} {total === 1 ? "order" : "orders"}
           {hasFilters && " match"}

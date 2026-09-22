@@ -79,7 +79,7 @@ export function MultiSelectFilter({ label, emptyLabel, options, selected, onChan
               onChange={() => toggle(option.value)}
               className="mt-0.5"
             />
-            <span className={option.isSubOption ? "text-muted" : ""}>{option.label}</span>
+            <span className={option.isSubOption ? "text-muted-foreground" : ""}>{option.label}</span>
           </label>
         ))}
       </div>

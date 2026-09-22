@@ -16,7 +16,7 @@ export function SiteHeader() {
           <span className="font-display text-xl font-semibold tracking-tight text-foreground">
             Sheppard
           </span>
-          <span className="text-sm text-muted">EO Tracker</span>
+          <span className="text-sm text-muted-foreground">EO Tracker</span>
         </Link>
         <nav className="flex items-center gap-6 text-sm font-medium">
           {NAV_LINKS.map((link) => (

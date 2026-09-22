@@ -34,15 +34,15 @@ function DayRow({ day, maxCost }: { day: DailyUsage; maxCost: number }) {
   return (
     <tr className="border-b border-border/60 last:border-0">
       <td className="px-4 py-2.5 text-sm whitespace-nowrap text-foreground">{formatDate(day.date)}</td>
-      <td className="px-4 py-2.5 text-sm text-muted tabular-nums">{day.calls}</td>
-      <td className="px-4 py-2.5 text-sm text-muted tabular-nums">
+      <td className="px-4 py-2.5 text-sm text-muted-foreground tabular-nums">{day.calls}</td>
+      <td className="px-4 py-2.5 text-sm text-muted-foreground tabular-nums">
         {tokens(day.inputTokens)} / {tokens(day.outputTokens)}
       </td>
-      <td className="px-4 py-2.5 text-sm text-muted tabular-nums">{tokens(day.cacheReadInputTokens)}</td>
+      <td className="px-4 py-2.5 text-sm text-muted-foreground tabular-nums">{tokens(day.cacheReadInputTokens)}</td>
       <td className="px-4 py-2.5">
         <div className="flex items-center gap-2">
           <div className="h-1.5 w-24 overflow-hidden rounded-full bg-border/60">
-            <div className="h-full rounded-full bg-accent-strong" style={{ width: `${widthPercent}%` }} />
+            <div className="h-full rounded-full bg-primary" style={{ width: `${widthPercent}%` }} />
           </div>
           <span className="text-sm font-medium tabular-nums text-foreground">{money(day.costUsd)}</span>
         </div>
@@ -58,7 +58,7 @@ export default async function UsagePage() {
     return (
       <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-8">
         <h1 className="font-display text-3xl font-semibold text-foreground">API Spend</h1>
-        <p className="mt-3 text-muted">
+        <p className="mt-3 text-muted-foreground">
           Supabase isn&apos;t configured, so no usage has been recorded. See the README.
         </p>
       </main>
@@ -74,7 +74,7 @@ export default async function UsagePage() {
       <div className="mx-auto w-full max-w-5xl flex-1 px-6 py-8">
         <div className="mb-6">
           <h1 className="font-display text-3xl font-semibold text-foreground">API Spend</h1>
-          <p className="mt-1 max-w-3xl text-muted">
+          <p className="mt-1 max-w-3xl text-muted-foreground">
             Every model call this app makes, priced and totalled by day. Recorded at the moment of
             the call, so a later price change never rewrites what a past run cost. Summaries use{" "}
             <code className="font-mono text-sm text-foreground">{getSummaryModel()}</code>; content
@@ -84,32 +84,32 @@ export default async function UsagePage() {
 
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-lg border border-border bg-surface px-4 py-3">
-            <p className="text-xs font-medium tracking-wide text-muted uppercase">Today (UTC)</p>
+            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Today (UTC)</p>
             <p className="mt-1 font-display text-3xl font-semibold text-foreground tabular-nums">
               {money(summary.today.costUsd)}
             </p>
-            <p className="mt-0.5 text-sm text-muted">{summary.today.calls} calls</p>
+            <p className="mt-0.5 text-sm text-muted-foreground">{summary.today.calls} calls</p>
           </div>
           <div className="rounded-lg border border-border bg-surface px-4 py-3">
-            <p className="text-xs font-medium tracking-wide text-muted uppercase">
+            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
               Last {USAGE_WINDOW_DAYS} days
             </p>
             <p className="mt-1 font-display text-3xl font-semibold text-foreground tabular-nums">
               {money(summary.windowCostUsd)}
             </p>
-            <p className="mt-0.5 text-sm text-muted">
+            <p className="mt-0.5 text-sm text-muted-foreground">
               {summary.days.reduce((n, d) => n + d.calls, 0)} calls
             </p>
           </div>
           <div className="rounded-lg border border-border bg-surface px-4 py-3">
-            <p className="text-xs font-medium tracking-wide text-muted uppercase">Today by feature</p>
+            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">Today by feature</p>
             {todayFeatures.length === 0 ? (
-              <p className="mt-2 text-sm text-muted">No calls yet today.</p>
+              <p className="mt-2 text-sm text-muted-foreground">No calls yet today.</p>
             ) : (
               <ul className="mt-2 space-y-1">
                 {todayFeatures.map(([feature, stats]) => (
                   <li key={feature} className="flex justify-between gap-3 text-sm">
-                    <span className="text-muted">{FEATURE_LABELS[feature] ?? feature}</span>
+                    <span className="text-muted-foreground">{FEATURE_LABELS[feature] ?? feature}</span>
                     <span className="tabular-nums text-foreground">{money(stats.costUsd)}</span>
                   </li>
                 ))}
@@ -129,7 +129,7 @@ export default async function UsagePage() {
         <section className="mt-8">
           <h2 className="font-display text-lg font-semibold text-foreground">Daily breakdown</h2>
           {summary.days.length === 0 ? (
-            <p className="mt-3 text-sm text-muted">
+            <p className="mt-3 text-sm text-muted-foreground">
               No API calls recorded in the last {USAGE_WINDOW_DAYS} days.
             </p>
           ) : (
@@ -137,11 +137,11 @@ export default async function UsagePage() {
               <table className="w-full min-w-[34rem]">
                 <thead>
                   <tr className="border-b border-border text-left">
-                    <th className="px-4 py-2.5 text-xs font-medium tracking-wide text-muted uppercase">Day</th>
-                    <th className="px-4 py-2.5 text-xs font-medium tracking-wide text-muted uppercase">Calls</th>
-                    <th className="px-4 py-2.5 text-xs font-medium tracking-wide text-muted uppercase">In / Out</th>
-                    <th className="px-4 py-2.5 text-xs font-medium tracking-wide text-muted uppercase">Cached</th>
-                    <th className="px-4 py-2.5 text-xs font-medium tracking-wide text-muted uppercase">Cost</th>
+                    <th className="px-4 py-2.5 text-xs font-medium tracking-wide text-muted-foreground uppercase">Day</th>
+                    <th className="px-4 py-2.5 text-xs font-medium tracking-wide text-muted-foreground uppercase">Calls</th>
+                    <th className="px-4 py-2.5 text-xs font-medium tracking-wide text-muted-foreground uppercase">In / Out</th>
+                    <th className="px-4 py-2.5 text-xs font-medium tracking-wide text-muted-foreground uppercase">Cached</th>
+                    <th className="px-4 py-2.5 text-xs font-medium tracking-wide text-muted-foreground uppercase">Cost</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -152,7 +152,7 @@ export default async function UsagePage() {
               </table>
             </div>
           )}
-          <p className="mt-2 text-xs text-muted">
+          <p className="mt-2 text-xs text-muted-foreground">
             &ldquo;Cached&rdquo; counts input tokens served from the prompt cache at a tenth the
             normal rate. If that column reads 0 while summaries are running, prompt caching has
             stopped working and the bill is roughly double what it should be.

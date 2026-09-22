@@ -137,7 +137,7 @@ export function ContentDrafter({
                 className="mt-0.5"
               />
               <span>
-                <span className="font-mono text-xs text-muted">
+                <span className="font-mono text-xs text-muted-foreground">
                   {eo.eoNumber ?? eo.actionType ?? "—"}
                 </span>{" "}
                 <span className="font-medium">{eo.title}</span>
@@ -145,7 +145,7 @@ export function ContentDrafter({
             </label>
           ))}
         </div>
-        <p className="mt-1 text-xs text-muted">
+        <p className="mt-1 text-xs text-muted-foreground">
           Select more than one to generate a combined digest across related orders.
         </p>
       </section>
@@ -162,8 +162,8 @@ export function ContentDrafter({
               onClick={() => setContentType(type)}
               className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
                 contentType === type
-                  ? "border-accent-strong bg-accent-strong text-white"
-                  : "border-border bg-surface text-foreground hover:border-accent"
+                  ? "border-primary bg-primary text-white"
+                  : "border-border bg-surface text-foreground hover:border-brand"
               }`}
             >
               {CONTENT_TYPE_LABELS[type]}
@@ -177,7 +177,7 @@ export function ContentDrafter({
           type="button"
           onClick={handleGenerate}
           disabled={generating || !requestToken}
-          className="rounded-md bg-accent-strong px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {generating ? "Generating…" : "Generate draft"}
         </button>
@@ -188,7 +188,7 @@ export function ContentDrafter({
         <section>
           <h2 className="font-display text-lg font-semibold text-foreground">3. Review & export</h2>
           {isStub && (
-            <p className="mt-2 rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-xs text-accent-strong">
+            <p className="mt-2 rounded-md border border-brand/30 bg-brand/10 px-3 py-2 text-xs text-primary">
               This is a placeholder stub draft — set AI_GATEWAY_API_KEY or ANTHROPIC_API_KEY to enable real AI-generated
               content (see README).
             </p>
@@ -207,7 +207,7 @@ export function ContentDrafter({
             </div>
           )}
           {!isStub && unverifiedQuotes.length === 0 && !quotesWereChecked && (
-            <p className="mt-2 rounded-md border border-border bg-surface px-3 py-2 text-xs text-muted">
+            <p className="mt-2 rounded-md border border-border bg-surface px-3 py-2 text-xs text-muted-foreground">
               Quote verification wasn&apos;t possible — the selected order(s) don&apos;t have stored source text
               yet (pre-Federal Register ingestion). This is not a confirmation that any quotes are accurate.
             </p>
@@ -235,7 +235,7 @@ export function ContentDrafter({
               type="button"
               onClick={handleCopy}
               disabled={!reviewed}
-              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-accent disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-brand disabled:cursor-not-allowed disabled:opacity-40"
             >
               {copied ? "Copied!" : "Copy to clipboard"}
             </button>
@@ -243,7 +243,7 @@ export function ContentDrafter({
               type="button"
               onClick={handleExportDocx}
               disabled={!reviewed}
-              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-accent disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-brand disabled:cursor-not-allowed disabled:opacity-40"
             >
               Export as .docx
             </button>
@@ -251,7 +251,7 @@ export function ContentDrafter({
               type="button"
               onClick={handleExportMarkdown}
               disabled={!reviewed}
-              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-accent disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-brand disabled:cursor-not-allowed disabled:opacity-40"
             >
               Export as text/markdown
             </button>

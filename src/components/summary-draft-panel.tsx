@@ -17,7 +17,7 @@ export function SummaryDraftPanel({ draft, hasCuratedSummary }: { draft: Summary
         <h3 className="text-sm font-medium text-foreground">
           {hasCuratedSummary ? "AI draft (not in use)" : "AI draft"}
         </h3>
-        <span className="text-xs text-muted">
+        <span className="text-xs text-muted-foreground">
           {draft.model} · {formatDate(draft.createdAt)}
         </span>
       </div>
@@ -40,7 +40,7 @@ export function SummaryDraftPanel({ draft, hasCuratedSummary }: { draft: Summary
 
       {draft.deliverables !== null && (
         <div className="mt-3">
-          <p className="text-xs font-medium text-muted">Deliverables</p>
+          <p className="text-xs font-medium text-muted-foreground">Deliverables</p>
           <p className="mt-1 whitespace-pre-line text-sm text-foreground/90">
             {formatDeliverables(draft.deliverables)}
           </p>

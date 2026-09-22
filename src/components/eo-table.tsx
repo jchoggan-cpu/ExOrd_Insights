@@ -20,7 +20,7 @@ export function EoTable({ orders }: { orders: ExecutiveOrderListItem[] }) {
     <div className="flex flex-col gap-4">
       <div className="overflow-x-auto rounded-lg border border-border bg-surface">
         <table className="w-full min-w-[900px] text-left text-sm">
-          <thead className="border-b border-border bg-background/60 text-xs uppercase tracking-wide text-muted">
+          <thead className="border-b border-border bg-background/60 text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
               <th className="px-4 py-3 font-medium">EO Number</th>
               <th className="px-4 py-3 font-medium">Title</th>
@@ -34,7 +34,7 @@ export function EoTable({ orders }: { orders: ExecutiveOrderListItem[] }) {
           <tbody>
             {orders.map((eo) => (
               <tr key={eo.id} className="border-b border-border last:border-0 hover:bg-background/50">
-                <td className="px-4 py-3 align-top font-mono text-xs text-muted">
+                <td className="px-4 py-3 align-top font-mono text-xs text-muted-foreground">
                   {eo.eoNumber ?? eo.actionType ?? "—"}
                 </td>
                 <td className="px-4 py-3 align-top">
@@ -59,7 +59,7 @@ export function EoTable({ orders }: { orders: ExecutiveOrderListItem[] }) {
                     </div>
                   )}
                 </td>
-                <td className="px-4 py-3 align-top whitespace-nowrap text-muted">
+                <td className="px-4 py-3 align-top whitespace-nowrap text-muted-foreground">
                   {formatDate(eo.dateSigned)}
                 </td>
                 <td className="px-4 py-3 align-top">
@@ -79,14 +79,14 @@ export function EoTable({ orders }: { orders: ExecutiveOrderListItem[] }) {
                     ))}
                   </div>
                 </td>
-                <td className="px-4 py-3 align-top text-muted">
+                <td className="px-4 py-3 align-top text-muted-foreground">
                   {eo.legalChallenges.length > 0 ? eo.legalChallenges.length : "—"}
                 </td>
               </tr>
             ))}
             {orders.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-10 text-center text-muted">
+                <td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">
                   No executive orders match your search or filters.
                 </td>
               </tr>

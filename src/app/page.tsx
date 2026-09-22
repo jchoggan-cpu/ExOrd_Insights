@@ -34,7 +34,7 @@ export default async function TrackerPage({
           <h1 className="font-display text-3xl font-semibold text-foreground">
             Executive Order Tracker
           </h1>
-          <p className="mt-1 text-muted">
+          <p className="mt-1 text-muted-foreground">
             Executive orders from the current administration (Jan 20, 2025 onward), with
             AI-assisted summaries, tagging, and litigation tracking.
           </p>

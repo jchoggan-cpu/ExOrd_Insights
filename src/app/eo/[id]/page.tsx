@@ -45,13 +45,13 @@ export default async function EoDetailPage({
 
         <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="font-mono text-xs text-muted">{eo.eoNumber ?? eo.actionType ?? "—"}</p>
+            <p className="font-mono text-xs text-muted-foreground">{eo.eoNumber ?? eo.actionType ?? "—"}</p>
             <h1 className="font-display mt-1 text-2xl font-semibold text-foreground">
               {eo.title}
             </h1>
             <div className="mt-2 flex items-center gap-3">
               <StatusBadge status={eo.status} />
-              <span className="text-sm text-muted">Signed {formatDate(eo.dateSigned, "long")}</span>
+              <span className="text-sm text-muted-foreground">Signed {formatDate(eo.dateSigned, "long")}</span>
               {eo.needsReview && <NeedsReviewBadge reason={eo.needsReviewReason} />}
               {isPriorAdministrationHoldover(eo.dateSigned) && (
                 <PriorAdministrationBadge dateSigned={eo.dateSigned} />
@@ -60,7 +60,7 @@ export default async function EoDetailPage({
           </div>
           <Link
             href={`/draft?eoId=${eo.id}`}
-            className="whitespace-nowrap rounded-md bg-accent-strong px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+            className="whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90"
           >
             Draft content about this EO
           </Link>
@@ -102,7 +102,7 @@ export default async function EoDetailPage({
                 ))}
               </ul>
             ) : (
-              <p className="text-muted">None recorded.</p>
+              <p className="text-muted-foreground">None recorded.</p>
             )}
           </Section>
 
@@ -112,12 +112,12 @@ export default async function EoDetailPage({
                 {eo.keyDates.map((kd) => (
                   <li key={kd.label} className="flex justify-between gap-4 border-b border-border/60 py-1 last:border-0">
                     <span>{kd.label}</span>
-                    <span className="whitespace-nowrap text-muted">{formatDate(kd.date, "long")}</span>
+                    <span className="whitespace-nowrap text-muted-foreground">{formatDate(kd.date, "long")}</span>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-muted">None recorded.</p>
+              <p className="text-muted-foreground">None recorded.</p>
             )}
           </Section>
 
@@ -140,9 +140,9 @@ export default async function EoDetailPage({
                   <li key={lc.caseName} className="rounded-md border border-border p-3">
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <span className="font-medium">{lc.caseName}</span>
-                      <span className="text-xs text-muted">{lc.status}</span>
+                      <span className="text-xs text-muted-foreground">{lc.status}</span>
                     </div>
-                    <p className="mt-1 text-muted">{lc.court}</p>
+                    <p className="mt-1 text-muted-foreground">{lc.court}</p>
                     <p className="mt-2">{lc.summary}</p>
                     {lc.docketUrl && (
                       <a
@@ -158,7 +158,7 @@ export default async function EoDetailPage({
                 ))}
               </ul>
             ) : (
-              <p className="text-muted">No known legal challenges.</p>
+              <p className="text-muted-foreground">No known legal challenges.</p>
             )}
           </Section>
 
@@ -176,15 +176,15 @@ export default async function EoDetailPage({
                       >
                         {n.title}
                       </a>
-                      <span className="text-xs text-muted">{formatDate(n.date, "long")}</span>
+                      <span className="text-xs text-muted-foreground">{formatDate(n.date, "long")}</span>
                     </div>
-                    <p className="mt-1 text-xs text-muted">{n.source}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{n.source}</p>
                     <p className="mt-2">{n.snippet}</p>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-muted">No news coverage on file.</p>
+              <p className="text-muted-foreground">No news coverage on file.</p>
             )}
           </Section>
         </div>

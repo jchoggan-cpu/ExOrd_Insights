@@ -3,7 +3,7 @@ type TagKind = "subject" | "practice" | "industry";
 const KIND_STYLES: Record<TagKind, string> = {
   subject: "bg-border/60 text-foreground",
   practice: "bg-link/10 text-link",
-  industry: "bg-accent/15 text-accent-strong",
+  industry: "bg-brand/15 text-primary",
 };
 
 export function TagPill({ label, kind = "subject" }: { label: string; kind?: TagKind }) {

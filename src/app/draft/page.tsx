@@ -25,7 +25,7 @@ export default async function DraftPage({
           <h1 className="font-display text-3xl font-semibold text-foreground">
             Draft Content
           </h1>
-          <p className="mt-1 text-muted">
+          <p className="mt-1 text-muted-foreground">
             Generate a client alert, blog post, talking points, or social post grounded in
             one or more executive orders below.
           </p>

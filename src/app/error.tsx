@@ -34,7 +34,7 @@ export default function Error({ error, retry }: { error: Error & { digest?: stri
         <h1 className="font-display text-2xl font-semibold text-foreground">
           Can&apos;t reach the tracker&apos;s database
         </h1>
-        <p className="mt-3 text-muted">
+        <p className="mt-3 text-muted-foreground">
           This page needs live data and the database did not answer, so nothing is shown rather
           than showing you figures that might be out of date. No tracker data has been lost.
         </p>
@@ -51,7 +51,7 @@ export default function Error({ error, retry }: { error: Error & { digest?: stri
           </Link>
         </div>
         {error.digest ? (
-          <p className="mt-8 font-mono text-xs text-muted">
+          <p className="mt-8 font-mono text-xs text-muted-foreground">
             Reference: {error.digest}
           </p>
         ) : null}

@@ -47,7 +47,7 @@ export function GateForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="rounded-md bg-accent-strong px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {submitting ? "Checking…" : "Continue"}
       </button>

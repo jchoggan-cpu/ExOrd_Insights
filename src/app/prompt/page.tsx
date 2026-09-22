@@ -46,7 +46,7 @@ export default async function PromptPage() {
       <div className="mx-auto w-full max-w-5xl flex-1 px-6 py-8">
         <div className="mb-6">
           <h1 className="font-display text-3xl font-semibold text-foreground">Summary Prompt</h1>
-          <p className="mt-1 max-w-3xl text-muted">
+          <p className="mt-1 max-w-3xl text-muted-foreground">
             The instructions sent to{" "}
             <code className="font-mono text-sm text-foreground">{getSummaryModel()}</code> for every
             executive order it summarizes and classifies. Editing this changes how future summaries
@@ -77,7 +77,7 @@ export default async function PromptPage() {
             <h2 className="font-display text-lg font-semibold text-foreground">
               Version history ({history.length})
             </h2>
-            <p className="mt-1 text-sm text-muted">
+            <p className="mt-1 text-sm text-muted-foreground">
               Every save is kept. A summary written on a given day was written by whichever version
               was in force then.
             </p>
@@ -87,13 +87,13 @@ export default async function PromptPage() {
                   <summary className="cursor-pointer px-4 py-3 text-sm text-foreground hover:bg-border/20">
                     <span className="font-medium">{formatDate(version.createdAt)}</span>
                     {version.isActive && (
-                      <span className="ml-2 rounded-full bg-accent-strong/10 px-2 py-0.5 text-xs font-medium text-accent-strong">
+                      <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                         in force
                       </span>
                     )}
-                    {version.note && <span className="ml-2 text-muted">— {version.note}</span>}
+                    {version.note && <span className="ml-2 text-muted-foreground">— {version.note}</span>}
                   </summary>
-                  <pre className="max-h-80 overflow-auto border-t border-border/60 px-4 py-3 font-mono text-xs leading-relaxed whitespace-pre-wrap text-muted">
+                  <pre className="max-h-80 overflow-auto border-t border-border/60 px-4 py-3 font-mono text-xs leading-relaxed whitespace-pre-wrap text-muted-foreground">
                     {version.body}
                   </pre>
                 </details>
