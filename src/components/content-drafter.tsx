@@ -20,11 +20,16 @@ function downloadBlob(blob: Blob, filename: string) {
 
 export function ContentDrafter({
   orders,
-  initialSelectedId,
+  initialSelectedIds,
   requestToken,
 }: {
   orders: ExecutiveOrderListItem[];
-  initialSelectedId?: string;
+  /**
+   * Orders ticked on the tracker and carried here by its selection bar, as
+   * repeated eoId parameters. Several, not one: drafting from a handful of
+   * related orders is the point of the multi-EO support below.
+   */
+  initialSelectedIds?: string[];
   /**
    * Minted per page render by the server (see src/lib/request-token.ts);
    * expires after 12 hours, at which point the page must be reloaded. Null
@@ -35,7 +40,7 @@ export function ContentDrafter({
   requestToken: string | null;
 }) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(
-    new Set(initialSelectedId ? [initialSelectedId] : []),
+    () => new Set(initialSelectedIds ?? []),
   );
   const [contentType, setContentType] = useState<ContentType>("client_alert");
   const [draftText, setDraftText] = useState("");

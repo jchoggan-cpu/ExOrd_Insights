@@ -4,6 +4,7 @@ import { StatusBadge } from "@/components/status-badge";
 import { TagPill } from "@/components/tag-pill";
 import { NeedsReviewBadge } from "@/components/needs-review-badge";
 import { PriorAdministrationBadge } from "@/components/prior-administration-badge";
+import { EoSelectCheckbox } from "@/components/eo-select-checkbox";
 import { formatDate } from "@/lib/format-date";
 import { isPriorAdministrationHoldover } from "@/lib/federal-register/prior-administration";
 
@@ -29,10 +30,12 @@ export function EoResultRow({ order }: { order: ExecutiveOrderListItem }) {
 
   return (
     <li className="border-b border-border last:border-0">
-      <div className="flex flex-col gap-2.5 px-4 py-3 transition-colors hover:bg-muted/40 sm:flex-row sm:gap-5 sm:px-5">
+      <div className="flex flex-col gap-2.5 px-4 py-3 transition-colors hover:bg-muted/40 sm:flex-row sm:gap-4 sm:px-5">
+        <EoSelectCheckbox id={order.id} title={order.title} />
+
         {/* Identity rail. Inline above the title on a phone, a column beside
             it from `sm` up. */}
-        <div className="flex shrink-0 items-baseline gap-2 text-xs text-muted-foreground sm:w-32 sm:flex-col sm:items-start sm:gap-1">
+        <div className="flex shrink-0 items-baseline gap-2 text-xs text-muted-foreground sm:w-28 sm:flex-col sm:items-start sm:gap-1">
           <span className="font-mono font-medium text-foreground">
             {order.eoNumber ?? order.actionType ?? "—"}
           </span>

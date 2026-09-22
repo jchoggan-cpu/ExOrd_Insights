@@ -5,6 +5,7 @@ import { EoResults } from "@/components/eo-results";
 import { TrackerControls } from "@/components/tracker-controls";
 import { TrackerPagination } from "@/components/tracker-pagination";
 import { LocalDataBanner } from "@/components/local-data-banner";
+import { EoSelectionBar } from "@/components/eo-selection-bar";
 
 // Reads live tracker data (cron jobs ingest new orders continuously) — must
 // never be statically prerendered, or new/updated orders wouldn't show up
@@ -45,6 +46,10 @@ export default async function TrackerPage({
           <EoResults orders={rows} />
           <TrackerPagination query={query} page={page} totalPages={totalPages} />
         </div>
+
+        {/* Reads the same store as the rows' checkboxes, backed by
+            sessionStorage so a selection survives paging. */}
+        <EoSelectionBar />
       </div>
     </main>
   );

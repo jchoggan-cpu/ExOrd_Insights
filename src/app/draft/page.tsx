@@ -2,13 +2,17 @@ import { getExecutiveOrders, isUsingLocalData } from "@/lib/data";
 import { ContentDrafter } from "@/components/content-drafter";
 import { LocalDataBanner } from "@/components/local-data-banner";
 import { hasRequestTokenSecret, mintRequestToken } from "@/lib/request-token";
+import { DRAFT_ID_PARAM } from "@/lib/eo-selection";
 
 export default async function DraftPage({
   searchParams,
 }: {
-  searchParams: Promise<{ eoId?: string }>;
+  // Repeated, so Next hands over an array when the tracker's selection bar
+  // sends several orders and a bare string when a single link sends one.
+  searchParams: Promise<{ [DRAFT_ID_PARAM]?: string | string[] }>;
 }) {
-  const { eoId } = await searchParams;
+  const eoId = (await searchParams)[DRAFT_ID_PARAM];
+  const initialSelectedIds = eoId === undefined ? [] : Array.isArray(eoId) ? eoId : [eoId];
   const orders = await getExecutiveOrders();
   const usingLocalData = isUsingLocalData();
   // Minted per render and handed to the client component, which sends it back
@@ -30,7 +34,11 @@ export default async function DraftPage({
             one or more executive orders below.
           </p>
         </div>
-        <ContentDrafter orders={orders} initialSelectedId={eoId} requestToken={requestToken} />
+        <ContentDrafter
+          orders={orders}
+          initialSelectedIds={initialSelectedIds}
+          requestToken={requestToken}
+        />
       </div>
     </main>
   );
