@@ -28,7 +28,7 @@ const displayFont = Lora({
 export const metadata: Metadata = {
   // No firm name anywhere in the UI until the tool is approved for use under
   // it. See the palette note in globals.css.
-  title: "Executive Order Tracker",
+  title: "Executive Actions Tracker",
   description:
     "Internal tool for tracking executive orders, their legal impact, and drafting client-ready content about them.",
 };

@@ -2,11 +2,20 @@ import { NextResponse, type NextRequest } from "next/server";
 import { SITE_AUTH_COOKIE, hashSitePassword } from "@/lib/site-auth";
 
 /**
- * Lightweight interim access gate — a single shared password protects the
- * whole app before Supabase Auth (Phase 5) exists. Entirely inactive if
- * SITE_PASSWORD isn't set (e.g. local development). See mitigation #3 in the
- * project plan; this proxy and src/app/gate/ should be removed once real
- * auth ships.
+ * Lightweight interim access gate over the ADMIN pages only — Needs
+ * Attention, Summary Prompt and API Spend — plus the endpoint that edits the
+ * summarization prompt. The tracker, the order pages and the drafter stay
+ * open to anyone with the link, which is the point: the tool is meant to be
+ * shared, while the pages that expose flagged rows, spend and the nightly
+ * prompt are not.
+ *
+ * A single shared password is NOT per-user access control. It keeps a demo
+ * audience out of the admin pages; it does not distinguish between people.
+ * Real accounts are Phase 5, and this proxy and src/app/gate/ should be
+ * removed when they ship.
+ *
+ * Entirely inactive if SITE_PASSWORD isn't set, so local development and the
+ * current deployment behave exactly as before until the variable is added.
  */
 export async function proxy(request: NextRequest) {
   const sitePassword = process.env.SITE_PASSWORD;
@@ -26,16 +35,29 @@ export async function proxy(request: NextRequest) {
   return NextResponse.redirect(gateUrl);
 }
 
+/*
+ * An explicit list rather than "everything except", which is what this used
+ * to be. Listing what IS gated means a new public page is public by default;
+ * the old form meant every new route was gated by accident, including
+ * /api/cron/*, which must return JSON to Vercel Cron rather than a redirect
+ * to an HTML page. Nothing here matches /api/cron/*, and those routes keep
+ * their own CRON_SECRET check (src/lib/cron-auth.ts) regardless.
+ */
 export const config = {
+  // Written out literally, NOT imported from src/lib/admin-routes.ts, even
+  // though that is the shared list every other caller uses. Next parses this
+  // at build time and rejects a computed value: "matcher needs to be a
+  // static string or array of static strings". admin-routes.test.ts asserts
+  // these patterns and that list stay in step, so the duplication cannot
+  // drift silently.
   matcher: [
-    /*
-     * Match everything except:
-     * - the gate page and its API route (or we'd redirect-loop)
-     * - /api/cron/* — Vercel Cron sends a plain GET expecting JSON, not a
-     *   redirect to an HTML gate page; those routes have their own
-     *   CRON_SECRET check (see src/lib/cron-auth.ts) instead
-     * - Next.js internals and static assets
-     */
-    "/((?!gate|api/gate|api/cron|_next/static|_next/image|favicon.ico).*)",
+    "/needs-attention",
+    "/needs-attention/:path*",
+    "/prompt",
+    "/prompt/:path*",
+    "/usage",
+    "/usage/:path*",
+    "/api/summary-prompt",
+    "/api/summary-prompt/:path*",
   ],
 };

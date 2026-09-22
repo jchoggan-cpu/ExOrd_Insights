@@ -37,13 +37,15 @@ export default async function TrackerPage({
     <main className="flex flex-1 flex-col">
       {usingLocalData && <LocalDataBanner />}
       <div className="mx-auto w-full max-w-7xl flex-1 px-6 py-5">
-        <div className="mb-4">
-          <h1 className="font-display text-2xl font-semibold text-foreground">
-            Executive Order Tracker
-          </h1>
-          <p className="mt-0.5 text-sm text-muted-foreground">
-            Executive orders from the current administration (Jan 20, 2025 onward), with
-            AI-assisted summaries, tagging, and litigation tracking.
+        <div className="mb-3">
+          {/* Visually hidden, not deleted: the banner names the product, so
+              repeating it here was the third "Executive Order" in the same
+              corner -- but a page still needs a heading to start its outline
+              for anyone navigating by headings. */}
+          <h1 className="sr-only">Executive Actions Tracker</h1>
+          <p className="text-sm text-muted-foreground">
+            Executive orders, proclamations and memoranda from Jan 20, 2025 onward, with
+            AI-assisted summaries, tagging and litigation tracking.
           </p>
         </div>
 

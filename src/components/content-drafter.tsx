@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { DraftOrderPicker } from "@/components/draft-order-picker";
 import type { ContentType, ExecutiveOrderListItem } from "@/lib/types";
 import { REQUEST_TOKEN_HEADER } from "@/lib/request-token-header";
 import { CONTENT_TYPE_LABELS } from "@/lib/types";
@@ -50,6 +51,13 @@ export function ContentDrafter({
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  /**
+   * What the last successful generation produced, for the notice beside the
+   * button. The draft itself renders below the fold, so without this a
+   * reader has no sign anything happened.
+   */
+  const [lastGenerated, setLastGenerated] = useState<{ type: ContentType; at: Date } | null>(null);
+  const draftSectionRef = useRef<HTMLElement>(null);
   const [reviewed, setReviewed] = useState(false);
 
   function toggleSelected(id: string) {
@@ -90,6 +98,7 @@ export function ContentDrafter({
       setIsStub(Boolean(data.isStub));
       setUnverifiedQuotes(Array.isArray(data.unverifiedQuotes) ? data.unverifiedQuotes : []);
       setQuotesWereChecked(Boolean(data.quotesWereChecked));
+      setLastGenerated({ type: contentType, at: new Date() });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to generate content.");
     } finally {
@@ -125,35 +134,7 @@ export function ContentDrafter({
 
   return (
     <div className="flex flex-col gap-8">
-      <section>
-        <h2 className="font-display text-lg font-semibold text-foreground">
-          1. Select executive order(s)
-        </h2>
-        <div className="mt-3 max-h-64 overflow-y-auto rounded-lg border border-border bg-surface">
-          {orders.map((eo) => (
-            <label
-              key={eo.id}
-              className="flex cursor-pointer items-start gap-3 border-b border-border/60 px-4 py-2.5 text-sm last:border-0 hover:bg-background/50"
-            >
-              <input
-                type="checkbox"
-                checked={selectedIds.has(eo.id)}
-                onChange={() => toggleSelected(eo.id)}
-                className="mt-0.5"
-              />
-              <span>
-                <span className="font-mono text-xs text-muted-foreground">
-                  {eo.eoNumber ?? eo.actionType ?? "—"}
-                </span>{" "}
-                <span className="font-medium">{eo.title}</span>
-              </span>
-            </label>
-          ))}
-        </div>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Select more than one to generate a combined digest across related orders.
-        </p>
-      </section>
+      <DraftOrderPicker orders={orders} selectedIds={selectedIds} onToggle={toggleSelected} />
 
       <section>
         <h2 className="font-display text-lg font-semibold text-foreground">
@@ -177,7 +158,7 @@ export function ContentDrafter({
         </div>
       </section>
 
-      <section>
+      <section className="flex flex-wrap items-center gap-y-2">
         <button
           type="button"
           onClick={handleGenerate}
@@ -186,11 +167,34 @@ export function ContentDrafter({
         >
           {generating ? "Generating…" : "Generate draft"}
         </button>
+        {/* The draft lands below the fold, so say it is there and offer to
+            go to it. Scrolling on its own would move the page under someone
+            mid-sentence in the order list. */}
+        {lastGenerated && !generating && (
+          <button
+            type="button"
+            onClick={() =>
+              draftSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+            }
+            className="ml-3 inline-flex items-center gap-2 rounded border border-success/40 bg-success/10 px-3 py-2 text-sm text-success hover:bg-success/15 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          >
+            <span aria-hidden="true">&#10003;</span>
+            <span>
+              {CONTENT_TYPE_LABELS[lastGenerated.type]} ready &middot;{" "}
+              {lastGenerated.at.toLocaleTimeString(undefined, {
+                hour: "numeric",
+                minute: "2-digit",
+              })}
+            </span>
+            <span className="font-medium underline">View draft</span>
+            <span aria-hidden="true">&darr;</span>
+          </button>
+        )}
         {error && <p className="mt-2 text-sm text-danger">{error}</p>}
       </section>
 
       {draftText && (
-        <section>
+        <section ref={draftSectionRef} className="scroll-mt-4">
           <h2 className="font-display text-lg font-semibold text-foreground">3. Review & export</h2>
           {isStub && (
             <p className="mt-2 rounded-md border border-brand/30 bg-brand/10 px-3 py-2 text-xs text-primary">
