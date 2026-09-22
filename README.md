@@ -28,7 +28,7 @@ Verified against the live database on 2026-09-22.
 | Summaries | ✅ **All 559 rows** have one; the enrichment queue is empty. **275** are the firm's hand-written text, protected from automated overwrite via `manually_edited_fields`; the rest are AI-written |
 | AI practice-area / industry tagging | ✅ **432** rows carry a practice area and **314** an industry; subject area is on all 559. The untagged remainder is ceremonial, where empty is correct |
 | Quote verification | ✅ A summary or draft quoting text not found verbatim in the source is never saved |
-| Content-drafting UI (4 content types, single & multi-EO) | ✅ Live, producing real AI output |
+| Content-drafting UI (4 content types, single & multi-EO) | ✅ Live, producing real AI output. Every draft opens with a title, its content type, and the orders it covers — see "What a generated draft looks like" |
 | Copy / .docx / markdown export | ✅ Gated behind a "reviewed for accuracy" confirmation |
 | Shared-password access gate | ⚠️ Built, **dormant** — `SITE_PASSWORD` was removed 2026-09-16 so the URL could be shared. Re-adding it plus a redeploy turns it back on; see "Interim access" |
 | Litigation docket linking (CourtListener) | ⚠️ Partly — **131 of 252** recorded challenges linked; 30 need a human decision, 91 unmatched |
@@ -88,6 +88,41 @@ snippet for every matching row rather than for one page — measured 1.67s
 against 0.65s for a page of 25, on 559 rows. It works; it is simply the one
 combination the migration's paging trick does not cover. Fixing it properly
 needs another migration.
+
+## What a generated draft looks like
+
+Every draft opens with a header before the model's words:
+
+```
+# Federal Procurement Reciprocity Memorandum Targets Canadian-Origin Items (Client Alert / Memo)
+
+**Executive order covered:**
+
+- [Trade — Restoring Reciprocity in Government Procurement](https://www.federalregister.gov/documents/...)
+
+---
+```
+
+**The title is the model's; everything else is the database's**, and the
+split is deliberate. Naming a piece is a judgement about its content, so the
+model does that. The order labels and, above all, the URLs are fact, so they
+are built in `src/lib/content-header.ts` from stored values. A model asked
+for links will eventually write a plausible one that does not resolve, and
+this is a document a firm may send to a client, so `buildSystemPrompt` tells
+it not to write URLs at all and nothing it returns reaches the link. An
+order with no Federal Register record reads "no source link on file" rather
+than getting a guessed URL.
+
+An order with no EO number is labelled by its subject area — proclamations
+and memoranda never carry a number, which is why the example above reads
+"Trade".
+
+The model is asked for a bare title on the first line. If it opens with
+prose instead, `splitTitleFromDraft` declines to use a first line over 140
+characters and the draft falls back to the order's own title, so a
+disobedient model loses its header rather than its opening paragraph. Stub
+drafts (no AI credentials) are assembled the same way, so what a developer
+sees locally is shaped like what attorneys get.
 
 ## Accessibility notes
 
