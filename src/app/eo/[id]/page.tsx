@@ -58,12 +58,34 @@ export default async function EoDetailPage({
               )}
             </div>
           </div>
-          <Link
-            href={`/draft?eoId=${eo.id}`}
-            className="whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90"
-          >
-            Draft content about this EO
-          </Link>
+          <div className="flex flex-col items-stretch gap-2">
+            <Link
+              href={`/draft?eoId=${eo.id}`}
+              className="whitespace-nowrap rounded-md bg-primary px-4 py-2 text-center text-sm font-medium text-white hover:opacity-90"
+            >
+              Draft content about this EO
+            </Link>
+
+            {/*
+              Everything above this line is the firm's own work product or an
+              AI summary of the order. This is the order. Named for what it
+              actually is: federal_register_url holds the API's html_url, the
+              FederalRegister.gov document page -- NOT the govinfo.gov PDF
+              that is the official legal edition, which this database does not
+              store. Calling it "the official text" would be a claim the data
+              cannot support. The document page links the official PDF itself.
+            */}
+            {eo.federalRegisterUrl && (
+              <a
+                href={eo.federalRegisterUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whitespace-nowrap rounded-md border border-border px-4 py-2 text-center text-sm font-medium text-link hover:border-link"
+              >
+                Read it on FederalRegister.gov
+              </a>
+            )}
+          </div>
         </div>
 
         <div className="mt-6 flex flex-wrap gap-1.5">
