@@ -36,19 +36,18 @@ export default async function TrackerPage({
   return (
     <main className="flex flex-1 flex-col">
       {usingLocalData && <LocalDataBanner />}
-      <div className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">
-        <div className="mb-6">
-          <h1 className="font-display text-3xl font-semibold text-foreground">
+      <div className="mx-auto w-full max-w-7xl flex-1 px-6 py-5">
+        <div className="mb-4">
+          <h1 className="font-display text-2xl font-semibold text-foreground">
             Executive Order Tracker
           </h1>
-          <p className="mt-1 text-muted-foreground">
+          <p className="mt-0.5 text-sm text-muted-foreground">
             Executive orders from the current administration (Jan 20, 2025 onward), with
             AI-assisted summaries, tagging, and litigation tracking.
           </p>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <TrackerControls query={query} total={total} undoFilters={undoFilters} />
+        <TrackerControls query={query} total={total} undoFilters={undoFilters}>
           <EoResults orders={rows} query={query} />
           <TrackerPagination
             query={query}
@@ -56,7 +55,7 @@ export default async function TrackerPage({
             totalPages={totalPages}
             undoFilters={undoFilters}
           />
-        </div>
+        </TrackerControls>
 
         {/* Reads the same store as the rows' checkboxes, backed by
             sessionStorage so a selection survives paging. */}

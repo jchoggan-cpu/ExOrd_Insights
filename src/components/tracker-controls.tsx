@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TrackerFilterBar } from "@/components/tracker-filter-bar";
+import { TrackerSearchField } from "@/components/tracker-search-field";
 import { TrackerResultBar } from "@/components/tracker-result-bar";
 import { buildTrackerQueryString, withTrackerChange, type TrackerQuery } from "@/lib/tracker-query";
 
@@ -32,11 +33,14 @@ export function TrackerControls({
   query,
   total,
   undoFilters,
+  children,
 }: {
   query: TrackerQuery;
   total: number;
   /** The previous query string, when a tag click replaced the filters. */
   undoFilters?: string;
+  /** The results and their paging, rendered on the server and placed in the results column. */
+  children: React.ReactNode;
 }) {
   const router = useRouter();
   const [searchText, setSearchText] = useState(query.search);
@@ -71,20 +75,26 @@ export function TrackerControls({
     if (!isTypingRef.current) setSearchText(query.search);
   }, [query.search]);
 
+  // Two columns from `lg` up: filters at the left, everything else beside
+  // them. The results are passed in as children so they stay server-rendered
+  // -- putting them inside this client component's tree does not make them
+  // client components.
   return (
-    <div className="flex flex-col gap-3">
-      <TrackerFilterBar
-        query={query}
-        searchText={searchText}
-        onSearchTextChange={setSearchText}
-        onChange={navigate}
-      />
-      <TrackerResultBar
-        query={query}
-        total={total}
-        undoFilters={undoFilters}
-        onChange={navigate}
-      />
+    <div className="flex flex-col gap-4 lg:flex-row lg:gap-5">
+      <aside className="lg:w-48 lg:shrink-0">
+        <TrackerFilterBar query={query} onChange={navigate} />
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col gap-3">
+        <TrackerSearchField searchText={searchText} onSearchTextChange={setSearchText} />
+        <TrackerResultBar
+          query={query}
+          total={total}
+          undoFilters={undoFilters}
+          onChange={navigate}
+        />
+        {children}
+      </div>
     </div>
   );
 }

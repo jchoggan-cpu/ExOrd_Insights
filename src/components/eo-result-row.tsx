@@ -44,7 +44,7 @@ export function EoResultRow({
 
   return (
     <li className="border-b border-border last:border-0">
-      <div className="flex flex-col gap-2.5 px-4 py-3 transition-colors hover:bg-muted/40 sm:flex-row sm:gap-4 sm:px-5">
+      <div className="flex flex-col gap-2 px-4 py-2.5 transition-colors hover:bg-muted/40 sm:flex-row sm:gap-4 sm:px-5">
         <EoSelectCheckbox id={order.id} title={order.title} />
 
         {/* Identity rail. Inline above the title on a phone, a column beside
@@ -70,7 +70,7 @@ export function EoResultRow({
           </Link>
 
           {snippetSegments.length > 0 ? (
-            <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted-foreground">
+            <p className="mt-0.5 line-clamp-2 text-sm leading-snug text-muted-foreground">
               {snippetSegments.map((segment, index) =>
                 segment.highlighted ? (
                   <mark
@@ -86,14 +86,14 @@ export function EoResultRow({
             </p>
           ) : (
             order.aiSummary && (
-              <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted-foreground">
+              <p className="mt-0.5 line-clamp-2 text-sm leading-snug text-muted-foreground">
                 {order.aiSummary}
               </p>
             )
           )}
 
           {(order.subjectArea.length > 0 || order.practiceAreas.length > 0) && (
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
+            <div className="mt-1 flex flex-wrap gap-1.5">
               {order.subjectArea.map((subject) => (
                 <TagPill
                   key={subject}
@@ -114,7 +114,7 @@ export function EoResultRow({
           )}
 
           {order.industries.length > 0 && (
-            <p className="mt-1.5 text-xs text-muted-foreground">
+            <p className="mt-1 text-xs text-muted-foreground">
               Clients in {order.industries.join(" · ")}
             </p>
           )}
@@ -130,7 +130,7 @@ export function EoResultRow({
         </div>
 
         {/* Status rail. */}
-        <div className="flex shrink-0 items-center gap-3 sm:w-40 sm:flex-col sm:items-end sm:gap-1.5">
+        <div className="flex shrink-0 items-center gap-3 sm:w-36 sm:flex-col sm:items-end sm:gap-1">
           <StatusBadge status={order.status} />
           <span className="text-xs text-muted-foreground sm:text-right">
             {challengeCount === 0
