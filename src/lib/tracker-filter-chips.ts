@@ -23,17 +23,26 @@ export interface FilterChip {
   clears: Partial<TrackerQuery>;
 }
 
-/** Everything a "Clear all" resets. Sort goes back to newest-first because
- *  clearing the search leaves relevance with nothing to rank against. */
-export const CLEARED_FILTERS: Partial<TrackerQuery> = {
+/**
+ * Everything a "Clear all" resets. Sort goes back to newest-first because
+ * clearing the search leaves relevance with nothing to rank against.
+ *
+ * Frozen, arrays included: withTrackerChange spreads this into a query, so
+ * these arrays become the query's own. Nothing mutates a selection in place
+ * today -- every path builds a new array -- but if something ever did, it
+ * would otherwise corrupt this constant for the rest of the session and
+ * "Clear all" would quietly stop clearing. Frozen, that attempt throws
+ * instead.
+ */
+export const CLEARED_FILTERS: Partial<TrackerQuery> = Object.freeze({
   search: "",
-  practiceAreas: [],
-  industries: [],
+  practiceAreas: Object.freeze([]) as unknown as string[],
+  industries: Object.freeze([]) as unknown as string[],
   status: "",
   dateFrom: "",
   dateTo: "",
   sort: "date",
-};
+});
 
 function withoutValue(values: string[], value: string): string[] {
   return values.filter((v) => v !== value);
