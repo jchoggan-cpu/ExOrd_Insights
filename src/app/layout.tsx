@@ -1,11 +1,23 @@
 import type { Metadata } from "next";
-import { Lora, Inter } from "next/font/google";
+import { Lora, Poppins } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
-const bodyFont = Inter({
+/*
+ * Two fonts, two CSS variables, both consumed by globals.css: --font-body
+ * becomes Tailwind's `font-sans` and --font-display becomes `font-display`.
+ *
+ * shadcn's installer adds a third font here (Geist) bound directly to
+ * --font-sans, which fights globals.css for the same variable. Removed on
+ * purpose: if it is ever reintroduced, the body font silently changes.
+ */
+
+// Poppins is not a variable font, so next/font needs the weights spelled
+// out. These four are what the UI uses: body, emphasis, labels, headings.
+const bodyFont = Poppins({
   variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const displayFont = Lora({
@@ -14,7 +26,9 @@ const displayFont = Lora({
 });
 
 export const metadata: Metadata = {
-  title: "EO Tracker | Sheppard",
+  // No firm name anywhere in the UI until the tool is approved for use under
+  // it. See the palette note in globals.css.
+  title: "Executive Order Tracker",
   description:
     "Internal tool for tracking executive orders, their legal impact, and drafting client-ready content about them.",
 };

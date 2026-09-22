@@ -1,34 +1,84 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 /*
- * Approximated law-firm theme: warm neutral background, ink-navy text, a
- * muted taupe/gold brand colour, serif display headings over a clean sans
- * body. This is a placeholder palette inferred from a public firm site —
- * swap these values (and the wordmark in src/components/site-header.tsx)
- * once real brand assets (hex codes, logo file, font names) are available.
+ * Keeps `dark:` utilities class-driven rather than following the reader's OS
+ * setting. This app has no dark mode and no token below carries a dark
+ * value, so without this line every shadcn component's `dark:` classes would
+ * switch on for anyone browsing in dark mode and paint undefined colours.
+ * Nothing adds the `.dark` class, so the variant is inert by design.
+ */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Approximated law-firm theme: warm cream ground, ink-navy type, a
+ * periwinkle for links and focus, a warm gold for decorative tags, serif
+ * display headings over a clean sans body.
  *
- * Token names follow shadcn/ui's vocabulary so the two can share one
- * palette: `muted` is a surface and `muted-foreground` is the grey text on
- * it, `primary` is the colour of a primary action, and `accent` is reserved
- * for shadcn's own hover states. `brand` is this app's decorative colour
- * (tag pills, info banners) and is deliberately NOT `accent`, because
- * shadcn components style their hovers with `bg-accent`.
+ * These values are a placeholder sampled from a public law-firm site, not
+ * real brand assets, and the firm's name is deliberately absent from the UI
+ * until the tool is approved. Swap these (and the wordmark in
+ * src/components/site-header.tsx) once real assets — hex codes, logo file,
+ * font names — are available.
+ *
+ * Token names follow shadcn/ui's vocabulary so both share one palette:
+ * `muted` is a surface and `muted-foreground` is the grey text on it,
+ * `primary` is the colour of a primary action, and `accent` is reserved for
+ * shadcn's own hover states. `brand` is this app's decorative colour (tag
+ * pills, info banners) and is deliberately NOT `accent`, because shadcn
+ * components style their hovers with `bg-accent`.
  */
 :root {
-  --background: #fbfaf7;
+  /* Ground and type */
+  --background: #f7f4ee;
   --surface: #ffffff;
-  --foreground: #1c2430;
-  --muted: #f3f1ec;
-  --muted-foreground: #6b6f76;
-  --border: #e4e1d9;
-  --brand: #8a7355;
-  --primary: #6b5842;
-  --primary-foreground: #ffffff;
-  --accent: #f3f1ec;
-  --accent-foreground: #1c2430;
-  --link: #33507a;
-  --danger: #a4392f;
-  --success: #3d6b4f;
+  --foreground: #111933;
+  --muted: #efeae1;
+  --muted-foreground: #565d70;
+  --border: #ded7ca;
+
+  /* Actions. Navy fill, cream label — 14.9:1. */
+  --primary: #111933;
+  --primary-foreground: #f4ede4;
+
+  /* The bar across the top of every page: inverted, so it reads as chrome
+     rather than as content. */
+  --header: #111933;
+  --header-foreground: #f4ede4;
+
+  /* Links and focus. 8.1:1 on the cream ground. */
+  --link: #2f3ebf;
+
+  /* Decorative only — tag pills, the "amended" badge, info banners. Always
+     used at low opacity behind `text-primary`, never as a text colour. */
+  --brand: #8a6d3b;
+
+  --danger: #a03127;
+  --success: #2f5d45;
+
+  /* shadcn's own surfaces, pointed at the palette above. */
+  --accent: #efeae1;
+  --accent-foreground: #111933;
+  --card: #ffffff;
+  --card-foreground: #111933;
+  --popover: #ffffff;
+  --popover-foreground: #111933;
+  --secondary: #efeae1;
+  --secondary-foreground: #111933;
+  --destructive: #a03127;
+  --input: #ded7ca;
+  --ring: #2f3ebf;
+
+  /* The sampled brand uses square corners; 2px keeps that feel without the
+     hard edges being uncomfortable on a dense table of rows. */
+  --radius: 0.125rem;
+
+  --chart-1: #111933;
+  --chart-2: #2f3ebf;
+  --chart-3: #8a6d3b;
+  --chart-4: #2f5d45;
+  --chart-5: #565d70;
 }
 
 @theme inline {
@@ -41,16 +91,53 @@
   --color-brand: var(--brand);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-header: var(--header);
+  --color-header-foreground: var(--header-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-link: var(--link);
   --color-danger: var(--danger);
   --color-success: var(--success);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Both are set on <html> by next/font in src/app/layout.tsx. shadcn's
+     installer rewrote this as `var(--font-sans)`, which is circular and
+     silently drops the body font. */
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
+  --font-heading: var(--font-display);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }
