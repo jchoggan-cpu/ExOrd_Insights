@@ -102,7 +102,7 @@ export default async function EoDetailPage({
 
         {eo.needsReview && (
           <div className="mt-4 rounded-md border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
-            ⚠ {eo.needsReviewReason}
+            <span aria-hidden="true">⚠</span> {eo.needsReviewReason}
           </div>
         )}
 
@@ -166,14 +166,19 @@ export default async function EoDetailPage({
                     </div>
                     <p className="mt-1 text-muted-foreground">{lc.court}</p>
                     <p className="mt-2">{lc.summary}</p>
+                    {/* Every one of these reads "View docket", so a screen
+                        reader listing the page's links hears the same words
+                        repeatedly with no way to tell the cases apart --
+                        hence the aria-label naming the case. */}
                     {lc.docketUrl && (
                       <a
                         href={lc.docketUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={`View docket for ${lc.caseName}`}
                         className="mt-2 inline-block text-xs text-link hover:underline"
                       >
-                        View docket →
+                        View docket <span aria-hidden="true">→</span>
                       </a>
                     )}
                   </li>

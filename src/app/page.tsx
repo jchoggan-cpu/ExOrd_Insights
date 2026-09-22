@@ -50,7 +50,12 @@ export default async function TrackerPage({
         <div className="flex flex-col gap-4">
           <TrackerControls query={query} total={total} undoFilters={undoFilters} />
           <EoResults orders={rows} query={query} />
-          <TrackerPagination query={query} page={page} totalPages={totalPages} />
+          <TrackerPagination
+            query={query}
+            page={page}
+            totalPages={totalPages}
+            undoFilters={undoFilters}
+          />
         </div>
 
         {/* Reads the same store as the rows' checkboxes, backed by

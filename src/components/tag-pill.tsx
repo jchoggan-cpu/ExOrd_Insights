@@ -40,7 +40,7 @@ export function TagPill({
    */
   href?: string;
 }) {
-  const shared = `inline-flex items-center rounded px-2 py-0.5 text-xs font-medium whitespace-normal sm:whitespace-nowrap ${KIND_STYLES[kind]}`;
+  const shared = `inline-flex items-center rounded px-2 py-0.5 text-xs font-medium whitespace-normal [@media(pointer:coarse)]:py-1 sm:whitespace-nowrap ${KIND_STYLES[kind]}`;
   const text = formatTagLabel(label);
 
   if (!href) return <span className={shared}>{text}</span>;

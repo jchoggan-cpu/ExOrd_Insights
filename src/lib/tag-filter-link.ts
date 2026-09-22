@@ -42,6 +42,11 @@ export function tagFilterHref(
 ): string {
   const replaced = buildTrackerQueryString({
     ...CLEARED_FILTERS,
+    // Page size is a display preference, not a filter. CLEARED_FILTERS omits
+    // it deliberately, and "Clear all" keeps it because that path spreads
+    // onto the current query; this one does not, so it has to be carried
+    // explicitly or a reader on "All" is silently dropped back to 25.
+    pageSize: current.pageSize,
     [FIELD_FOR_KIND[kind]]: [value],
   });
 

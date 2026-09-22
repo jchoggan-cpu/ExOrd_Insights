@@ -13,7 +13,7 @@ import { PAGE_SIZES, type PageSize, type TrackerQuery } from "@/lib/tracker-quer
  */
 
 const CONTROL_CLASS =
-  "rounded border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-link";
+  "rounded border border-control-border bg-surface px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none";
 
 interface TrackerResultBarProps {
   query: TrackerQuery;
@@ -41,7 +41,7 @@ export function TrackerResultBar({ query, total, undoFilters, onChange }: Tracke
             type="button"
             onClick={() => onChange(chip.clears)}
             title={`Remove filter: ${chip.label}`}
-            className="inline-flex items-center gap-1.5 rounded bg-muted px-2 py-0.5 text-xs text-foreground hover:bg-border"
+            className="inline-flex items-center gap-1.5 rounded bg-muted px-2 py-0.5 text-xs text-foreground hover:bg-border focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none [@media(pointer:coarse)]:py-1"
           >
             {chip.label}
             <span aria-hidden="true" className="text-muted-foreground">

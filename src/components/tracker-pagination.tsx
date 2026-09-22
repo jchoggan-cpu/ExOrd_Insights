@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { buildTrackerQueryString, type TrackerQuery } from "@/lib/tracker-query";
+import { UNDO_PARAM } from "@/lib/tag-filter-link";
 
 /**
  * Page navigation for the tracker.
@@ -11,9 +12,18 @@ import { buildTrackerQueryString, type TrackerQuery } from "@/lib/tracker-query"
 /** Page numbers to show either side of the current one before collapsing to an ellipsis. */
 const WINDOW = 1;
 
-function hrefFor(query: TrackerQuery, page: number): string {
+/**
+ * `undo` rides along through paging, because turning a page is not a
+ * decision to keep the filters a tag click replaced. Changing a filter IS
+ * such a decision, so the controls drop it -- they rebuild the URL from
+ * TrackerQuery alone, which deliberately does not carry it.
+ */
+function hrefFor(query: TrackerQuery, page: number, undoFilters?: string): string {
   const qs = buildTrackerQueryString({ ...query, page });
-  return qs ? `/?${qs}` : "/";
+  const withUndo = undoFilters
+    ? `${qs}${qs ? "&" : ""}${UNDO_PARAM}=${encodeURIComponent(undoFilters)}`
+    : qs;
+  return withUndo ? `/?${withUndo}` : "/";
 }
 
 /**
@@ -42,10 +52,13 @@ export function TrackerPagination({
   query,
   page,
   totalPages,
+  undoFilters,
 }: {
   query: TrackerQuery;
   page: number;
   totalPages: number;
+  /** Carried through paging so a tag click stays undoable past page 1. */
+  undoFilters?: string;
 }) {
   // Nothing to navigate: one page, or the reader asked to see everything.
   if (totalPages <= 1 || query.pageSize === "all") return null;
@@ -57,7 +70,7 @@ export function TrackerPagination({
   return (
     <nav className="flex flex-wrap items-center justify-center gap-1.5" aria-label="Pagination">
       {page > 1 ? (
-        <Link href={hrefFor(query, page - 1)} className={linkClass} rel="prev">
+        <Link href={hrefFor(query, page - 1, undoFilters)} className={linkClass} rel="prev">
           ← Previous
         </Link>
       ) : (
@@ -78,14 +91,14 @@ export function TrackerPagination({
             {entry}
           </span>
         ) : (
-          <Link key={entry} href={hrefFor(query, entry)} className={linkClass}>
+          <Link key={entry} href={hrefFor(query, entry, undoFilters)} className={linkClass}>
             {entry}
           </Link>
         ),
       )}
 
       {page < totalPages ? (
-        <Link href={hrefFor(query, page + 1)} className={linkClass} rel="next">
+        <Link href={hrefFor(query, page + 1, undoFilters)} className={linkClass} rel="next">
           Next →
         </Link>
       ) : (

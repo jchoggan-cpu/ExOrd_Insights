@@ -183,8 +183,18 @@ describe("subject filter", () => {
     ]);
   });
 
-  it("accepts a comma-separated list, as the other multi-selects do", () => {
-    expect(parseTrackerQuery({ subject: "Trade,Tech" }).subjects).toEqual(["Trade", "Tech"]);
+  it("keeps a comma inside a value instead of splitting on it", () => {
+    // Three real industries contain a comma. Splitting on it produced two
+    // values that match nothing, so the filter silently returned 0 orders.
+    expect(parseTrackerQuery({ industry: "Aerospace, Defense & Government Services" }).industries)
+      .toEqual(["Aerospace, Defense & Government Services"]);
+    expect(parseTrackerQuery({ subject: "Trade,Tech" }).subjects).toEqual(["Trade,Tech"]);
+  });
+
+  it("round-trips a value containing a comma", () => {
+    const original = ["Aerospace, Defense & Government Services", "Retail, Fashion & Beauty"];
+    const qs = buildTrackerQueryString({ ...DEFAULTS, industries: original });
+    expect(parseTrackerQuery(asSearchParams(qs)).industries).toEqual(original);
   });
 
   it("de-duplicates and drops blanks", () => {
@@ -305,8 +315,21 @@ describe("parseTrackerQuery — multi-select and dates", () => {
     expect(parseTrackerQuery({ practice: "Tax" }).practiceAreas).toEqual(["Tax"]);
   });
 
-  it("accepts a comma-separated list, for a hand-written URL", () => {
-    expect(parseTrackerQuery({ industry: "Fintech,Healthcare" }).industries).toEqual(["Fintech", "Healthcare"]);
+  it("no longer splits a hand-written comma list, so real values survive", () => {
+    // This used to return ["Fintech", "Healthcare"] as a convenience for
+    // hand-written URLs. That convenience cost three real industry filters:
+    // "Aerospace, Defense & Government Services" parsed into two values that
+    // match nothing, so the tracker showed 0 orders with no explanation.
+    // Nothing the app generates is ever comma-joined, so the convenience only
+    // ever applied to URLs typed by hand -- and it broke ones produced by
+    // clicking.
+    expect(parseTrackerQuery({ industry: "Fintech,Healthcare" }).industries).toEqual([
+      "Fintech,Healthcare",
+    ]);
+    expect(parseTrackerQuery({ industry: ["Fintech", "Healthcare"] }).industries).toEqual([
+      "Fintech",
+      "Healthcare",
+    ]);
   });
 
   it("drops duplicates and blanks", () => {

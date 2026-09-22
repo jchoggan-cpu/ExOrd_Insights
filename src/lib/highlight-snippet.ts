@@ -83,3 +83,45 @@ export function parseSnippet(snippet: string | null | undefined): SnippetSegment
 
   return segments;
 }
+
+/**
+ * How much plain text may precede the first highlight before it is trimmed.
+ *
+ * The row clamps the snippet to two lines, which is roughly 13-15 words on a
+ * phone, while Postgres builds fragments of up to 30 words and centres the
+ * match inside them. So the highlight regularly sat past the clamp and the
+ * reader saw two lines of unhighlighted statutory text where the summary
+ * used to be -- strictly worse than the summary, which at least described
+ * the order.
+ */
+const MAX_LEADING_CHARS = 70;
+
+/** Marks text trimmed from the front, so it does not read as the opening. */
+export const TRIM_PREFIX = "…";
+
+/**
+ * Drops leading text so the first highlight is visible inside a two-line
+ * clamp, cutting at a word boundary rather than mid-word.
+ *
+ * Returns the segments unchanged when there is no highlight, or when the
+ * first one is already near the start -- the common case.
+ */
+export function leadWithHighlight(segments: SnippetSegment[]): SnippetSegment[] {
+  const firstHighlight = segments.findIndex((segment) => segment.highlighted);
+  if (firstHighlight <= 0) return segments;
+
+  const leading = segments.slice(0, firstHighlight);
+  const leadingText = leading.map((segment) => segment.text).join("");
+  if (leadingText.length <= MAX_LEADING_CHARS) return segments;
+
+  const kept = leadingText.slice(-MAX_LEADING_CHARS);
+  // Start at a word boundary so the line does not open mid-word. If there is
+  // no space in the kept text, keep it whole rather than returning nothing.
+  const firstSpace = kept.indexOf(" ");
+  const trimmed = firstSpace === -1 ? kept : kept.slice(firstSpace + 1);
+
+  return [
+    { text: `${TRIM_PREFIX}${trimmed}`, highlighted: false },
+    ...segments.slice(firstHighlight),
+  ];
+}

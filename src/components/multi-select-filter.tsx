@@ -47,18 +47,28 @@ interface MultiSelectFilterProps {
  * be tested without rendering -- vitest here runs in node and collects
  * *.test.ts only.
  */
-export function filterOptions(options: FilterOption[], term: string): FilterOption[] {
+export function filterOptions(
+  options: FilterOption[],
+  term: string,
+  selected: readonly string[] = [],
+): FilterOption[] {
   const needle = term.trim().toLowerCase();
   if (!needle) return options;
   return options.filter(
     (option) =>
       option.label.toLowerCase().includes(needle) ||
-      option.value.toLowerCase().includes(needle),
+      option.value.toLowerCase().includes(needle) ||
+      // A selected option always stays visible. Filtered out, its checkbox
+      // disappears and there is no way to untick it from inside the control
+      // -- only "Clear", which drops everything. Worse, the panel could read
+      // "Nothing matches" while two filters were actively narrowing the
+      // results, with nothing on screen saying so.
+      selected.includes(option.value),
   );
 }
 
 const SUMMARY_CLASS =
-  "cursor-pointer select-none rounded border border-border bg-surface px-3 py-2 text-sm outline-none marker:content-none focus:border-link";
+  "flex cursor-pointer select-none items-center gap-1.5 rounded border border-control-border bg-surface px-3 py-2 text-sm marker:content-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none";
 
 export function MultiSelectFilter({
   label,
@@ -69,7 +79,7 @@ export function MultiSelectFilter({
   findPlaceholder,
 }: MultiSelectFilterProps) {
   const [findTerm, setFindTerm] = useState("");
-  const visibleOptions = findPlaceholder ? filterOptions(options, findTerm) : options;
+  const visibleOptions = findPlaceholder ? filterOptions(options, findTerm, selected) : options;
 
   const toggle = (value: string) => {
     onChange(selected.includes(value) ? selected.filter((v) => v !== value) : [...selected, value]);
@@ -85,9 +95,23 @@ export function MultiSelectFilter({
         : `${selected.length} selected`;
 
   return (
-    <details className="relative">
-      <summary className={SUMMARY_CLASS} aria-label={label}>
+    <details className="group relative">
+      <summary className={SUMMARY_CLASS} aria-label={`${label}: ${summaryText}`}>
         {summaryText}
+        {/* The native disclosure triangle is removed by marker:content-none,
+            which left no sign the control opened at all. Decorative, so
+            hidden from assistive tech -- the summary element already carries
+            its own expanded/collapsed state. */}
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 12 12"
+          className="size-3 shrink-0 transition-transform group-open:rotate-180"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.75"
+        >
+          <path d="M2.5 4.5 6 8l3.5-3.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </summary>
 
       {/* Never wider than the screen it opens on: at 390px a fixed 18rem
@@ -100,7 +124,7 @@ export function MultiSelectFilter({
             onChange={(e) => setFindTerm(e.target.value)}
             placeholder={findPlaceholder}
             aria-label={findPlaceholder}
-            className="mb-2 w-full rounded border border-border bg-surface px-2 py-1 text-sm outline-none focus:border-link"
+            className="mb-2 w-full rounded border border-control-border bg-surface px-2 py-1 text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           />
         )}
 

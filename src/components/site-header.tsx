@@ -47,7 +47,7 @@ export function SiteHeader() {
           </Link>
         </div>
 
-        <div className="-mx-6 flex items-center gap-4 overflow-x-auto px-6 sm:mx-0 sm:justify-end sm:overflow-visible sm:px-0">
+        <div className="-mx-6 flex items-center gap-4 overflow-x-auto px-6 sm:mx-0 sm:justify-end sm:px-0">
           <nav className="flex items-center gap-4 text-sm font-medium whitespace-nowrap sm:gap-5">
             {NAV_LINKS.map((link) => (
               <Link

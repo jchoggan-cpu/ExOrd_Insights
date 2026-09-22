@@ -40,7 +40,7 @@ const INDUSTRY_OPTIONS: FilterOption[] = INDUSTRIES.map((name) => ({ value: name
 const SUBJECT_OPTIONS: FilterOption[] = SUBJECT_AREAS.map((name) => ({ value: name, label: name }));
 
 const CONTROL_CLASS =
-  "rounded border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-link";
+  "rounded border border-control-border bg-surface px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none";
 
 interface TrackerFilterBarProps {
   query: TrackerQuery;

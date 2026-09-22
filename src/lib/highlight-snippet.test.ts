@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  HIGHLIGHT_CLOSE,
-  HIGHLIGHT_OPEN,
-  parseSnippet,
-} from "@/lib/highlight-snippet";
+import { HIGHLIGHT_CLOSE, HIGHLIGHT_OPEN, parseSnippet, leadWithHighlight, TRIM_PREFIX } from "@/lib/highlight-snippet";
 
 describe("parseSnippet", () => {
   it("returns an empty array for null, undefined, and an empty string", () => {
@@ -128,5 +124,49 @@ describe("parseSnippet", () => {
   it("exports the marker constants so nothing else hardcodes them", () => {
     expect(HIGHLIGHT_OPEN).toBe("[[hl]]");
     expect(HIGHLIGHT_CLOSE).toBe("[[/hl]]");
+  });
+});
+
+describe("leadWithHighlight", () => {
+  const longLead =
+    "By the authority vested in me as President by the Constitution and the laws of the United States of America, and in order to address matters of ";
+
+  it("leaves a snippet alone when the highlight is already near the start", () => {
+    const segments = parseSnippet("the reciprocal [[hl]]tariff[[/hl]] rates");
+    expect(leadWithHighlight(segments)).toEqual(segments);
+  });
+
+  it("leaves a snippet with no highlight alone", () => {
+    const segments = parseSnippet("no markers here at all");
+    expect(leadWithHighlight(segments)).toEqual(segments);
+  });
+
+  it("leaves a snippet that opens with a highlight alone", () => {
+    const segments = parseSnippet("[[hl]]Tariff[[/hl]] rates rise");
+    expect(leadWithHighlight(segments)).toEqual(segments);
+  });
+
+  it("trims a long lead so the highlight survives a two-line clamp", () => {
+    const result = leadWithHighlight(parseSnippet(`${longLead}[[hl]]tariffs[[/hl]] generally`));
+
+    expect(result[0].text.startsWith(TRIM_PREFIX)).toBe(true);
+    expect(result[0].text.length).toBeLessThanOrEqual(71);
+    // The highlight is what the reader needs to see; it must survive.
+    expect(result.some((segment) => segment.highlighted && segment.text === "tariffs")).toBe(true);
+  });
+
+  it("cuts at a word boundary rather than mid-word", () => {
+    const result = leadWithHighlight(parseSnippet(`${longLead}[[hl]]tariffs[[/hl]]`));
+    const afterEllipsis = result[0].text.slice(TRIM_PREFIX.length);
+    // Whatever word it starts with must be a whole one from the original.
+    expect(longLead).toContain(afterEllipsis);
+  });
+
+  it("keeps everything from the first highlight onward", () => {
+    const result = leadWithHighlight(
+      parseSnippet(`${longLead}[[hl]]a[[/hl]] middle [[hl]]b[[/hl]] tail`),
+    );
+    const rebuilt = result.map((s) => s.text).join("");
+    expect(rebuilt.endsWith("a middle b tail")).toBe(true);
   });
 });

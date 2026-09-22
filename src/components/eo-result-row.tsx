@@ -5,7 +5,7 @@ import { TagPill } from "@/components/tag-pill";
 import { NeedsReviewBadge } from "@/components/needs-review-badge";
 import { PriorAdministrationBadge } from "@/components/prior-administration-badge";
 import { EoSelectCheckbox } from "@/components/eo-select-checkbox";
-import { parseSnippet } from "@/lib/highlight-snippet";
+import { leadWithHighlight, parseSnippet } from "@/lib/highlight-snippet";
 import { tagFilterHref } from "@/lib/tag-filter-link";
 import type { TrackerQuery } from "@/lib/tracker-query";
 import { formatDate } from "@/lib/format-date";
@@ -39,7 +39,8 @@ export function EoResultRow({
   const challengeCount = order.legalChallenges.length;
   // Present only on a search, and only when the match was in the body --
   // see migration 0009. Otherwise the summary is what the row shows.
-  const snippetSegments = parseSnippet(order.snippet);
+  // Trimmed so the matched words survive the two-line clamp below.
+  const snippetSegments = leadWithHighlight(parseSnippet(order.snippet));
 
   return (
     <li className="border-b border-border last:border-0">

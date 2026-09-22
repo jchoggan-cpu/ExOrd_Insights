@@ -78,10 +78,20 @@ function firstValue(raw: string | string[] | undefined): string {
  * Every value for a repeated parameter ("?practice=Tax&practice=Litigation"),
  * de-duplicated and with blanks dropped. Next hands a repeated parameter over
  * as an array and a single one as a string, so both shapes arrive here.
+ *
+ * Commas are NOT separators. They used to be, and it silently broke three
+ * real filters: ticking "Aerospace, Defense & Government Services" parsed
+ * back as ["Aerospace", "Defense & Government Services"], neither of which
+ * is a real industry, so the tracker showed 0 orders and two invented chips
+ * with nothing to explain it. "AI, Robotics and Quantum" and "Retail,
+ * Fashion & Beauty" fail the same way. Nothing ever produced a comma-joined
+ * value -- buildTrackerQueryString emits one parameter per selection -- so
+ * splitting on commas only ever destroyed values that legitimately contain
+ * one.
  */
 function allValues(raw: string | string[] | undefined): string[] {
   const values = Array.isArray(raw) ? raw : raw === undefined ? [] : [raw];
-  return [...new Set(values.flatMap((v) => v.split(",")).map((v) => v.trim()).filter(Boolean))];
+  return [...new Set(values.map((v) => v.trim()).filter(Boolean))];
 }
 
 // A hand-edited "?from=last-tuesday" must not reach SQL as a date.
