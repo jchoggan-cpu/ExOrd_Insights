@@ -1,4 +1,4 @@
-import { INDUSTRIES, PRACTICE_AREAS, subPracticeTag } from "@/lib/taxonomy";
+import { INDUSTRIES, PRACTICE_AREAS, SUBJECT_AREAS, subPracticeTag } from "@/lib/taxonomy";
 import { MultiSelectFilter, type FilterOption } from "@/components/multi-select-filter";
 import { STATUSES, type TrackerQuery } from "@/lib/tracker-query";
 
@@ -34,6 +34,10 @@ const PRACTICE_AREA_OPTIONS: FilterOption[] = PRACTICE_AREAS.flatMap((area) => [
 ]);
 
 const INDUSTRY_OPTIONS: FilterOption[] = INDUSTRIES.map((name) => ({ value: name, label: name }));
+
+// Subject leads the row because it is the one tag on 100% of rows. 26 of
+// them is too many to scan, hence the find-as-you-type box.
+const SUBJECT_OPTIONS: FilterOption[] = SUBJECT_AREAS.map((name) => ({ value: name, label: name }));
 
 const CONTROL_CLASS =
   "rounded border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-link";
@@ -77,6 +81,15 @@ export function TrackerFilterBar({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
+        <MultiSelectFilter
+          label="Subjects"
+          emptyLabel="All Subjects"
+          options={SUBJECT_OPTIONS}
+          selected={query.subjects}
+          onChange={(subjects) => onChange({ subjects })}
+          findPlaceholder="Find a subject"
+        />
+
         <MultiSelectFilter
           label="Practice areas"
           emptyLabel="All Practice Areas"

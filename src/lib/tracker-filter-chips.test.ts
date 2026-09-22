@@ -9,6 +9,7 @@ import { withTrackerChange, type TrackerQuery } from "@/lib/tracker-query";
 
 const BROWSING: TrackerQuery = {
   search: "",
+  subjects: [],
   practiceAreas: [],
   industries: [],
   status: "",

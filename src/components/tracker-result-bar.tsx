@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { activeFilterChips, CLEARED_FILTERS, hasActiveFilters } from "@/lib/tracker-filter-chips";
+import { undoHref } from "@/lib/tag-filter-link";
 import { PAGE_SIZES, type PageSize, type TrackerQuery } from "@/lib/tracker-query";
 
 /**
@@ -16,10 +18,12 @@ const CONTROL_CLASS =
 interface TrackerResultBarProps {
   query: TrackerQuery;
   total: number;
+  /** The previous query string, when a tag click replaced the filters. */
+  undoFilters?: string;
   onChange: (change: Partial<TrackerQuery>) => void;
 }
 
-export function TrackerResultBar({ query, total, onChange }: TrackerResultBarProps) {
+export function TrackerResultBar({ query, total, undoFilters, onChange }: TrackerResultBarProps) {
   const filtered = hasActiveFilters(query);
   const chips = activeFilterChips(query);
 
@@ -55,6 +59,14 @@ export function TrackerResultBar({ query, total, onChange }: TrackerResultBarPro
           >
             Clear all
           </button>
+        )}
+
+        {/* A tag click replaces the filters rather than adding to them, so
+            the way back has to be offered rather than assumed. */}
+        {undoFilters && (
+          <Link href={undoHref(undoFilters)} className="text-link hover:underline">
+            Undo tag filter
+          </Link>
         )}
 
         <span className="ml-auto flex flex-wrap items-center gap-x-3 gap-y-2">

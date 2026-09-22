@@ -42,6 +42,7 @@ interface SearchRow {
   needs_review: boolean;
   review_reason: string | null;
   ai_summary: string | null;
+  snippet: string | null;
   total_count: number;
 }
 
@@ -60,6 +61,7 @@ function mapSearchRow(row: SearchRow): ExecutiveOrderListItem {
     needsReview: row.needs_review,
     needsReviewReason: row.review_reason ?? undefined,
     aiSummary: row.ai_summary ?? undefined,
+    snippet: row.snippet ?? undefined,
   };
 }
 
@@ -79,6 +81,7 @@ export async function searchExecutiveOrders(
     // Empty arrays would be indistinguishable from "filter to nothing" if the
     // function treated them literally; it reads null and empty the same way,
     // and null is the clearer signal of "not filtering on this".
+    p_subjects: query.subjects.length > 0 ? query.subjects : null,
     p_practice_areas: query.practiceAreas.length > 0 ? query.practiceAreas : null,
     p_industries: query.industries.length > 0 ? query.industries : null,
     p_status: query.status || null,

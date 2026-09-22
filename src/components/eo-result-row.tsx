@@ -5,6 +5,9 @@ import { TagPill } from "@/components/tag-pill";
 import { NeedsReviewBadge } from "@/components/needs-review-badge";
 import { PriorAdministrationBadge } from "@/components/prior-administration-badge";
 import { EoSelectCheckbox } from "@/components/eo-select-checkbox";
+import { parseSnippet } from "@/lib/highlight-snippet";
+import { tagFilterHref } from "@/lib/tag-filter-link";
+import type { TrackerQuery } from "@/lib/tracker-query";
 import { formatDate } from "@/lib/format-date";
 import { isPriorAdministrationHoldover } from "@/lib/federal-register/prior-administration";
 
@@ -25,8 +28,18 @@ import { isPriorAdministrationHoldover } from "@/lib/federal-register/prior-admi
  *
  * Presentational and server-rendered -- no state, no JavaScript shipped.
  */
-export function EoResultRow({ order }: { order: ExecutiveOrderListItem }) {
+export function EoResultRow({
+  order,
+  query,
+}: {
+  order: ExecutiveOrderListItem;
+  /** What is filtered now, so a tag can link to "just this tag" and offer a way back. */
+  query: TrackerQuery;
+}) {
   const challengeCount = order.legalChallenges.length;
+  // Present only on a search, and only when the match was in the body --
+  // see migration 0009. Otherwise the summary is what the row shows.
+  const snippetSegments = parseSnippet(order.snippet);
 
   return (
     <li className="border-b border-border last:border-0">
@@ -55,17 +68,46 @@ export function EoResultRow({ order }: { order: ExecutiveOrderListItem }) {
             {order.title}
           </Link>
 
-          {order.aiSummary && (
-            <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted-foreground">{order.aiSummary}</p>
+          {snippetSegments.length > 0 ? (
+            <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted-foreground">
+              {snippetSegments.map((segment, index) =>
+                segment.highlighted ? (
+                  <mark
+                    key={index}
+                    className="rounded-sm bg-brand/25 px-0.5 text-foreground"
+                  >
+                    {segment.text}
+                  </mark>
+                ) : (
+                  <span key={index}>{segment.text}</span>
+                ),
+              )}
+            </p>
+          ) : (
+            order.aiSummary && (
+              <p className="mt-1 line-clamp-2 text-sm leading-snug text-muted-foreground">
+                {order.aiSummary}
+              </p>
+            )
           )}
 
           {(order.subjectArea.length > 0 || order.practiceAreas.length > 0) && (
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               {order.subjectArea.map((subject) => (
-                <TagPill key={subject} label={subject} kind="subject" />
+                <TagPill
+                  key={subject}
+                  label={subject}
+                  kind="subject"
+                  href={tagFilterHref(query, "subject", subject)}
+                />
               ))}
               {order.practiceAreas.map((area) => (
-                <TagPill key={area} label={area} kind="practice" />
+                <TagPill
+                  key={area}
+                  label={area}
+                  kind="practice"
+                  href={tagFilterHref(query, "practice", area)}
+                />
               ))}
             </div>
           )}

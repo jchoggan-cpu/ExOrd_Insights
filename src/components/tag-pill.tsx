@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { formatTagLabel } from "@/lib/tag-label";
 
 type TagKind = "subject" | "practice" | "industry";
@@ -25,12 +26,33 @@ const KIND_STYLES: Record<TagKind, string> = {
   industry: "bg-brand/15 text-primary",
 };
 
-export function TagPill({ label, kind = "subject" }: { label: string; kind?: TagKind }) {
+export function TagPill({
+  label,
+  kind = "subject",
+  href,
+}: {
+  label: string;
+  kind?: TagKind;
+  /**
+   * Where clicking filters to. Omitted where a pill is decoration rather
+   * than a control -- on the detail page, for instance, where there is no
+   * result set to narrow.
+   */
+  href?: string;
+}) {
+  const shared = `inline-flex items-center rounded px-2 py-0.5 text-xs font-medium whitespace-normal sm:whitespace-nowrap ${KIND_STYLES[kind]}`;
+  const text = formatTagLabel(label);
+
+  if (!href) return <span className={shared}>{text}</span>;
+
   return (
-    <span
-      className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-medium whitespace-normal sm:whitespace-nowrap ${KIND_STYLES[kind]}`}
+    <Link
+      href={href}
+      // Says what the click does, since the pill itself only shows a name.
+      title={`Show only orders tagged ${text}`}
+      className={`${shared} transition-opacity hover:opacity-80 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none`}
     >
-      {formatTagLabel(label)}
-    </span>
+      {text}
+    </Link>
   );
 }

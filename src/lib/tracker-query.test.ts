@@ -11,6 +11,7 @@ import {
 
 const DEFAULTS: TrackerQuery = {
   search: "",
+  subjects: [],
   practiceAreas: [],
   industries: [],
   status: "",
@@ -45,6 +46,7 @@ describe("parseTrackerQuery", () => {
     expect(
       parseTrackerQuery({
         q: "critical minerals",
+        subject: "Trade",
         practice: "Tax",
         industry: "Energy and Infrastructure",
         status: "revoked",
@@ -56,6 +58,7 @@ describe("parseTrackerQuery", () => {
       }),
     ).toEqual({
       search: "critical minerals",
+      subjects: ["Trade"],
       practiceAreas: ["Tax"],
       industries: ["Energy and Infrastructure"],
       status: "revoked",
@@ -172,6 +175,46 @@ describe("sort defaults to relevance on a search", () => {
   });
 });
 
+describe("subject filter", () => {
+  it("reads repeated subject parameters", () => {
+    expect(parseTrackerQuery({ subject: ["Trade", "Foreign Affairs"] }).subjects).toEqual([
+      "Trade",
+      "Foreign Affairs",
+    ]);
+  });
+
+  it("accepts a comma-separated list, as the other multi-selects do", () => {
+    expect(parseTrackerQuery({ subject: "Trade,Tech" }).subjects).toEqual(["Trade", "Tech"]);
+  });
+
+  it("de-duplicates and drops blanks", () => {
+    expect(parseTrackerQuery({ subject: ["Trade", "", "Trade"] }).subjects).toEqual(["Trade"]);
+  });
+
+  it("is empty when absent", () => {
+    expect(parseTrackerQuery({}).subjects).toEqual([]);
+  });
+
+  it("emits one parameter per selection and round-trips", () => {
+    const query: TrackerQuery = { ...DEFAULTS, subjects: ["Trade", "Tech"] };
+    const qs = buildTrackerQueryString(query);
+    expect(qs).toBe("subject=Trade&subject=Tech");
+    expect(parseTrackerQuery(asSearchParams(qs)).subjects).toEqual(["Trade", "Tech"]);
+  });
+
+  it("survives a subject containing a character that needs escaping", () => {
+    // "Environment/Energy" and "National Security/Defense" both carry a
+    // slash, which must not be read as a path separator.
+    const qs = buildTrackerQueryString({ ...DEFAULTS, subjects: ["Environment/Energy"] });
+    expect(parseTrackerQuery(asSearchParams(qs)).subjects).toEqual(["Environment/Energy"]);
+  });
+
+  it("resets to page 1 when the subject selection changes", () => {
+    const onPage12: TrackerQuery = { ...DEFAULTS, page: 12 };
+    expect(withTrackerChange(onPage12, { subjects: ["Trade"] }).page).toBe(1);
+  });
+});
+
 describe("buildTrackerQueryString", () => {
   it("produces an empty string when everything is at its default", () => {
     expect(buildTrackerQueryString(DEFAULTS)).toBe("");
@@ -193,6 +236,7 @@ describe("buildTrackerQueryString", () => {
   it("round-trips through parse unchanged", () => {
     const original: TrackerQuery = {
       search: "tariff OR duty",
+      subjects: ["Trade", "Foreign Affairs"],
       practiceAreas: ["Tax", "Governmental--National Security"],
       industries: ["Fintech", "Healthcare"],
       status: "active",

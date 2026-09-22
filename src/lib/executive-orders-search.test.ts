@@ -19,16 +19,49 @@ function searchRow(overrides: Record<string, unknown> = {}) {
     needs_review: false,
     review_reason: null,
     ai_summary: "This EO does a thing.",
+    snippet: null,
     total_count: 1,
     ...overrides,
   };
 }
 
 describe("searchExecutiveOrders", () => {
+  it("sends null rather than an empty array when no subject is selected", () => {
+    // The function reads null and empty the same way, but null is the
+    // clearer signal of "not filtering on this" -- and an empty array would
+    // read as "filter to nothing" to anyone scanning the call.
+    const supabase = createFakeSupabase({ rpc: { search_executive_orders: [searchRow()] } });
+    return searchExecutiveOrders(parseTrackerQuery({}), supabase).then(() => {
+      expect(supabase.rpcCalls[0].args).toMatchObject({ p_subjects: null });
+    });
+  });
+
+  it("carries a snippet through to the row when the database returns one", async () => {
+    const supabase = createFakeSupabase({
+      rpc: {
+        search_executive_orders: [
+          searchRow({ snippet: "the reciprocal [[hl]]tariff[[/hl]] rates" }),
+        ],
+      },
+    });
+
+    const { rows } = await searchExecutiveOrders(parseTrackerQuery({ q: "tariff" }), supabase);
+    expect(rows[0].snippet).toBe("the reciprocal [[hl]]tariff[[/hl]] rates");
+  });
+
+  it("leaves snippet undefined when the database returns none", async () => {
+    // Null on every row while browsing, and on a search whose match came
+    // from the title, summary or tags rather than the body.
+    const supabase = createFakeSupabase({ rpc: { search_executive_orders: [searchRow()] } });
+    const { rows } = await searchExecutiveOrders(parseTrackerQuery({}), supabase);
+    expect(rows[0].snippet).toBeUndefined();
+  });
+
   it("passes the query through to the database function", async () => {
     const supabase = createFakeSupabase({ rpc: { search_executive_orders: [searchRow()] } });
     const query = parseTrackerQuery({
       q: "tariff",
+      subject: ["Trade", "Foreign Affairs"],
       practice: ["Tax", "Governmental--National Security"],
       industry: "Fintech",
       status: "revoked",
@@ -45,6 +78,7 @@ describe("searchExecutiveOrders", () => {
       name: "search_executive_orders",
       args: {
         p_search: "tariff",
+        p_subjects: ["Trade", "Foreign Affairs"],
         p_practice_areas: ["Tax", "Governmental--National Security"],
         p_industries: ["Fintech"],
         p_status: "revoked",

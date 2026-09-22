@@ -36,6 +36,7 @@ export interface FilterChip {
  */
 export const CLEARED_FILTERS: Partial<TrackerQuery> = Object.freeze({
   search: "",
+  subjects: Object.freeze([]) as unknown as string[],
   practiceAreas: Object.freeze([]) as unknown as string[],
   industries: Object.freeze([]) as unknown as string[],
   status: "",
@@ -51,6 +52,7 @@ function withoutValue(values: string[], value: string): string[] {
 export function hasActiveFilters(query: TrackerQuery): boolean {
   return Boolean(
     query.search ||
+      query.subjects.length ||
       query.practiceAreas.length ||
       query.industries.length ||
       query.status ||
@@ -67,6 +69,14 @@ export function activeFilterChips(query: TrackerQuery): FilterChip[] {
       key: "search",
       label: `Full text: ${query.search}`,
       clears: { search: "" },
+    });
+  }
+
+  for (const subject of query.subjects) {
+    chips.push({
+      key: `subject:${subject}`,
+      label: `Subject: ${subject}`,
+      clears: { subjects: withoutValue(query.subjects, subject) },
     });
   }
 

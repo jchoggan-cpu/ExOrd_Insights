@@ -14,6 +14,9 @@ import { offsetFor, totalPagesFor, type TrackerQuery } from "@/lib/tracker-query
  *   - no word stemming (`tariffs` will not find `tariff`)
  *   - no order body text (the legacy dataset has no full_text at all)
  *   - no relevance ranking, so the sort control only affects date order
+ *   - no snippets: they come from ts_headline over full_text, which this
+ *     dataset does not have, so rows here carry no `snippet` and the UI
+ *     falls back to the summary
  *
  * Reproducing websearch_to_tsquery in TypeScript would be a second search
  * engine to keep in step with the first, and the two would drift. A
@@ -58,6 +61,7 @@ export async function searchLocalExecutiveOrders(query: TrackerQuery): Promise<T
 
   const matched = all.filter((eo) => {
     if (!matchesSearch(eo, needle)) return false;
+    if (!matchesAny(eo.subjectArea, query.subjects)) return false;
     if (!matchesAnyPractice(eo.practiceAreas, query.practiceAreas)) return false;
     if (!matchesAny(eo.industries, query.industries)) return false;
     if (query.status && eo.status !== query.status) return false;

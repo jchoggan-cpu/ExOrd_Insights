@@ -41,6 +41,13 @@ export const STATUSES = ["active", "amended", "revoked"] as const;
 export interface TrackerQuery {
   search: string;
   /**
+   * Selected subject areas, OR'd with each other and AND'd against the rest.
+   * Subject is the one tag on 100% of rows, and until migration 0009 it had
+   * no filter at all -- it could only be reached by typing the words into
+   * the full-text box.
+   */
+  subjects: string[];
+  /**
    * Selected practice areas. Several may be chosen at once and they widen
    * the result set rather than narrowing it (OR), which is how a reader
    * expects checkboxes to behave. A selected parent also matches its
@@ -104,6 +111,7 @@ export function parseTrackerQuery(params: RawSearchParams): TrackerQuery {
 
   return {
     search,
+    subjects: allValues(params.subject),
     practiceAreas: allValues(params.practice),
     industries: allValues(params.industry),
     dateFrom: parseIsoDate(firstValue(params.from)),
@@ -127,6 +135,7 @@ export function buildTrackerQueryString(query: Partial<TrackerQuery>): string {
   const params = new URLSearchParams();
 
   if (query.search) params.set("q", query.search);
+  for (const subject of query.subjects ?? []) params.append("subject", subject);
   for (const area of query.practiceAreas ?? []) params.append("practice", area);
   for (const industry of query.industries ?? []) params.append("industry", industry);
   if (query.status) params.set("status", query.status);
@@ -154,6 +163,7 @@ export function withTrackerChange(
   const next = { ...current, ...change };
   const changesResultSet =
     change.search !== undefined ||
+    change.subjects !== undefined ||
     change.practiceAreas !== undefined ||
     change.industries !== undefined ||
     change.status !== undefined ||

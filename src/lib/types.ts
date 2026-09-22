@@ -140,7 +140,17 @@ export type ExecutiveOrderListItem = Pick<
   | "ingestionFlagged"
   | "ingestionFlagReason"
   | "aiSummary"
->;
+> & {
+  /**
+   * The passage of the order's text around the search terms, with matches
+   * wrapped in the markers parseSnippet() understands (see
+   * src/lib/highlight-snippet.ts). NOT a column: it is produced per search by
+   * search_executive_orders (migration 0009), so it is absent when browsing
+   * without a search, when the match came from the title, summary or tags
+   * rather than the body, and on the rows that have no Federal Register text.
+   */
+  snippet?: string;
+};
 
 export interface ContentDraft {
   id: string;

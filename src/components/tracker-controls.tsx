@@ -28,7 +28,16 @@ import { buildTrackerQueryString, withTrackerChange, type TrackerQuery } from "@
  */
 const SEARCH_DEBOUNCE_MS = 300;
 
-export function TrackerControls({ query, total }: { query: TrackerQuery; total: number }) {
+export function TrackerControls({
+  query,
+  total,
+  undoFilters,
+}: {
+  query: TrackerQuery;
+  total: number;
+  /** The previous query string, when a tag click replaced the filters. */
+  undoFilters?: string;
+}) {
   const router = useRouter();
   const [searchText, setSearchText] = useState(query.search);
   // Tracks whether the pending change came from this component, so the sync
@@ -70,7 +79,12 @@ export function TrackerControls({ query, total }: { query: TrackerQuery; total: 
         onSearchTextChange={setSearchText}
         onChange={navigate}
       />
-      <TrackerResultBar query={query} total={total} onChange={navigate} />
+      <TrackerResultBar
+        query={query}
+        total={total}
+        undoFilters={undoFilters}
+        onChange={navigate}
+      />
     </div>
   );
 }

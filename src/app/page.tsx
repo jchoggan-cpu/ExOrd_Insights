@@ -1,6 +1,7 @@
 import { isUsingLocalData } from "@/lib/data";
 import { searchExecutiveOrders } from "@/lib/executive-orders-search";
 import { parseTrackerQuery, type RawSearchParams } from "@/lib/tracker-query";
+import { UNDO_PARAM } from "@/lib/tag-filter-link";
 import { EoResults } from "@/components/eo-results";
 import { TrackerControls } from "@/components/tracker-controls";
 import { TrackerPagination } from "@/components/tracker-pagination";
@@ -23,7 +24,12 @@ export default async function TrackerPage({
   // Search, filters, sort and page all live in the URL, so a filtered view
   // can be shared, bookmarked and reached with the back button — and so the
   // server can do the work rather than shipping every row to the browser.
-  const query = parseTrackerQuery(await searchParams);
+  const rawParams = await searchParams;
+  const query = parseTrackerQuery(rawParams);
+  // Deliberately not part of TrackerQuery: it is a way back after a tag
+  // click replaced the filters, not part of what is being shown.
+  const rawUndo = rawParams[UNDO_PARAM];
+  const undoFilters = (Array.isArray(rawUndo) ? rawUndo[0] : rawUndo) ?? "";
   const { rows, total, page, totalPages } = await searchExecutiveOrders(query);
   const usingLocalData = isUsingLocalData();
 
@@ -42,8 +48,8 @@ export default async function TrackerPage({
         </div>
 
         <div className="flex flex-col gap-4">
-          <TrackerControls query={query} total={total} />
-          <EoResults orders={rows} />
+          <TrackerControls query={query} total={total} undoFilters={undoFilters} />
+          <EoResults orders={rows} query={query} />
           <TrackerPagination query={query} page={page} totalPages={totalPages} />
         </div>
 
