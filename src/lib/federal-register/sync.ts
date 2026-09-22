@@ -3,6 +3,7 @@ import { cleanFederalRegisterText } from "@/lib/federal-register/clean-text";
 import { findUnlinkedLegacyRow, flagUnlinkedLegacyRow } from "@/lib/federal-register/find-unlinked-legacy";
 import { checkDateSanity } from "@/lib/federal-register/date-sanity";
 import { parseDispositionNotes } from "@/lib/federal-register/parse-disposition";
+import { refreshStatusOnly, type ExistingStatusRow } from "@/lib/federal-register/refresh-status";
 import type { FederalRegisterDocument } from "@/lib/federal-register/types";
 
 // Deterministic fields a Federal Register correction can change. Compared
@@ -137,14 +138,16 @@ export async function syncDocument(
   if (!doc.correction_of) {
     const { data: existing, error: lookupError } = await supabase
       .from("executive_orders")
-      .select("id")
+      .select("id, status, manually_edited_fields")
       .eq("document_number", doc.document_number)
       .maybeSingle();
     if (lookupError) throw new Error(`Lookup failed for ${doc.document_number}: ${lookupError.message}`);
     if (existing) {
-      // Deliberately before any fetch: this is the overwhelmingly common
-      // case, and it needs nothing but the document_number.
-      return { documentNumber: doc.document_number, action: "unchanged" };
+      // Still before any fetch: this is the overwhelmingly common case and
+      // the status check below needs only fields the document already
+      // carries, so an unchanged row costs no network request (see the
+      // rate-limiter note on FetchRawFullText).
+      return await refreshStatusOnly(supabase, doc, existing as ExistingStatusRow);
     }
 
     const record = buildRecordFromDocument(doc, await fetchRawFullText());

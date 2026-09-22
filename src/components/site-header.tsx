@@ -50,7 +50,7 @@ export async function SiteHeader() {
 
   return (
     <header className="bg-header text-header-foreground">
-      <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-4">
+      <div className="mx-auto flex max-w-[120rem] flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-4">
         <div className="flex items-center justify-between gap-3 sm:justify-start">
           <Link
             href="/"
@@ -67,7 +67,7 @@ export async function SiteHeader() {
           </Link>
         </div>
 
-        <div className="-mx-6 flex items-center gap-4 overflow-x-auto px-6 sm:mx-0 sm:justify-end sm:px-0">
+        <div className="-mx-4 flex items-center gap-4 overflow-x-auto px-4 sm:mx-0 sm:justify-end sm:px-0">
           <nav className="flex items-center gap-4 text-sm font-medium whitespace-nowrap sm:gap-5">
             {navLinks.map((link) => (
               <Link

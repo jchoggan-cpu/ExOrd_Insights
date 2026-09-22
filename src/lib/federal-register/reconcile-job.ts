@@ -1,15 +1,23 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { formatError } from "@/lib/format-error";
-import { fetchAllDocuments, fetchDocumentDetail, fetchRawText, MINIMAL_FIELDS } from "@/lib/federal-register/client";
+import {
+  fetchAllDocuments,
+  fetchDocumentDetail,
+  fetchRawText,
+  RECONCILE_FIELDS,
+} from "@/lib/federal-register/client";
 import { ADMINISTRATION_START_DATE } from "@/lib/federal-register/constants";
 import { finishRunSafely, startRun } from "@/lib/federal-register/ingestion-run";
 import { resolveRunStatus } from "@/lib/federal-register/run-status";
 import { syncDocument } from "@/lib/federal-register/sync";
+import { refreshStatusOnly, type ExistingStatusRow } from "@/lib/federal-register/refresh-status";
 
 export interface ReconcileJobResult {
   runId: string;
   status: "success" | "partial" | "failure";
   gapsFound: number;
+  /** Stored orders whose status the Federal Register has since changed. */
+  statusChangedCount: number;
   newCount: number;
   updatedCount: number;
   flaggedCount: number;
@@ -29,11 +37,22 @@ export interface ReconcileJobDeps {
 const defaultDeps: ReconcileJobDeps = { fetchAllDocuments, fetchDocumentDetail, fetchRawText };
 
 /**
- * Weekly job: a cheap document_number-only diff against the API over the
- * FULL administration-to-date range (not just the daily job's trailing
- * window), so a gap older than 90 days doesn't silently persist forever.
- * Anything missing is fetched in full and ingested directly — logged as
- * its own run type so a completeness gap is never confused with an
+ * Weekly job, doing two things over the FULL administration-to-date range
+ * rather than the daily job's trailing window.
+ *
+ * 1. GAPS. A cheap document_number diff against the API, so a gap older than
+ *    90 days doesn't silently persist forever. Anything missing is fetched
+ *    in full and ingested.
+ *
+ * 2. STATUS. Every stored order's disposition is re-read from the same
+ *    response. This is the only job that can catch a revocation: disposition
+ *    notes are written onto a document after publication, so an order
+ *    ingested as active in February and revoked in September only learns of
+ *    it from a later look at its own notes -- and the daily job's window has
+ *    long since moved past it. Costs no extra request, just two more fields
+ *    on a page of results already being fetched.
+ *
+ * Logged as its own run type so a completeness gap is never confused with an
  * ingestion failure.
  */
 export async function runReconcileJob(
@@ -45,12 +64,12 @@ export async function runReconcileJob(
   try {
     const apiDocuments = await deps.fetchAllDocuments({
       publicationDateGte: ADMINISTRATION_START_DATE,
-      fields: MINIMAL_FIELDS,
+      fields: RECONCILE_FIELDS,
     });
 
     const { data: existingRows, error } = await supabase
       .from("executive_orders")
-      .select("document_number, applied_correction_document_numbers")
+      .select("id, document_number, applied_correction_document_numbers, status, manually_edited_fields")
       .not("document_number", "is", null);
     if (error) throw new Error(`Failed to load existing document_numbers: ${error.message}`);
 
@@ -66,6 +85,19 @@ export async function runReconcileJob(
 
     const missing = apiDocuments.filter((doc) => !accountedFor.has(doc.document_number));
 
+    // Stored rows, by the document they came from, so the status pass below
+    // can pair each API document with the row it belongs to.
+    const rowByDocumentNumber = new Map<string, ExistingStatusRow>();
+    for (const row of existingRows ?? []) {
+      if (!row.document_number) continue;
+      rowByDocumentNumber.set(row.document_number as string, {
+        id: row.id as string,
+        status: row.status as ExistingStatusRow["status"],
+        manually_edited_fields: (row.manually_edited_fields as string[] | null) ?? null,
+      });
+    }
+
+    let statusChangedCount = 0;
     let newCount = 0;
     let updatedCount = 0;
     let flaggedCount = 0;
@@ -85,7 +117,24 @@ export async function runReconcileJob(
       }
     }
 
-    const status = resolveRunStatus({ attempted: missing.length, failed: errors.length });
+    // The status pass. Every document the API returned that is already
+    // stored, re-read for a disposition change.
+    for (const doc of apiDocuments) {
+      const row = rowByDocumentNumber.get(doc.document_number);
+      if (!row) continue;
+      try {
+        const outcome = await refreshStatusOnly(supabase, doc, row);
+        if (outcome.action === "updated") statusChangedCount++;
+        else if (outcome.action === "flagged") flaggedCount++;
+      } catch (err) {
+        errors.push(`${doc.document_number} (status): ${formatError(err)}`);
+      }
+    }
+
+    const status = resolveRunStatus({
+      attempted: missing.length + rowByDocumentNumber.size,
+      failed: errors.length,
+    });
     const errorMessage = errors.length > 0 ? errors.join("; ") : undefined;
     await finishRunSafely(supabase, runId, { status, newCount, updatedCount, errorMessage });
 
@@ -93,6 +142,7 @@ export async function runReconcileJob(
       runId,
       status,
       gapsFound: missing.length,
+      statusChangedCount,
       newCount,
       updatedCount,
       flaggedCount,
@@ -106,6 +156,7 @@ export async function runReconcileJob(
       runId,
       status: "failure",
       gapsFound: 0,
+      statusChangedCount: 0,
       newCount: 0,
       updatedCount: 0,
       flaggedCount: 0,

@@ -20,8 +20,8 @@ export function EoSelectionBar() {
   if (selected.length === 0) return null;
 
   return (
-    <div className="sticky bottom-0 z-20 -mx-6 mt-2 border-t border-border bg-header px-6 py-3 text-header-foreground shadow-lg">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
+    <div className="sticky bottom-0 z-20 -mx-4 mt-2 border-t border-border bg-header px-4 py-3 text-header-foreground shadow-lg">
+      <div className="mx-auto flex max-w-[120rem] flex-wrap items-center justify-between gap-3">
         <span className="text-sm">
           <span className="font-semibold">{selectionLabel(selected.length)}</span> selected
         </span>

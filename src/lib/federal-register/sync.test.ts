@@ -34,11 +34,15 @@ describe("buildRecordFromDocument", () => {
     expect(record.full_text).toContain("Executive Order 14421");
   });
 
-  it("derives 'amended' status from a real disposition_notes value and cleans full_text", () => {
+  it("leaves an order active when its notes say what IT revoked", () => {
+    // EO 14146's note reads "Revokes in part: EO 13961" -- active voice.
+    // 14146 revoked part of 13961; nothing was done to 14146. This test
+    // asserted "amended" until 2026-09-22, which is the error that showed
+    // 24 revoking orders as revoked.
     const doc = loadDoc("eo-14146-with-disposition-notes.json");
     const record = buildRecordFromDocument(doc, "raw text");
 
-    expect(record.status).toBe("amended");
+    expect(record.status).toBe("active");
     expect(record.source_notes).toContain("Revokes in part");
   });
 
@@ -63,9 +67,9 @@ describe("syncDocument", () => {
     expect(supabase.rows[0].document_number).toBe("2026-17843");
   });
 
-  it("reports unchanged when the document_number already exists", async () => {
+  it("reports unchanged when the document is stored and its status has not moved", async () => {
     const supabase = createFakeSupabase({
-      rows: [{ id: "row-1", document_number: "2026-17843", manually_edited_fields: [], applied_correction_document_numbers: [] }],
+      rows: [{ id: "row-1", document_number: "2026-17843", status: "active", manually_edited_fields: [], applied_correction_document_numbers: [] }],
     });
     const doc = loadDoc("eo-14421-detail.json");
 
@@ -80,7 +84,7 @@ describe("syncDocument", () => {
   // one of them for text that was about to be discarded.
   it("never downloads the text of a document it already has", async () => {
     const supabase = createFakeSupabase({
-      rows: [{ id: "row-1", document_number: "2026-17843", manually_edited_fields: [], applied_correction_document_numbers: [] }],
+      rows: [{ id: "row-1", document_number: "2026-17843", status: "active", manually_edited_fields: [], applied_correction_document_numbers: [] }],
     });
     const fetchRawFullText = vi.fn(async () => "raw text");
 

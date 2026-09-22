@@ -27,8 +27,21 @@ export const FULL_FIELDS = [
   "corrections",
 ] as const;
 
-/** Cheap subset for reconciliation's existence check — no full text pulled. */
+/** Cheap subset for an existence-only check — no full text pulled. */
 export const MINIMAL_FIELDS = ["document_number", "correction_of"] as const;
+
+/**
+ * What reconciliation asks for: existence, plus the disposition notes it
+ * re-reads to catch a revocation recorded after publication. Still no
+ * raw_text_url, so this stays a cheap paged listing rather than a fetch per
+ * document.
+ */
+export const RECONCILE_FIELDS = [
+  "document_number",
+  "correction_of",
+  "disposition_notes",
+  "executive_order_notes",
+] as const;
 
 function buildQuery(params: {
   publicationDateGte?: string;

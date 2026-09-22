@@ -54,7 +54,7 @@ export default async function NeedsAttentionPage() {
 
   return (
     <main className="flex flex-1 flex-col">
-      <div className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">
+      <div className="mx-auto w-full max-w-[120rem] flex-1 px-4 py-8">
         <div className="mb-6">
           <h1 className="font-display text-3xl font-semibold text-foreground">Needs Attention</h1>
           <p className="mt-1 text-muted-foreground">
