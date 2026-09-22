@@ -12,16 +12,19 @@ tagging); Phase 3 is partly built (litigation dockets yes, news no); Phases 4–
 
 ## Current status
 
-Verified against the live database on 2026-09-16.
+Verified against the live database on 2026-09-22.
 
 | Piece | Status |
 |---|---|
 | Supabase | ✅ Connected. Migrations `0001`–`0008` applied — see "Setting up Supabase" |
-| Tracker table + EO detail pages | ✅ Live — **553 orders**, signed 2025-01-17 → 2026-09-09 |
+| Tracker table + EO detail pages | ✅ Live — **559 orders**, signed 2025-01-17 → 2026-09-17 |
 | Search, multi-select filters, signing-date range | ✅ Live, executed in Postgres (`search_executive_orders`, migrations `0007`/`0008`) |
+| Relevance ranking | ✅ Live — a search now ranks by relevance automatically; see "How search is ordered" |
+| Subject-area filter | ❌ Not built — `subject_area` is on all 559 rows and is the one tag with no filter. Needs a migration (`0009`) |
+| Firm branding in the UI | ⚠️ Deliberately absent — see "Branding and the placeholder palette" |
 | Federal Register ingestion | ✅ Live — three Vercel Cron jobs, see "Federal Register ingestion" |
-| Summaries | ✅ **All 553 rows** have one. 284 are still the firm's hand-written text (275 of those protected from automated overwrite via `manually_edited_fields`); the rest are AI-written |
-| AI practice-area / industry tagging | ✅ 428 rows tagged; the untagged remainder is ceremonial, where empty is correct |
+| Summaries | ✅ **All 559 rows** have one; the enrichment queue is empty. **275** are the firm's hand-written text, protected from automated overwrite via `manually_edited_fields`; the rest are AI-written |
+| AI practice-area / industry tagging | ✅ **432** rows carry a practice area and **314** an industry; subject area is on all 559. The untagged remainder is ceremonial, where empty is correct |
 | Quote verification | ✅ A summary or draft quoting text not found verbatim in the source is never saved |
 | Content-drafting UI (4 content types, single & multi-EO) | ✅ Live, producing real AI output |
 | Copy / .docx / markdown export | ✅ Gated behind a "reviewed for accuracy" confirmation |
@@ -32,6 +35,48 @@ Verified against the live database on 2026-09-16.
 | Alerting when a scheduled job fails | ✅ Live — a fourth cron posts to Slack when a job fails, goes missing, sticks, or stalls; see "Alerting" |
 | Email digest | ❌ Not started (Phase 5) |
 | Auth / admin vs. general user roles | ❌ Not started (Phase 5) — RLS policies for it already exist in the schema |
+
+## How search is ordered
+
+A search ranks by relevance; browsing without one lists newest first. The
+ranking itself has existed since migration `0007` — title and EO number
+weighted 'A', summary and tags 'B', body text 'D' — but nothing reached it
+until 2026-09-21, because the sort defaulted to date whatever had been
+typed. Searching "tariff OR duty" returned its 164 matches led by
+Constitution Day and Patriot Day.
+
+The default is a function of the query rather than a constant
+(`defaultSortFor` in `src/lib/tracker-query.ts`), and parsing and
+serializing both go through it. That is what lets a reader switch back to
+"Newest first" on a search and keep it: the query string omits `sort` only
+when it matches the default *for that state*, so on a search an explicit
+`date` is written to the URL rather than dropped and re-defaulted back to
+relevance on the next read. Changing the search text re-decides the sort;
+changing a filter or turning a page does not.
+
+## Branding and the placeholder palette
+
+**The firm's name appears nowhere in the UI, on purpose.** The tool is not
+yet approved for use under it, so the product names itself: the header
+wordmark, the browser tab title and the dormant password gate all read
+"Executive Order Tracker". The repo, this file and the code comments still
+use the firm's name; only the rendered UI is anonymous. Two outbound
+`USER_AGENT` strings (`src/lib/courtlistener/client.ts`,
+`src/lib/federal-register/fetch-with-retry.ts`) also still identify the firm
+to those two APIs — deliberate API etiquette, but worth knowing.
+
+The colours in `src/app/globals.css` are a placeholder sampled from a public
+law-firm site, not real brand assets: cream ground, ink-navy chrome and
+type, periwinkle for links and focus, warm gold for decorative tags. Swap
+those values and the wordmark once real assets (hex codes, logo file, font
+names) arrive.
+
+`shadcn/ui` was added 2026-09-21 (base-nova style, Base UI primitives).
+Its token names are the vocabulary the whole app now uses, so `muted` is a
+surface and `muted-foreground` is the grey text on it, `primary` is the
+colour of a primary action, and `accent` is reserved for shadcn's own hover
+states. This app's own decorative colour is `brand`, deliberately not
+`accent`, because shadcn components style their hovers with `bg-accent`.
 
 ## Getting started
 
@@ -45,7 +90,7 @@ Open http://localhost:3000.
 With no `.env.local`, the app falls back to the imported spreadsheet data in
 `src/data/legacy-import/*.json` — real firm data, but a frozen January 2026
 snapshot of 340 rows, and a visible banner says so. To work against the live
-553-row database, set at least `NEXT_PUBLIC_SUPABASE_URL` and
+559-row database, set at least `NEXT_PUBLIC_SUPABASE_URL` and
 `NEXT_PUBLIC_SUPABASE_ANON_KEY` (see "Environment variables").
 
 ## Where the data comes from
@@ -58,7 +103,7 @@ Three sources feed the tracker:
 | [federalregister.gov](https://www.federalregister.gov/developers/documentation/api/v1) | Every new executive action, plus source text, citation and official URL | Daily cron — free, no API key |
 | [CourtListener](https://www.courtlistener.com) | Real docket numbers, filing dates and URLs for recorded litigation | `npm run link:dockets`, by hand — free |
 
-Of the 553 rows today, **499 carry Federal Register source text** and 54 are
+Of the 559 rows today, **505 carry Federal Register source text** and 54 are
 legacy-only records (mostly memoranda and pardons the Federal Register never
 published) that can never be fact-checked against a source.
 
@@ -103,7 +148,7 @@ won't silently overwrite them.
   a number leaked into the type field. All three are leftovers from parsing the
   spreadsheet's free-text "Type/Number" column, and none has a Federal Register
   counterpart to correct it. Fix by hand with `npm run correct`.
-- **`key_dates` and `news_mentions` are empty on all 553 rows.** The columns and types
+- **`key_dates` and `news_mentions` are empty on all 559 rows.** The columns and types
   exist; nothing writes to them yet.
 - **Practice-area tags have no ground truth.** They are AI-generated and have never
   been validated beyond a 20-row pilot review. Treat them as a filtering aid, not an
@@ -331,9 +376,19 @@ because a database problem is exactly what sends you here.
 
 **A note on source reliability**: FederalRegister.gov states its own text is
 ["not an official legal edition"](https://www.federalregister.gov/reader-aids/government-policy-and-ofr-procedures/about-this-site#legal-status) —
-the official version is the linked govinfo.gov PDF (`federal_register_url`
-on each order). Fine for summarization and drafting; anywhere content is
-asserted as authoritative, cite the PDF.
+the official version is a govinfo.gov PDF. Fine for summarization and
+drafting; anywhere content is asserted as authoritative, cite that PDF.
+
+**`federal_register_url` is not that PDF**, despite what this file claimed
+until 2026-09-22. `sync.ts` sets it from the API's `html_url`, so it holds
+the ordinary FederalRegister.gov document page (verified live: every one of
+the 505 values is a `federalregister.gov/documents/...` URL). The API's
+`pdf_url`, which is the govinfo-hosted official edition, is neither
+requested nor stored, and it cannot be derived from what is stored because
+no publication date is kept. **Linking "the official PDF" from the app
+therefore needs a schema change first** — request `pdf_url` in the Federal
+Register client, add a column, backfill. Until then, link the document page
+and call it what it is.
 
 ## Alerting
 
@@ -619,7 +674,7 @@ scripts/
   data-diagnostics.ts            Post-run data-quality report (counts, duplicates, flags)
 src/
   app/
-    page.tsx                 Tracker dashboard (table, search, filters, paging)
+    page.tsx                 Tracker dashboard (results list, search, filters, paging)
     eo/[id]/page.tsx          EO detail page
     draft/page.tsx            Content-drafting assistant
     needs-attention/page.tsx  Flagged rows + recent ingestion run history
@@ -628,7 +683,14 @@ src/
     api/generate-content/     Content generation API route
     api/cron/                 Federal Register ingest/enrich/reconcile + the watchdog (CRON_SECRET-gated)
     error.tsx                 Shown when a page throws — in practice a failed Supabase read
-  components/                 UI components (table, filters, tags, badges, drafter, header)
+  components/                 UI components (result rows, filters, tags, badges, drafter, header)
+    eo-results.tsx / eo-result-row.tsx  One row per order: title, summary, tags, status
+    tracker-controls.tsx        Debounced search state + navigation (the only client component
+                                on the tracker; the rows render on the server)
+    tracker-filter-bar.tsx      Search box and filter dropdowns
+    tracker-result-bar.tsx      Match count, active-filter chips, sort, page size
+    eo-selection-bar.tsx        The sticky bar that hands ticked orders to the drafter
+    ui/                         shadcn/ui components (added 2026-09-21)
   config/                     Fixed Practice Area / Industry / Subject Area lists
   data/legacy-import/         Extracted spreadsheet data (generated — see scripts/ above)
   lib/
@@ -636,6 +698,9 @@ src/
     supabase.ts                Supabase client factories (anon; service-role for ingestion)
     data.ts / executive-orders.ts  Data access layer — Supabase if configured, else local JSON
     executive-orders-search.ts  One page of tracker results, searched and filtered in Postgres
+    tracker-query.ts           The tracker's URL state: search, filters, sort, paging
+    tracker-filter-chips.ts    Which filters are active, and how to remove one
+    eo-selection.ts / eo-selection-store.ts  Which orders are ticked, held in sessionStorage
     ai-model.ts                Per-task model routing + the single AI-credentials access point
     normalize-title.ts         How two records are compared for being the same instrument
     taxonomy.ts                Typed accessors for the Practice Area / Industry config
