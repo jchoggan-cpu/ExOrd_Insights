@@ -48,7 +48,7 @@ interface ExecutiveOrderRow {
 }
 
 // Columns actually rendered by the tracker table, draft picker, and Needs
-// Attention page (verified against src/components/eo-table.tsx's rendered
+// Attention page (verified against src/components/eo-result-row.tsx's rendered
 // cells and its search haystack, which includes ai_summary). Deliberately
 // excludes full_text/source_notes — see ExecutiveOrderListItem.
 const LIST_COLUMNS =

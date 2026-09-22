@@ -1,7 +1,7 @@
 import { isUsingLocalData } from "@/lib/data";
 import { searchExecutiveOrders } from "@/lib/executive-orders-search";
 import { parseTrackerQuery, type RawSearchParams } from "@/lib/tracker-query";
-import { EoTable } from "@/components/eo-table";
+import { EoResults } from "@/components/eo-results";
 import { TrackerControls } from "@/components/tracker-controls";
 import { TrackerPagination } from "@/components/tracker-pagination";
 import { LocalDataBanner } from "@/components/local-data-banner";
@@ -42,7 +42,7 @@ export default async function TrackerPage({
 
         <div className="flex flex-col gap-4">
           <TrackerControls query={query} total={total} />
-          <EoTable orders={rows} />
+          <EoResults orders={rows} />
           <TrackerPagination query={query} page={page} totalPages={totalPages} />
         </div>
       </div>

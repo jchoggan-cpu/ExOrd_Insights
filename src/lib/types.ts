@@ -116,7 +116,7 @@ export interface ExecutiveOrder {
 /**
  * List-shaped view of an ExecutiveOrder: exactly the columns the tracker
  * table, the draft picker, and the Needs Attention page render (verified
- * against src/components/eo-table.tsx). Deliberately a `Pick`, not the full
+ * against src/components/eo-result-row.tsx). Deliberately a `Pick`, not the full
  * `ExecutiveOrder` — omitting `fullText`/`sourceNotes`/etc. entirely (rather
  * than typing them as always-`undefined`) means a caller that tries to read
  * one off a list row gets a compile error, not a silent `undefined` at
