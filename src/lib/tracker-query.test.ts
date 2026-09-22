@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildTrackerQueryString,
+  defaultSortFor,
   offsetFor,
   parseTrackerQuery,
   totalPagesFor,
@@ -102,13 +103,90 @@ describe("parseTrackerQuery", () => {
   });
 });
 
+/**
+ * A search used to be answered in date order, so searching "tariff OR duty"
+ * returned 164 matching orders led by Constitution Day and Patriot Day --
+ * the relevance ranking in migration 0007 existed but nothing ever reached
+ * it. These cover the switch, and the harder half: that a reader who
+ * deliberately switches back to newest-first is not overridden.
+ */
+describe("sort defaults to relevance on a search", () => {
+  it("ranks by relevance when a search has no explicit sort", () => {
+    expect(parseTrackerQuery({ q: "tariff OR duty" }).sort).toBe("relevance");
+  });
+
+  it("stays newest-first with no search term", () => {
+    expect(parseTrackerQuery({}).sort).toBe("date");
+    expect(parseTrackerQuery({ practice: "Tax" }).sort).toBe("date");
+  });
+
+  it("treats a whitespace-only search as no search", () => {
+    expect(parseTrackerQuery({ q: "   " }).sort).toBe("date");
+    expect(defaultSortFor("   ")).toBe("date");
+  });
+
+  it("honours an explicit date sort on a search", () => {
+    expect(parseTrackerQuery({ q: "tariff", sort: "date" }).sort).toBe("date");
+  });
+
+  it("keeps a deliberate newest-first through paging and sharing", () => {
+    // The bug this guards: buildTrackerQueryString used to omit sort
+    // whenever it equalled "date", so the explicit choice vanished from the
+    // URL and the next read defaulted it straight back to relevance.
+    const deliberate: TrackerQuery = { ...DEFAULTS, search: "tariff", sort: "date" };
+    const shared = buildTrackerQueryString(deliberate);
+
+    expect(shared).toContain("sort=date");
+    expect(parseTrackerQuery(asSearchParams(shared)).sort).toBe("date");
+
+    const pageTwo = withTrackerChange(deliberate, { page: 2 });
+    expect(pageTwo.sort).toBe("date");
+    expect(parseTrackerQuery(asSearchParams(buildTrackerQueryString(pageTwo))).sort).toBe("date");
+  });
+
+  it("leaves sort out of the URL when it is the default for that state", () => {
+    expect(buildTrackerQueryString({ ...DEFAULTS, search: "tariff", sort: "relevance" })).toBe(
+      "q=tariff",
+    );
+    expect(buildTrackerQueryString({ ...DEFAULTS, sort: "date" })).toBe("");
+  });
+
+  it("re-decides the sort when the search itself changes", () => {
+    const browsing: TrackerQuery = { ...DEFAULTS };
+    const searching = withTrackerChange(browsing, { search: "tariff" });
+    expect(searching.sort).toBe("relevance");
+
+    // Clearing the box: relevance with nothing to match on is date order
+    // wearing a different label, so go back to saying "newest first".
+    expect(withTrackerChange(searching, { search: "" }).sort).toBe("date");
+  });
+
+  it("lets a sort set in the same change win over the search", () => {
+    expect(withTrackerChange(DEFAULTS, { search: "tariff", sort: "date" }).sort).toBe("date");
+  });
+
+  it("does not re-decide the sort when something else changes", () => {
+    const deliberate: TrackerQuery = { ...DEFAULTS, search: "tariff", sort: "date" };
+    expect(withTrackerChange(deliberate, { practiceAreas: ["Tax"] }).sort).toBe("date");
+    expect(withTrackerChange(deliberate, { pageSize: 50 }).sort).toBe("date");
+  });
+});
+
 describe("buildTrackerQueryString", () => {
   it("produces an empty string when everything is at its default", () => {
     expect(buildTrackerQueryString(DEFAULTS)).toBe("");
   });
 
   it("omits defaults but keeps what differs", () => {
-    const qs = buildTrackerQueryString({ ...DEFAULTS, search: "tariff", page: 2 });
+    // Relevance rather than DEFAULTS' "date", because that is what a search
+    // now produces -- pairing a search with date order is a deliberate
+    // choice and is written to the URL on purpose.
+    const qs = buildTrackerQueryString({
+      ...DEFAULTS,
+      search: "tariff",
+      sort: "relevance",
+      page: 2,
+    });
     expect(qs).toBe("q=tariff&page=2");
   });
 
@@ -215,6 +293,6 @@ describe("parseTrackerQuery — multi-select and dates", () => {
   });
 
   it("omits date parameters when unset", () => {
-    expect(buildTrackerQueryString({ ...DEFAULTS, search: "x" })).toBe("q=x");
+    expect(buildTrackerQueryString({ ...DEFAULTS, search: "x", sort: "relevance" })).toBe("q=x");
   });
 });

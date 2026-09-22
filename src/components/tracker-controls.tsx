@@ -166,6 +166,13 @@ export function TrackerControls({ query, total }: { query: TrackerQuery; total: 
           {hasFilters && " match"}
         </span>
 
+        {query.sort === "relevance" && query.search && (
+          <span>
+            Sorted by <strong className="font-medium text-foreground">relevance</strong>{" "}
+            <span className="text-muted-foreground">(switched on because you searched)</span>
+          </span>
+        )}
+
         <label className="flex items-center gap-1.5">
           Sort
           <select
@@ -176,8 +183,9 @@ export function TrackerControls({ query, total }: { query: TrackerQuery; total: 
           >
             <option value="date">Newest first</option>
             {/* With no search term every row ranks equally, so relevance
-                would silently behave as date order — say so rather than
-                offering a control that appears to do nothing. */}
+                really would behave as date order. Searching now selects this
+                automatically, so the disabled case is only ever reached by
+                someone opening the dropdown with an empty search box. */}
             <option value="relevance" disabled={!query.search}>
               Most relevant{!query.search ? " (type a search first)" : ""}
             </option>

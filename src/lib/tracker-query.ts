@@ -16,7 +16,25 @@ export type PageSize = (typeof PAGE_SIZES)[number] | "all";
 export const DEFAULT_PAGE_SIZE: PageSize = 25;
 
 export type SortMode = "relevance" | "date";
-export const DEFAULT_SORT: SortMode = "date";
+
+/**
+ * The sort to use when the URL does not ask for one.
+ *
+ * A search means "find me the orders about this", so ranking by how well
+ * each row matches is what the reader is actually asking for; date order
+ * buries the best match under whatever was signed most recently. With no
+ * search term there is nothing to rank against -- every row scores equally
+ * -- so newest-first is the only useful order.
+ *
+ * Parsing and serializing both go through this, which is what lets a
+ * deliberate "Newest first" on a search survive paging and sharing: the
+ * query string only omits `sort` when it matches the default FOR THAT
+ * STATE, so on a search the explicit `date` is written out rather than
+ * dropped and re-defaulted back to relevance on the next read.
+ */
+export function defaultSortFor(search: string): SortMode {
+  return search.trim() ? "relevance" : "date";
+}
 
 export const STATUSES = ["active", "amended", "revoked"] as const;
 
@@ -82,16 +100,19 @@ function parsePage(raw: string): number {
 export function parseTrackerQuery(params: RawSearchParams): TrackerQuery {
   const sort = firstValue(params.sort);
   const status = firstValue(params.status);
+  const search = firstValue(params.q).trim();
 
   return {
-    search: firstValue(params.q).trim(),
+    search,
     practiceAreas: allValues(params.practice),
     industries: allValues(params.industry),
     dateFrom: parseIsoDate(firstValue(params.from)),
     dateTo: parseIsoDate(firstValue(params.to)),
     // An unrecognized status would silently match nothing; drop it instead.
     status: (STATUSES as readonly string[]).includes(status) ? status : "",
-    sort: sort === "relevance" ? "relevance" : DEFAULT_SORT,
+    // An explicit sort in the URL always wins, including an explicit "date"
+    // on a search -- that is a reader who switched back deliberately.
+    sort: sort === "relevance" || sort === "date" ? sort : defaultSortFor(search),
     page: parsePage(firstValue(params.page)),
     pageSize: parsePageSize(firstValue(params.size)),
   };
@@ -111,7 +132,9 @@ export function buildTrackerQueryString(query: Partial<TrackerQuery>): string {
   if (query.status) params.set("status", query.status);
   if (query.dateFrom) params.set("from", query.dateFrom);
   if (query.dateTo) params.set("to", query.dateTo);
-  if (query.sort && query.sort !== DEFAULT_SORT) params.set("sort", query.sort);
+  if (query.sort && query.sort !== defaultSortFor(query.search ?? "")) {
+    params.set("sort", query.sort);
+  }
   if (query.pageSize && query.pageSize !== DEFAULT_PAGE_SIZE) params.set("size", String(query.pageSize));
   if (query.page && query.page > 1) params.set("page", String(query.page));
 
@@ -140,6 +163,15 @@ export function withTrackerChange(
     change.sort !== undefined;
 
   if (changesResultSet && change.page === undefined) next.page = 1;
+
+  // Changing what is being searched re-decides the sort, unless this change
+  // set one itself. Typing a search switches to relevance; clearing it goes
+  // back to newest-first, because relevance with nothing to match on is
+  // just date order wearing a different label.
+  if (change.search !== undefined && change.sort === undefined) {
+    next.sort = defaultSortFor(next.search);
+  }
+
   return next;
 }
 
