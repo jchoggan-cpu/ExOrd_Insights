@@ -20,6 +20,7 @@ Verified against the live database on 2026-09-22.
 | Tracker table + EO detail pages | ✅ Live — **559 orders**, signed 2025-01-17 → 2026-09-17 |
 | Search, multi-select filters, signing-date range | ✅ Live, executed in Postgres (`search_executive_orders`, migrations `0007`/`0008`) |
 | Relevance ranking | ✅ Live — a search now ranks by relevance automatically; see "How search is ordered" |
+| Order status (active / amended / revoked) | ✅ Live and **corrected 2026-09-22** — the disposition parser had the polarity inverted; 42 rows were wrong. See "How an order's status is decided". Now 548 active, 9 amended, 2 revoked |
 | Subject-area filter | ✅ Live — a dropdown with find-as-you-type over all 26 subjects (`p_subjects`, migration `0009`) |
 | Search snippets | ✅ Live — the matching passage of the order's text appears under the title with the matched words marked (`ts_headline`, migration `0009`) |
 | Clickable tags | ✅ Live — a subject or practice tag filters to itself; "Undo tag filter" restores what was there |
@@ -28,9 +29,9 @@ Verified against the live database on 2026-09-22.
 | Summaries | ✅ **All 559 rows** have one; the enrichment queue is empty. **275** are the firm's hand-written text, protected from automated overwrite via `manually_edited_fields`; the rest are AI-written |
 | AI practice-area / industry tagging | ✅ **432** rows carry a practice area and **314** an industry; subject area is on all 559. The untagged remainder is ceremonial, where empty is correct |
 | Quote verification | ✅ A summary or draft quoting text not found verbatim in the source is never saved |
-| Content-drafting UI (4 content types, single & multi-EO) | ✅ Live, producing real AI output. Every draft opens with a title, its content type, and the orders it covers — see "What a generated draft looks like" |
+| Content-drafting UI (4 content types, single & multi-EO) | ✅ Live, producing real AI output. Its order picker has its own search and filters. Every draft opens with a title, its content type, and the orders it covers — see "What a generated draft looks like" |
 | Copy / .docx / markdown export | ✅ Gated behind a "reviewed for accuracy" confirmation |
-| Shared-password access gate | ⚠️ Built, **dormant** — `SITE_PASSWORD` was removed 2026-09-16 so the URL could be shared. Re-adding it plus a redeploy turns it back on; see "Interim access" |
+| Shared-password gate on the admin pages | ⚠️ Built, **dormant** — covers `/needs-attention`, `/prompt`, `/usage` and `/api/summary-prompt` only; the tracker and drafter stay open. Set `SITE_PASSWORD` plus a redeploy to turn it on; see "Interim access" |
 | Litigation docket linking (CourtListener) | ⚠️ Partly — **131 of 252** recorded challenges linked; 30 need a human decision, 91 unmatched |
 | Legal-challenge *discovery* (orders with no recorded challenge) | ❌ Not started — everything so far only links cases the firm already found |
 | News mentions | ❌ Not started — the `NewsMention` type exists and is unused |
@@ -181,8 +182,12 @@ are worth not regressing:
 **The firm's name appears nowhere in the UI, on purpose.** The tool is not
 yet approved for use under it, so the product names itself: the header
 wordmark, the browser tab title and the dormant password gate all read
-"Executive Order Tracker". The repo, this file and the code comments still
-use the firm's name; only the rendered UI is anonymous. Two outbound
+"Executive **Actions** Tracker" — actions, not orders, because the corpus
+includes proclamations and memoranda, and because it is the firm's own word:
+their source spreadsheet is the Executive Actions Tracker.
+
+The repo, this file and the code comments still use the firm's name; only
+the rendered UI is anonymous. Two outbound
 `USER_AGENT` strings (`src/lib/courtlistener/client.ts`,
 `src/lib/federal-register/fetch-with-retry.ts`) also still identify the firm
 to those two APIs — deliberate API etiquette, but worth knowing.
@@ -192,6 +197,14 @@ law-firm site, not real brand assets: cream ground, ink-navy chrome and
 type, periwinkle for links and focus, warm gold for decorative tags. Swap
 those values and the wordmark once real assets (hex codes, logo file, font
 names) arrive.
+
+The tracker's own layout is tuned for one thing: how many orders fit on a
+screen. Filters sit in a column at the left rather than a band above the
+results, the container runs to 1920px rather than 1280, and the page heading
+is `sr-only` because the banner already names the product. Together those
+took the space above the first row from 375px to 232px. The 1920px cap is
+deliberate rather than "no limit" — on a wider monitor an uncapped summary
+line runs past what anyone reads comfortably.
 
 `shadcn/ui` was added 2026-09-21 (base-nova style, Base UI primitives).
 Its token names are the vocabulary the whole app now uses, so `muted` is a
@@ -369,24 +382,53 @@ scratch.
 ### Interim access before real auth
 
 There's no user accounts system yet (that's Phase 5). `SITE_PASSWORD` in the
-deployment's environment variables gates the whole app: `src/proxy.ts` redirects anyone
-without the right cookie to `/gate`, a single shared-password prompt. **It is not set
-today** — it was removed on 2026-09-16 so the tracker could be shared freely, and the
-machinery sits dormant in the repo. Setting the variable again and redeploying re-enables
-it in about thirty seconds, which is why none of it has been deleted. It is **not** a
-real accounts system — no per-user identity, no roles — just enough to keep a deployed
-URL from being fully open. Remove `src/proxy.ts`, `src/app/gate/`, `src/app/api/gate/`,
-and `src/lib/site-auth.ts` once Supabase Auth ships.
+deployment's environment variables gates **the admin pages only**, via
+`src/proxy.ts`, which redirects anyone without the right cookie to `/gate`, a
+single shared-password prompt:
 
-Two things worth knowing about it:
+| Gated | Open |
+|---|---|
+| `/needs-attention`, `/prompt`, `/usage` | `/` and every `/eo/[id]` |
+| `/api/summary-prompt` | `/draft` |
+
+That split is the point. The tracker is meant to be shared; the pages that
+expose flagged rows, AI spend and the prompt the nightly job runs on are not.
+`/api/summary-prompt` is gated with `/prompt` because protecting the page and
+leaving open the endpoint that writes the prompt would protect nothing.
+
+**It is not set today**, so nothing is gated and every page behaves as it did
+before. Setting the variable and redeploying enables it in about thirty
+seconds, which is why none of the machinery has been deleted. Remove
+`src/proxy.ts`, `src/app/gate/`, `src/app/api/gate/`, `src/lib/site-auth.ts`
+and `src/lib/site-access.ts` once Supabase Auth ships.
+
+The header hides the admin links when the cookie is absent
+(`src/lib/site-access.ts`), so the nav does not advertise a locked door. That
+is cosmetic: the proxy is what actually protects the routes, and if the two
+ever disagree the proxy wins.
+
+**A shared password is not access control.** No per-user identity, no roles;
+it cannot tell you apart from anyone you gave the password to. It keeps a
+deployed URL from being fully open, and that is all.
+
+Three things worth knowing:
 
 - **It needs no paid Vercel plan.** Vercel's own Deployment Protection is a paid add-on;
   this is the app's own gate, and `SITE_PASSWORD` is an ordinary environment variable
   that works on Hobby.
-- **`/api/cron/*` is deliberately excluded** from the proxy's matcher. Vercel Cron sends
-  a plain GET expecting JSON, not a redirect to an HTML login page, so those routes are
-  protected by `CRON_SECRET` instead. If you change the matcher, re-check that a cron
-  request still returns JSON and an unauthenticated one still returns 401 — not the gate.
+- **The matcher lists what IS gated**, rather than "everything except", which
+  is what it used to be. A new page is therefore public unless it is added to
+  the list; the old form gated every new route by accident. Next parses the
+  matcher at build time and rejects a computed value, so the patterns are
+  written out literally in `src/proxy.ts` and `admin-routes.test.ts` asserts
+  they match `src/lib/admin-routes.ts`.
+- **`/api/cron/*` is not gated, deliberately.** Vercel Cron sends a plain GET
+  expecting JSON, not a redirect to an HTML login page — a 307 would have the
+  nightly jobs "succeed" while doing nothing. Those routes answer to
+  `CRON_SECRET` instead. Verified when the matcher last changed: with
+  `SITE_PASSWORD` set, `/` and `/draft` return 200, the admin pages redirect
+  to `/gate`, and `/api/cron/watchdog` returns 401. Re-check all three if you
+  touch the matcher.
 
 ### Protecting the write endpoints
 
@@ -448,11 +490,18 @@ sync with [federalregister.gov's API](https://www.federalregister.gov/developers
   cost), verifying any quoted text against the order's stored `full_text` in
   code before saving — a summary with an unverifiable quote is never saved;
   the row is flagged for review instead.
-- **`reconcile`** (weekly, `/api/cron/reconcile`) — a cheap
-  `document_number`-only diff against the API over the *full*
-  administration-to-date range, so a gap older than the daily job's window
-  doesn't silently persist. Logged as its own run type so a completeness gap
-  is never confused with an ingestion failure.
+- **`reconcile`** (weekly, `/api/cron/reconcile`, Mondays 11:00 UTC) — does
+  two things over the *full* administration-to-date range rather than the
+  daily job's trailing window. **Gaps**: a cheap `document_number` diff
+  against the API, so a gap older than that window doesn't silently persist.
+  **Statuses**: every stored order's disposition re-read from the same
+  response, which is the only way a revocation is ever noticed — disposition
+  notes are written onto a document after publication, so an order ingested
+  in February and revoked in September learns of it only from a later look at
+  its own notes, by which time the daily window is long past. Costs no extra
+  request, just two more fields on a page already being fetched. Reports
+  `statusChangedCount` alongside `gapsFound`. Logged as its own run type so a
+  completeness gap is never confused with an ingestion failure.
 
 All three are Vercel Cron jobs (see `vercel.json`), authenticated via
 `CRON_SECRET` (see `.env.example`) — never open endpoints.
@@ -812,6 +861,8 @@ src/
     tracker-filter-bar.tsx      Search box and filter dropdowns
     tracker-result-bar.tsx      Match count, active-filter chips, sort, page size
     eo-selection-bar.tsx        The sticky bar that hands ticked orders to the drafter
+    tracker-search-field.tsx    The full-text box at the top of the results column
+    draft-order-picker.tsx      The drafter's order list, with its own search and filters
     ui/                         shadcn/ui components (added 2026-09-21)
   config/                     Fixed Practice Area / Industry / Subject Area lists
   data/legacy-import/         Extracted spreadsheet data (generated — see scripts/ above)
@@ -823,6 +874,10 @@ src/
     tracker-query.ts           The tracker's URL state: search, filters, sort, paging
     tracker-filter-chips.ts    Which filters are active, and how to remove one
     tag-filter-link.ts         Where a clickable tag goes, and how to undo it
+    admin-routes.ts            Which pages the shared-password gate covers
+    site-access.ts             Whether this request may see them (header only; the proxy enforces)
+    content-header.ts          The title/type/source-links block every draft opens with
+    filter-picker-orders.ts    In-browser filtering for the drafter's order list
     highlight-snippet.ts       Turns the database's [[hl]] markers into plain segments
     tag-label.ts               How a stored tag is spelled on screen
     eo-selection.ts / eo-selection-store.ts  Which orders are ticked, held in sessionStorage
@@ -833,6 +888,8 @@ src/
     cron-auth.ts               Verifies a request came from Vercel Cron (CRON_SECRET)
     alerts/                    The watchdog: health checks, Slack delivery, thresholds
     federal-register/          Federal Register client, sync/ingest/enrich/reconcile, the duplicate guard
+      parse-disposition.ts     Which disposition notes change an order's own status (voice matters)
+      refresh-status.ts        Re-reads a stored order's status without re-downloading it
     courtlistener/             CourtListener docket search + the deterministic case-matching gate
     classify/                  Practice-area and industry classification (tags only, never summaries)
     merge/                     Duplicate-pair detection and the field-by-field merge rules
