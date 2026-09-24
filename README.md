@@ -36,7 +36,8 @@ Verified against the live database on 2026-09-24.
 | AI practice-area / industry tagging | ✅ **434** rows carry a practice area and **316** an industry; subject area is on all 561. The untagged remainder is overwhelmingly ceremonial — see "What is actually filled in, per order" |
 | Quote verification | ✅ A summary or draft quoting text not found verbatim in the source is never saved |
 | Content-drafting UI (4 content types, single & multi-EO) | ✅ Live, producing real AI output. Its order picker has its own search and filters. Every draft opens with a title, its content type, and the orders it covers — see "What a generated draft looks like" |
-| Copy / .docx / markdown export | ✅ Gated behind a "reviewed for accuracy" confirmation |
+| Copy / .docx / markdown export | ✅ Gated behind a "reviewed for accuracy" confirmation, client-side |
+| Saving a generated draft | ❌ Not wired — a draft lives only in the browser tab that made it. `content_drafts` has existed since `0001` and holds 0 rows; see Next steps |
 | Shared-password gate on the admin pages | ⚠️ Built, **dormant** — covers `/needs-attention`, `/prompt`, `/usage` and `/api/summary-prompt` only; the tracker and drafter stay open. Set `SITE_PASSWORD` plus a redeploy to turn it on; see "Interim access" |
 | Litigation docket linking (CourtListener) | ⚠️ Partly — **131 of 252** recorded challenges linked; 30 need a human decision, 91 unmatched |
 | Legal-challenge *discovery* (orders with no recorded challenge) | ❌ Not started — everything so far only links cases the firm already found |
@@ -1017,17 +1018,52 @@ none. Three details worth knowing before running it again:
    pair each summary with source excerpts, grade three ways, store the results in a
    committed file (deliberately not a database table) and have `npm run diagnostics`
    report accuracy over time.
-5. **News mentions** (the `NewsMention` type exists and is unused). News has no docket
+5. **Save generated content so the whole team can see and reuse it.** Added
+   2026-09-24 from feedback; deliberately after Demo Day. Today a draft lives
+   only in the browser tab that generated it — close the page and it is gone,
+   and two attorneys can pay for the same client alert about the same order
+   without ever knowing. The goal is that every generated draft is stored and
+   visible to everyone, so it can be read, reused as a starting point, or
+   simply seen to exist.
+
+   **Most of this is already built and unwired.** `content_drafts` has been
+   live since migration `0001` with exactly the right shape — `eo_ids`,
+   `content_type`, `title`, `draft_text`, `created_by`, `created_at`, plus
+   `reviewed_at`/`reviewed_by` — and its RLS policy already says what this
+   goal says: *"any signed-in user can read all drafts (shared team
+   recordkeeping) and create their own; only the author or an admin can
+   edit."* The `ContentDraft` type exists in `src/lib/types.ts`. **Nothing in
+   `src/` or `scripts/` reads or writes that table**, and it holds 0 rows.
+
+   Three things to decide before building it:
+
+   - **Attribution needs identity.** The insert policy is
+     `created_by = auth.uid()`, and `profiles` has 0 rows, so "who wrote
+     this" cannot be answered until Phase 5 auth (item 7) ships. Either do
+     this after auth, or accept an interim where drafts are written with a
+     null author and shared anonymously — useful, but it cannot tell you
+     who to ask about a draft.
+   - **The review gate should move server-side.** Export is gated on "I have
+     reviewed this for accuracy" in the browser today. `0001`'s own comment
+     anticipates this: *"once drafts are persisted, enforce it here too."*
+     A shared draft that others may reuse should not be able to claim it was
+     reviewed when it was not.
+   - **Saving everything is not obviously right.** A first attempt someone
+     abandoned is noise at best and misleading at worst. Decide whether
+     drafts are saved automatically or on an explicit "save for the team",
+     and whether an author can delete their own.
+
+6. **News mentions** (the `NewsMention` type exists and is unused). News has no docket
    number to verify against, so it needs its own verification design.
-6. **Auth** (Supabase Auth) with the admin/general role split the schema already
+7. **Auth** (Supabase Auth) with the admin/general role split the schema already
    supports, and the email digest — Phase 5. Tighten the four SELECT policies `0002`
    loosened at the same time.
-7. **Cap snippet building when "All" is selected.** With no page limit,
+8. **Cap snippet building when "All" is selected.** With no page limit,
    `search_executive_orders` builds a `ts_headline` for every matching row rather
    than for one page — 1.67s against 0.65s today, and it grows with the corpus.
    Needs a migration: clamp the rows the snippet CTE sees, independently of paging.
-8. **UI pages for the Rescinded Prior Orders (112) and Agency Actions (32) data** —
+9. **UI pages for the Rescinded Prior Orders (112) and Agency Actions (32) data** —
    imported and available via `src/lib/data.ts`, but surfaced nowhere.
-9. **An end-to-end test.** Nothing automatically proves a user can go tracker → EO
+10. **An end-to-end test.** Nothing automatically proves a user can go tracker → EO
    detail → draft content → export. Accepted while there is one user; revisit the
    moment there are two.
