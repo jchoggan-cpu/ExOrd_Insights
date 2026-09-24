@@ -1,9 +1,15 @@
 # Sheppard EO Tracker
 
-An internal tool that tracks executive orders (EOs) from the current administration
-(Jan 20, 2025 onward), enriches them with AI-generated summaries and firm-specific
-tagging, tracks related litigation and news, and helps attorneys draft client alerts,
-blog posts, talking points, and social posts grounded in that data.
+An internal tool that tracks executive **actions** from the current administration
+(Jan 20, 2025 onward) — executive orders, proclamations and memoranda alike — enriches
+them with AI-generated summaries and firm-specific tagging, tracks related litigation
+and news, and helps attorneys draft client alerts, blog posts, talking points, and
+social posts grounded in that data.
+
+"Actions", not "orders": only 288 of the 561 rows are executive orders. The rest are
+194 proclamations, 75 memoranda and a pardon — **49% of the corpus carries no EO
+number at all** and is not an executive order. The UI is named **Executive Actions
+Tracker** for the same reason.
 
 This replaces a manually-maintained spreadsheet. Phases 1 and 2 are live (data model,
 tracker UI, content drafting, Federal Register ingestion, AI summarization and
@@ -12,12 +18,12 @@ tagging); Phase 3 is partly built (litigation dockets yes, news no); Phases 4–
 
 ## Current status
 
-Verified against the live database on 2026-09-22.
+Verified against the live database on 2026-09-24.
 
 | Piece | Status |
 |---|---|
 | Supabase | ✅ Connected. Migrations `0001`–`0009` applied — see "Setting up Supabase" |
-| Tracker table + EO detail pages | ✅ Live — **559 orders**, signed 2025-01-17 → 2026-09-17 |
+| Tracker table + order detail pages | ✅ Live — **561 orders** (288 executive orders, 194 proclamations, 75 memoranda, 1 pardon), signed from 2025-01-17 |
 | Search, multi-select filters, signing-date range | ✅ Live, executed in Postgres (`search_executive_orders`, migrations `0007`/`0008`) |
 | Relevance ranking | ✅ Live — a search now ranks by relevance automatically; see "How search is ordered" |
 | Order status (active / amended / revoked) | ✅ Live and **corrected 2026-09-22** — the disposition parser had the polarity inverted; 42 rows were wrong. See "How an order's status is decided". Now 548 active, 9 amended, 2 revoked |
@@ -26,8 +32,8 @@ Verified against the live database on 2026-09-22.
 | Clickable tags | ✅ Live — a subject or practice tag filters to itself; "Undo tag filter" restores what was there |
 | Firm branding in the UI | ⚠️ Deliberately absent — see "Branding and the placeholder palette" |
 | Federal Register ingestion | ✅ Live — three Vercel Cron jobs, see "Federal Register ingestion" |
-| Summaries | ✅ **All 559 rows** have one; the enrichment queue is empty. **275** are the firm's hand-written text, protected from automated overwrite via `manually_edited_fields`; the rest are AI-written |
-| AI practice-area / industry tagging | ✅ **432** rows carry a practice area and **314** an industry; subject area is on all 559. The untagged remainder is ceremonial, where empty is correct |
+| Summaries | ✅ **All 561 rows** have one; the enrichment queue is empty. **275** are the firm's hand-written text, protected from automated overwrite via `manually_edited_fields`; the rest are AI-written |
+| AI practice-area / industry tagging | ✅ **434** rows carry a practice area and **316** an industry; subject area is on all 561. The untagged remainder is overwhelmingly ceremonial — see "What is actually filled in, per order" |
 | Quote verification | ✅ A summary or draft quoting text not found verbatim in the source is never saved |
 | Content-drafting UI (4 content types, single & multi-EO) | ✅ Live, producing real AI output. Its order picker has its own search and filters. Every draft opens with a title, its content type, and the orders it covers — see "What a generated draft looks like" |
 | Copy / .docx / markdown export | ✅ Gated behind a "reviewed for accuracy" confirmation |
@@ -56,6 +62,47 @@ when it matches the default *for that state*, so on a search an explicit
 `date` is written to the URL rather than dropped and re-defaulted back to
 relevance on the next read. Changing the search text re-decides the sort;
 changing a filter or turning a page does not.
+
+## What is actually filled in, per order
+
+Measured live 2026-09-24 across 561 orders. The AI enrichment pass writes
+**four** fields and nothing else; everything below the second heading comes
+from the firm's spreadsheet or the docket-linking script.
+
+| Written by the AI pass | Filled | Firm-authored | AI-written |
+|---|---|---|---|
+| `ai_summary` | 100% | 275 | 286 |
+| `subject_area` | 100% | 338 | 223 |
+| `practice_areas` | 77% | 0 | 434 |
+| `industries` | 56% | 0 | 316 |
+
+Among the 286 orders the AI summarized itself, it returned a subject area
+every time, practice areas on 57%, and industries on 47%. **The blanks are
+mostly correct, not failures**: of the 127 orders with no practice area, 124
+are "Establishing Dates of Importance" and 126 of 127 are proclamations —
+the classifier is declining to tag ceremonial documents. Of the 245 with no
+industry, 115 are ceremonial and most of the rest are government, justice or
+immigration matters where no client industry applies. A minority are
+arguably under-tagged; there is no ground truth to measure that against.
+
+| Never written by the AI | Filled |
+|---|---|
+| `deliverable` | 99% |
+| `timeline_notes` | 60% |
+| `agencies_impacted` | 57% |
+| `available_analysis` | 9% |
+| `legal_challenges` | 7% |
+| `key_dates` | **0%** |
+| `news_mentions` | **0%** |
+
+`key_dates` and `news_mentions` have columns, types and UI, and nothing
+writes them. The detail page **omits a section whose field is empty** rather
+than printing a heading over "None recorded.", which said nothing about the
+order and read as the tool having failed. Two sections are deliberately
+exempt: Legal Challenges still reports "No known legal challenges", because
+absence is an answer a partner wants and hiding it would make it
+indistinguishable from nobody having checked; and Summary keeps its "not
+generated yet" fallback, which means enrichment has not reached that row.
 
 ## How an order's status is decided
 
@@ -120,7 +167,7 @@ the site.
 
 **Known cost**: selecting "All" *and* searching makes Postgres build a
 snippet for every matching row rather than for one page — measured 1.67s
-against 0.65s for a page of 25, on 559 rows. It works; it is simply the one
+against 0.65s for a page of 25, on 561 rows. It works; it is simply the one
 combination the migration's paging trick does not cover. Fixing it properly
 needs another migration.
 
@@ -225,7 +272,7 @@ Open http://localhost:3000.
 With no `.env.local`, the app falls back to the imported spreadsheet data in
 `src/data/legacy-import/*.json` — real firm data, but a frozen January 2026
 snapshot of 340 rows, and a visible banner says so. To work against the live
-559-row database, set at least `NEXT_PUBLIC_SUPABASE_URL` and
+561-row database, set at least `NEXT_PUBLIC_SUPABASE_URL` and
 `NEXT_PUBLIC_SUPABASE_ANON_KEY` (see "Environment variables").
 
 ## Where the data comes from
@@ -238,7 +285,7 @@ Three sources feed the tracker:
 | [federalregister.gov](https://www.federalregister.gov/developers/documentation/api/v1) | Every new executive action, plus source text, citation and official URL | Daily cron — free, no API key |
 | [CourtListener](https://www.courtlistener.com) | Real docket numbers, filing dates and URLs for recorded litigation | `npm run link:dockets`, by hand — free |
 
-Of the 559 rows today, **505 carry Federal Register source text** and 54 are
+Of the 561 rows today, **507 carry Federal Register source text** and 54 are
 legacy-only records (mostly memoranda and pardons the Federal Register never
 published) that can never be fact-checked against a source.
 
@@ -283,7 +330,7 @@ won't silently overwrite them.
   a number leaked into the type field. All three are leftovers from parsing the
   spreadsheet's free-text "Type/Number" column, and none has a Federal Register
   counterpart to correct it. Fix by hand with `npm run correct`.
-- **`key_dates` and `news_mentions` are empty on all 559 rows.** The columns and types
+- **`key_dates` and `news_mentions` are empty on all 561 rows.** The columns and types
   exist; nothing writes to them yet.
 - **Practice-area tags have no ground truth.** They are AI-generated and have never
   been validated beyond a 20-row pilot review. Treat them as a filtering aid, not an
