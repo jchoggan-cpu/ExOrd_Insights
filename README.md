@@ -37,7 +37,7 @@ Verified against the live database on 2026-09-24.
 | Quote verification | ✅ A summary or draft quoting text not found verbatim in the source is never saved |
 | Content-drafting UI (4 content types, single & multi-EO) | ✅ Live, producing real AI output. Its order picker has its own search and filters. Every draft opens with a title, its content type, and the orders it covers — see "What a generated draft looks like" |
 | Copy / .docx / markdown export | ✅ Gated behind a "reviewed for accuracy" confirmation, client-side |
-| Saving a generated draft | ❌ Not wired — a draft lives only in the browser tab that made it. `content_drafts` has existed since `0001` and holds 0 rows; see Next steps |
+| Shared drafts | ✅ Live — every generated draft is saved and visible to everyone at `/drafts`, and is surfaced on the order it covers and in the drafter before you generate a duplicate. See "Shared drafts" |
 | Shared-password gate on the admin pages | ⚠️ Built, **dormant** — covers `/needs-attention`, `/prompt`, `/usage` and `/api/summary-prompt` only; the tracker and drafter stay open. Set `SITE_PASSWORD` plus a redeploy to turn it on; see "Interim access" |
 | Litigation docket linking (CourtListener) | ⚠️ Partly — **131 of 252** recorded challenges linked; 30 need a human decision, 91 unmatched |
 | Legal-challenge *discovery* (orders with no recorded challenge) | ❌ Not started — everything so far only links cases the firm already found |
@@ -104,6 +104,65 @@ exempt: Legal Challenges still reports "No known legal challenges", because
 absence is an answer a partner wants and hiding it would make it
 indistinguishable from nobody having checked; and Summary keeps its "not
 generated yet" fallback, which means enrichment has not reached that row.
+
+## Shared drafts
+
+Every generated draft is saved and visible to everyone. The point is not
+archiving — it is that the next person finds what already exists instead of
+paying to generate it again.
+
+**Where it lives**: the `content_drafts` table, in the same database as the
+orders. `eo_ids`, `content_type`, `title`, `draft_text`, `created_at`, plus
+`created_by` and `reviewed_at`, which are always null today and are
+explained below. Nothing is kept in the browser but a draft's id and its
+delete token.
+
+**How anyone finds one**, in descending order of how much good it does:
+
+| Where | What it says |
+|---|---|
+| In the drafter, before generating | "1 Client Alert / Memo has already been written about this order" — red, because it is probably a duplicate and costs money |
+| | "1 other draft already covers this order" — milder, for a different content type: context, not a reason to stop |
+| On an order's page | "1 draft has already been written about this order", above the summary |
+| `/drafts` | All of them, newest first, each naming and linking the orders it covers |
+
+The drafter loads existing drafts once with the page and matches them in the
+browser as the selection changes, so ticking an order costs no round trip.
+A multi-order digest is found by any single order it covers.
+
+**No migration was needed, and that is deliberate.** `content_drafts` has
+existed since `0001`, and its RLS was written for accounts that do not exist
+yet — insert wants `created_by = auth.uid()`, select wants an authenticated
+role, and no anonymous caller satisfies either. Rather than loosen those
+policies, every access goes through the service-role client on the server.
+The policies stay correct for the day auth ships, and the table stays shut to
+the browser.
+
+### Who may delete a draft, without accounts to say who anyone is
+
+On generation the server returns the new draft's id and an HMAC of that id,
+and the browser keeps both in sessionStorage. Deleting presents the token;
+the server recomputes and compares. Deriving the token instead of storing a
+column keeps it off the schema and out of every listing.
+
+That scoping is load-bearing, because `/drafts` publishes every draft id. A
+token good for one draft is the difference between "delete mine" and "delete
+anything" — a valid token for a *different* draft is refused.
+
+Admin delete is gated on `hasActiveAdminSession()`, **not**
+`hasAdminAccess()`. The latter returns true when `SITE_PASSWORD` is unset so
+local development works; reused here it would have meant "everyone is an
+admin" on a deployment with the gate off, which is this one today.
+
+**Two consequences, both accepted rather than overlooked:**
+
+- **Close the tab and the token is gone.** With no accounts, "yours" is the
+  session that made the draft. After that, only an admin can remove it — and
+  admin delete does nothing until `SITE_PASSWORD` is set. Until then an
+  abandoned draft is effectively permanent.
+- **Nothing here has been checked by a person.** Every row says so, on the
+  row rather than once at the top, because someone reusing a draft may never
+  have seen the heading.
 
 ## How an order's status is decided
 
@@ -894,6 +953,8 @@ scripts/
 src/
   app/
     page.tsx                 Tracker dashboard (results list, search, filters, paging)
+    drafts/page.tsx          Every draft the team has generated
+    api/content-drafts/      Deleting a shared draft (token or admin)
     eo/[id]/page.tsx          EO detail page
     draft/page.tsx            Content-drafting assistant
     needs-attention/page.tsx  Flagged rows + recent ingestion run history
@@ -911,6 +972,10 @@ src/
     eo-selection-bar.tsx        The sticky bar that hands ticked orders to the drafter
     tracker-search-field.tsx    The full-text box at the top of the results column
     draft-order-picker.tsx      The drafter's order list, with its own search and filters
+    existing-drafts-warning.tsx Says a draft already exists, before you make another
+    drafts-about-order.tsx      The same, on an order's own page
+    draft-list-item.tsx         One shared draft, with delete for those allowed it
+    saved-draft-notice.tsx      "Saved for the team", and the author's delete
     ui/                         shadcn/ui components (added 2026-09-21)
   config/                     Fixed Practice Area / Industry / Subject Area lists
   data/legacy-import/         Extracted spreadsheet data (generated — see scripts/ above)
@@ -922,6 +987,11 @@ src/
     tracker-query.ts           The tracker's URL state: search, filters, sort, paging
     tracker-filter-chips.ts    Which filters are active, and how to remove one
     tag-filter-link.ts         Where a clickable tag goes, and how to undo it
+    content-drafts.ts          Reading and writing the drafts the team shares
+    draft-delete-token.ts      Proof a browser created a given draft
+    drafts-for-selection.ts    Which existing drafts cover what is selected
+    session-drafts.ts          The drafts this session made, and their tokens
+    order-labels.ts            Naming an order referred to from elsewhere
     admin-routes.ts            Which pages the shared-password gate covers
     site-access.ts             Whether this request may see them (header only; the proxy enforces)
     content-header.ts          The title/type/source-links block every draft opens with
@@ -1018,60 +1088,13 @@ none. Three details worth knowing before running it again:
    pair each summary with source excerpts, grade three ways, store the results in a
    committed file (deliberately not a database table) and have `npm run diagnostics`
    report accuracy over time.
-5. **Save generated content so the whole team can see and reuse it.** Added
-   2026-09-24 from feedback; deliberately after Demo Day. Today a draft lives
-   only in the browser tab that generated it — close the page and it is gone,
-   and two attorneys can pay for the same client alert about the same order
-   without ever knowing. The goal is that every generated draft is stored and
-   visible to everyone, so it can be read, reused as a starting point, or
-   simply seen to exist.
-
-   **Most of this is already built and unwired.** `content_drafts` has been
-   live since migration `0001` with exactly the right shape — `eo_ids`,
-   `content_type`, `title`, `draft_text`, `created_by`, `created_at`, plus
-   `reviewed_at`/`reviewed_by` — and its RLS policy already says what this
-   goal says: *"any signed-in user can read all drafts (shared team
-   recordkeeping) and create their own; only the author or an admin can
-   edit."* The `ContentDraft` type exists in `src/lib/types.ts`. **Nothing in
-   `src/` or `scripts/` reads or writes that table**, and it holds 0 rows.
-
-   **Decided 2026-09-24:**
-
-   - **Anonymous interim, not blocked on auth.** Drafts are written with a
-     null `created_by` and are readable by everyone, so the feature ships
-     before Phase 5. The cost is accepted deliberately: nobody can tell who
-     wrote a draft, so nobody can be asked about one.
-   - **Saved automatically**, the moment generation succeeds — no "share
-     with the team" step to forget.
-   - **The author can delete it while it is still on screen.** A "Delete
-     this draft" control appears beside the new draft for the session that
-     created it.
-
-   **The consequence to design around**: with no identity, "the author" is
-   just the browser tab that made it. Once that tab navigates away the
-   delete affordance is gone, and an anonymous draft nobody can claim is
-   permanent — there is no owner to authorize removing it later. Two ways to
-   soften that, to pick when building: carry the created ids in
-   sessionStorage the way the tracker's selection already does, so delete
-   survives a page change within the session; and give the admin pages a
-   draft list with delete, since `/needs-attention` is already gated and is
-   where a wrong draft would be cleaned up from.
-
-   **Two things that still hold:**
-
-   - **The review gate should move server-side.** Export is gated on "I have
-     reviewed this for accuracy" in the browser today. `0001`'s own comment
-     anticipates this: *"once drafts are persisted, enforce it here too."*
-     A shared draft that others may reuse should not be able to claim it was
-     reviewed when it was not. With drafts saved automatically, an unreviewed
-     draft is now visible to the team, so the stored row needs to say plainly
-     that nobody has checked it.
-   - **The insert policy needs revisiting.** It is
-     `created_by = auth.uid()`, which no anonymous writer can satisfy. Saving
-     anonymously means either writing through the service role from the API
-     route, or a migration relaxing that policy. The service-role route is
-     the smaller change and keeps the table closed to direct anonymous
-     writes.
+5. **Move the draft review gate server-side.** Export is gated on "I have
+   reviewed this for accuracy" in the browser. Now that drafts are saved
+   automatically and shared, an unreviewed draft is visible to colleagues who
+   may reuse it, and nothing stops a stored row claiming a review that never
+   happened. `content_drafts.reviewed_at` and `reviewed_by` exist and are
+   always null. `0001`'s own comment anticipates this: *"once drafts are
+   persisted, enforce it here too."*
 
 6. **News mentions** (the `NewsMention` type exists and is unused). News has no docket
    number to verify against, so it needs its own verification design.
