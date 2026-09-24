@@ -132,11 +132,17 @@ export function EoResultRow({
         {/* Status rail. */}
         <div className="flex shrink-0 items-center gap-3 sm:w-36 sm:flex-col sm:items-end sm:gap-1">
           <StatusBadge status={order.status} />
-          <span className="text-xs text-muted-foreground sm:text-right">
-            {challengeCount === 0
-              ? "No legal challenges"
-              : `${challengeCount} legal challenge${challengeCount === 1 ? "" : "s"}`}
-          </span>
+          {/* Only when there is something to say. "No legal challenges"
+              appeared on 93% of rows, so it was a column of identical grey
+              text that scrolled past the eye and made the handful of orders
+              that ARE challenged harder to spot, not easier. The detail page
+              still states it, where a reader has asked about one order and
+              absence is an answer. */}
+          {challengeCount > 0 && (
+            <span className="text-xs text-muted-foreground sm:text-right">
+              {challengeCount} legal challenge{challengeCount === 1 ? "" : "s"}
+            </span>
+          )}
         </div>
       </div>
     </li>
