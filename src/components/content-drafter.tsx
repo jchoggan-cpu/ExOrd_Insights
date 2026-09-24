@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import { DraftOrderPicker } from "@/components/draft-order-picker";
+import { useSessionDrafts } from "@/components/use-session-drafts";
+import { SavedDraftNotice } from "@/components/saved-draft-notice";
 import type { ContentType, ExecutiveOrderListItem } from "@/lib/types";
 import { REQUEST_TOKEN_HEADER } from "@/lib/request-token-header";
 import { CONTENT_TYPE_LABELS } from "@/lib/types";
@@ -58,6 +60,9 @@ export function ContentDrafter({
    */
   const [lastGenerated, setLastGenerated] = useState<{ type: ContentType; at: Date } | null>(null);
   const draftSectionRef = useRef<HTMLElement>(null);
+  /** The id of the draft just generated, while this session can still delete it. */
+  const [savedDraftId, setSavedDraftId] = useState<string | null>(null);
+  const { remember } = useSessionDrafts();
   const [reviewed, setReviewed] = useState(false);
 
   function toggleSelected(id: string) {
@@ -99,6 +104,14 @@ export function ContentDrafter({
       setUnverifiedQuotes(Array.isArray(data.unverifiedQuotes) ? data.unverifiedQuotes : []);
       setQuotesWereChecked(Boolean(data.quotesWereChecked));
       setLastGenerated({ type: contentType, at: new Date() });
+      // Saved for the team automatically. The id and its delete token are
+      // kept for this session so the author can take it back down again.
+      if (typeof data.draftId === "string" && typeof data.deleteToken === "string") {
+        remember({ id: data.draftId, deleteToken: data.deleteToken });
+        setSavedDraftId(data.draftId);
+      } else {
+        setSavedDraftId(null);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to generate content.");
     } finally {
@@ -196,6 +209,14 @@ export function ContentDrafter({
       {draftText && (
         <section ref={draftSectionRef} className="scroll-mt-4">
           <h2 className="font-display text-lg font-semibold text-foreground">3. Review & export</h2>
+
+          {savedDraftId && (
+            <SavedDraftNotice
+              draftId={savedDraftId}
+              onDeleted={() => setSavedDraftId(null)}
+              onError={setError}
+            />
+          )}
           {isStub && (
             <p className="mt-2 rounded-md border border-brand/30 bg-brand/10 px-3 py-2 text-xs text-primary">
               This is a placeholder stub draft — set AI_GATEWAY_API_KEY or ANTHROPIC_API_KEY to enable real AI-generated

@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { hasAdminAccess } from "@/lib/site-access";
 
-/** Everyone sees these. */
-const PUBLIC_NAV_LINKS = [{ href: "/", label: "Tracker" }];
+/** Everyone sees these. Shared drafts are public on purpose -- the point of
+ *  saving them is that colleagues can find and reuse them. */
+const PUBLIC_NAV_LINKS = [
+  { href: "/", label: "Tracker" },
+  { href: "/drafts", label: "Shared Drafts" },
+];
 
 /**
  * Shown only to whoever holds the site password. These expose flagged rows,

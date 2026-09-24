@@ -23,3 +23,20 @@ export async function hasAdminAccess(): Promise<boolean> {
 
   return cookie === (await hashSitePassword(sitePassword));
 }
+
+/**
+ * Whether the caller holds a genuinely-gated admin session.
+ *
+ * Distinct from hasAdminAccess() and NOT interchangeable with it.
+ * hasAdminAccess returns true when SITE_PASSWORD is unset, so local
+ * development and the current deployment show the admin links -- correct for
+ * deciding what to render, and dangerous for deciding who may destroy data.
+ * With the gate switched off, that would read as "everyone is an admin".
+ *
+ * This one requires the gate to be configured AND satisfied, so a deployment
+ * with no password grants nobody the power to delete other people's drafts.
+ */
+export async function hasActiveAdminSession(): Promise<boolean> {
+  if (!process.env.SITE_PASSWORD) return false;
+  return hasAdminAccess();
+}

@@ -5,6 +5,9 @@ import { recordApiUsage } from "@/lib/usage/record";
 import { checkGenerationLimit, limitMessage } from "@/lib/generation-limit";
 import { rejectionMessage, verifyRequest } from "@/lib/request-token";
 import { getServiceRoleClient } from "@/lib/supabase";
+import { saveDraft } from "@/lib/content-drafts";
+import { mintDeleteToken } from "@/lib/draft-delete-token";
+import { splitTitleFromDraft } from "@/lib/content-header";
 import type { ContentType } from "@/lib/types";
 
 const VALID_CONTENT_TYPES: ContentType[] = [
@@ -93,7 +96,28 @@ export async function POST(request: Request) {
       });
     }
 
-    return NextResponse.json(result);
+    // Saved automatically, and shared with everyone, so a draft is never
+    // lost with the tab that made it. Deliberately AFTER metering and in its
+    // own try: a storage failure must not turn a draft the attorney is
+    // looking at into an error, and the only thing lost is the sharing.
+    let draftId: string | null = null;
+    let deleteToken: string | null = null;
+    if (!result.isStub) {
+      try {
+        draftId = await saveDraft(getServiceRoleClient(), {
+          eoIds: eoIds as string[],
+          contentType: contentType as ContentType,
+          // The model's own title line, already parsed out for the header.
+          title: splitTitleFromDraft(result.draftText).title ?? undefined,
+          draftText: result.draftText,
+        });
+        deleteToken = mintDeleteToken(draftId);
+      } catch (err) {
+        console.error("Draft generated but not saved to the shared list:", err);
+      }
+    }
+
+    return NextResponse.json({ ...result, draftId, deleteToken });
   } catch (err) {
     console.error("Content generation failed:", err);
     const message = err instanceof Error ? err.message : "Content generation failed.";
