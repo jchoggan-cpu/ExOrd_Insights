@@ -11,7 +11,31 @@ import { PriorAdministrationBadge } from "@/components/prior-administration-badg
 import { formatDate } from "@/lib/format-date";
 import { isPriorAdministrationHoldover } from "@/lib/federal-register/prior-administration";
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+/**
+ * One block of an order's detail page.
+ *
+ * `omit` hides the whole section, heading included, when there is nothing to
+ * put in it. A heading over "None recorded." tells a reader nothing about
+ * the order -- only that the tool has a field for it -- and two of these
+ * (Key Dates, News Coverage) are empty on all 561 rows because nothing
+ * writes them yet, so every order carried two blank sections.
+ *
+ * Legal Challenges is deliberately NOT omitted when empty. There, absence is
+ * an answer: "No known legal challenges" is something a partner wants to
+ * read, and hiding it would make it indistinguishable from nobody having
+ * looked.
+ */
+function Section({
+  title,
+  omit = false,
+  children,
+}: {
+  title: string;
+  omit?: boolean;
+  children: React.ReactNode;
+}) {
+  if (omit) return null;
+
   return (
     <section className="border-t border-border py-6 first:border-0 first:pt-0">
       <h2 className="font-display text-lg font-semibold text-foreground">{title}</h2>
@@ -116,7 +140,7 @@ export default async function EoDetailPage({
             )}
           </Section>
 
-          <Section title="Agencies Impacted">
+          <Section title="Agencies Impacted" omit={eo.agenciesImpacted.length === 0}>
             {eo.agenciesImpacted.length > 0 ? (
               <ul className="list-disc space-y-1 pl-5">
                 {eo.agenciesImpacted.map((a) => (
@@ -128,7 +152,7 @@ export default async function EoDetailPage({
             )}
           </Section>
 
-          <Section title="Key Dates">
+          <Section title="Key Dates" omit={eo.keyDates.length === 0}>
             {eo.keyDates.length > 0 ? (
               <ul className="space-y-1">
                 {eo.keyDates.map((kd) => (
@@ -143,15 +167,15 @@ export default async function EoDetailPage({
             )}
           </Section>
 
-          <Section title="Timeline">
+          <Section title="Timeline" omit={!eo.timelineNotes}>
             <p>{eo.timelineNotes ?? "Not recorded."}</p>
           </Section>
 
-          <Section title="Deliverable">
+          <Section title="Deliverable" omit={!eo.deliverable}>
             <p>{eo.deliverable ?? "Not recorded."}</p>
           </Section>
 
-          <Section title="Available Analysis">
+          <Section title="Available Analysis" omit={!eo.availableAnalysis}>
             <p>{eo.availableAnalysis ?? "None on file."}</p>
           </Section>
 
@@ -189,7 +213,7 @@ export default async function EoDetailPage({
             )}
           </Section>
 
-          <Section title="News Coverage">
+          <Section title="News Coverage" omit={eo.newsMentions.length === 0}>
             {eo.newsMentions.length > 0 ? (
               <ul className="space-y-4">
                 {eo.newsMentions.map((n) => (
