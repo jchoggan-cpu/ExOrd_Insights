@@ -1035,23 +1035,43 @@ none. Three details worth knowing before running it again:
    edit."* The `ContentDraft` type exists in `src/lib/types.ts`. **Nothing in
    `src/` or `scripts/` reads or writes that table**, and it holds 0 rows.
 
-   Three things to decide before building it:
+   **Decided 2026-09-24:**
 
-   - **Attribution needs identity.** The insert policy is
-     `created_by = auth.uid()`, and `profiles` has 0 rows, so "who wrote
-     this" cannot be answered until Phase 5 auth (item 7) ships. Either do
-     this after auth, or accept an interim where drafts are written with a
-     null author and shared anonymously — useful, but it cannot tell you
-     who to ask about a draft.
+   - **Anonymous interim, not blocked on auth.** Drafts are written with a
+     null `created_by` and are readable by everyone, so the feature ships
+     before Phase 5. The cost is accepted deliberately: nobody can tell who
+     wrote a draft, so nobody can be asked about one.
+   - **Saved automatically**, the moment generation succeeds — no "share
+     with the team" step to forget.
+   - **The author can delete it while it is still on screen.** A "Delete
+     this draft" control appears beside the new draft for the session that
+     created it.
+
+   **The consequence to design around**: with no identity, "the author" is
+   just the browser tab that made it. Once that tab navigates away the
+   delete affordance is gone, and an anonymous draft nobody can claim is
+   permanent — there is no owner to authorize removing it later. Two ways to
+   soften that, to pick when building: carry the created ids in
+   sessionStorage the way the tracker's selection already does, so delete
+   survives a page change within the session; and give the admin pages a
+   draft list with delete, since `/needs-attention` is already gated and is
+   where a wrong draft would be cleaned up from.
+
+   **Two things that still hold:**
+
    - **The review gate should move server-side.** Export is gated on "I have
      reviewed this for accuracy" in the browser today. `0001`'s own comment
      anticipates this: *"once drafts are persisted, enforce it here too."*
      A shared draft that others may reuse should not be able to claim it was
-     reviewed when it was not.
-   - **Saving everything is not obviously right.** A first attempt someone
-     abandoned is noise at best and misleading at worst. Decide whether
-     drafts are saved automatically or on an explicit "save for the team",
-     and whether an author can delete their own.
+     reviewed when it was not. With drafts saved automatically, an unreviewed
+     draft is now visible to the team, so the stored row needs to say plainly
+     that nobody has checked it.
+   - **The insert policy needs revisiting.** It is
+     `created_by = auth.uid()`, which no anonymous writer can satisfy. Saving
+     anonymously means either writing through the service role from the API
+     route, or a migration relaxing that policy. The service-role route is
+     the smaller change and keeps the table closed to direct anonymous
+     writes.
 
 6. **News mentions** (the `NewsMention` type exists and is unused). News has no docket
    number to verify against, so it needs its own verification design.
