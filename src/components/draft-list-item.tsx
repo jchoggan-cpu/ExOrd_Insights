@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { CONTENT_TYPE_LABELS } from "@/lib/types";
 import type { SharedDraft } from "@/lib/content-drafts";
 import { useSessionDrafts } from "@/components/use-session-drafts";
+import type { OrderLabel } from "@/lib/order-labels";
 
 /**
  * One shared draft in the list, collapsed to its opening until expanded.
@@ -17,9 +19,12 @@ const PREVIEW_CHARS = 320;
 
 export function DraftListItem({
   draft,
+  orderLabels,
   adminDeleteToken,
 }: {
   draft: SharedDraft;
+  /** The orders this draft covers, by name rather than by count. */
+  orderLabels: OrderLabel[];
   adminDeleteToken: string | null;
 }) {
   const { forget, tokenFor } = useSessionDrafts();
@@ -72,6 +77,21 @@ export function DraftListItem({
           {isMine && " \u00b7 created in this session"}
         </span>
       </div>
+
+      {orderLabels.length > 0 && (
+        <p className="mt-1 text-xs text-muted-foreground">
+          About{" "}
+          {orderLabels.map((label, index) => (
+            <span key={label.id}>
+              {index > 0 && " · "}
+              <Link href={`/eo/${label.id}`} className="text-link hover:underline">
+                {label.reference}
+              </Link>{" "}
+              {label.title}
+            </span>
+          ))}
+        </p>
+      )}
 
       {/* Nothing here has been through a person. Said on every row rather
           than once at the top, because a reader reusing one may well have

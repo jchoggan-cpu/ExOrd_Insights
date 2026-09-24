@@ -3,6 +3,8 @@ import { ContentDrafter } from "@/components/content-drafter";
 import { LocalDataBanner } from "@/components/local-data-banner";
 import { hasRequestTokenSecret, mintRequestToken } from "@/lib/request-token";
 import { DRAFT_ID_PARAM } from "@/lib/eo-selection";
+import { listDrafts } from "@/lib/content-drafts";
+import { getServiceRoleClient } from "@/lib/supabase";
 
 export default async function DraftPage({
   searchParams,
@@ -21,6 +23,17 @@ export default async function DraftPage({
   // an explicitly disabled Generate button instead of a 500.
   const requestToken = hasRequestTokenSecret() ? mintRequestToken() : null;
 
+  // Loaded once and filtered in the browser as the selection changes, rather
+  // than a round trip per tick. Drafts are few and only their metadata is
+  // needed to say "this already exists". Non-fatal: not knowing about an
+  // existing draft must not stop someone writing a new one.
+  let existingDrafts: Awaited<ReturnType<typeof listDrafts>> = [];
+  try {
+    existingDrafts = await listDrafts(getServiceRoleClient(), 200);
+  } catch (err) {
+    console.error("Could not load existing drafts for the duplicate check:", err);
+  }
+
   return (
     <main className="flex flex-1 flex-col">
       {usingLocalData && <LocalDataBanner />}
@@ -37,6 +50,7 @@ export default async function DraftPage({
         <ContentDrafter
           orders={orders}
           initialSelectedIds={initialSelectedIds}
+          existingDrafts={existingDrafts}
           requestToken={requestToken}
         />
       </div>

@@ -4,6 +4,7 @@ import { getServiceRoleClient } from "@/lib/supabase";
 import { hasActiveAdminSession } from "@/lib/site-access";
 import { mintDeleteToken } from "@/lib/draft-delete-token";
 import { DraftListItem } from "@/components/draft-list-item";
+import { listOrderLabels } from "@/lib/order-labels";
 
 /**
  * Every draft the team has generated, newest first.
@@ -22,6 +23,13 @@ export const dynamic = "force-dynamic";
 export default async function DraftsPage() {
   const isAdmin = await hasActiveAdminSession();
   const drafts = await listDrafts(getServiceRoleClient());
+
+  // Which orders each draft covers, by name. A count ("1 order") tells a
+  // reader nothing about whether a draft is the one they want.
+  const orderLabels = await listOrderLabels(
+    getServiceRoleClient(),
+    drafts.flatMap((draft) => draft.eoIds),
+  );
 
   return (
     <main className="flex flex-1 flex-col">
@@ -51,6 +59,9 @@ export default async function DraftsPage() {
               <DraftListItem
                 key={draft.id}
                 draft={draft}
+                orderLabels={draft.eoIds
+                  .map((id) => orderLabels.get(id))
+                  .filter((label) => label !== undefined)}
                 /* Minted server-side and handed only to a page an admin can
                    open. A reader without the gate gets nothing, so the
                    delete button never appears for them. */

@@ -92,6 +92,35 @@ export async function listDrafts(
 }
 
 /**
+ * Drafts already written about any of these orders.
+ *
+ * This is what stops the same client alert being generated, and paid for,
+ * three times: the drafts are surfaced where the decision is made -- on an
+ * order's page and in the drafter -- rather than only on a list somebody has
+ * to think to visit.
+ *
+ * `overlaps` is Postgres array overlap on eo_ids, so a multi-order digest is
+ * found by any one of the orders it covers.
+ */
+export async function listDraftsForOrders(
+  supabase: SupabaseClient,
+  eoIds: string[],
+  limit = 20,
+): Promise<SharedDraft[]> {
+  if (eoIds.length === 0) return [];
+
+  const { data, error } = await supabase
+    .from("content_drafts")
+    .select(LIST_COLUMNS)
+    .overlaps("eo_ids", eoIds)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) throw new Error(`Failed to load drafts for these orders: ${error.message}`);
+  return ((data ?? []) as unknown as DraftRow[]).map(mapRow);
+}
+
+/**
  * Removes one draft. The caller is responsible for having established that
  * it may -- either a valid delete token or admin access -- because this
  * runs with the service role and will delete whatever it is given.

@@ -2,6 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getExecutiveOrderById, isUsingLocalData } from "@/lib/data";
 import { getSummaryDraft } from "@/lib/summary-drafts";
+import { listDraftsForOrders } from "@/lib/content-drafts";
+import { getServiceRoleClient } from "@/lib/supabase";
+import { DraftsAboutOrder } from "@/components/drafts-about-order";
 import { SummaryDraftPanel } from "@/components/summary-draft-panel";
 import { StatusBadge } from "@/components/status-badge";
 import { TagPill } from "@/components/tag-pill";
@@ -56,6 +59,17 @@ export default async function EoDetailPage({
   // A draft, when one exists, is shown beneath the summary rather than in
   // place of it — see SummaryDraftPanel.
   const draft = await getSummaryDraft(id);
+
+  // What the team has already written about this order, so the reader can
+  // reuse it rather than paying to generate the same thing again. Non-fatal:
+  // the order itself is what this page is for, and a drafts outage must not
+  // take it down.
+  let existingDrafts: Awaited<ReturnType<typeof listDraftsForOrders>> = [];
+  try {
+    existingDrafts = await listDraftsForOrders(getServiceRoleClient(), [eo.id]);
+  } catch (err) {
+    console.error("Could not load drafts written about this order:", err);
+  }
 
   const usingLocalData = isUsingLocalData();
 
@@ -129,6 +143,8 @@ export default async function EoDetailPage({
             <span aria-hidden="true">⚠</span> {eo.needsReviewReason}
           </div>
         )}
+
+        <DraftsAboutOrder drafts={existingDrafts} />
 
         <div className="mt-2">
           <Section title="Summary">

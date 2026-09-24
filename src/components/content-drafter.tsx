@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import { DraftOrderPicker } from "@/components/draft-order-picker";
 import { useSessionDrafts } from "@/components/use-session-drafts";
 import { SavedDraftNotice } from "@/components/saved-draft-notice";
+import { ExistingDraftsWarning } from "@/components/existing-drafts-warning";
+import type { SharedDraft } from "@/lib/content-drafts";
 import type { ContentType, ExecutiveOrderListItem } from "@/lib/types";
 import { REQUEST_TOKEN_HEADER } from "@/lib/request-token-header";
 import { CONTENT_TYPE_LABELS } from "@/lib/types";
@@ -24,6 +26,7 @@ function downloadBlob(blob: Blob, filename: string) {
 export function ContentDrafter({
   orders,
   initialSelectedIds,
+  existingDrafts = [],
   requestToken,
 }: {
   orders: ExecutiveOrderListItem[];
@@ -33,6 +36,8 @@ export function ContentDrafter({
    * related orders is the point of the multi-EO support below.
    */
   initialSelectedIds?: string[];
+  /** Everything already written, so the drafter can say when this would be a duplicate. */
+  existingDrafts?: SharedDraft[];
   /**
    * Minted per page render by the server (see src/lib/request-token.ts);
    * expires after 12 hours, at which point the page must be reloaded. Null
@@ -170,6 +175,12 @@ export function ContentDrafter({
           ))}
         </div>
       </section>
+
+      <ExistingDraftsWarning
+        drafts={existingDrafts}
+        selectedIds={Array.from(selectedIds)}
+        contentType={contentType}
+      />
 
       <section className="flex flex-wrap items-center gap-y-2">
         <button
