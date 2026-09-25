@@ -132,39 +132,22 @@ describe("parseClassifyResponse — practice subgroups", () => {
   });
 });
 
-describe("parseClassifyResponse — practices that are also subgroups", () => {
-  // Sheppard lists Antitrust and White Collar both in their own right and
-  // inside Governmental. A row carrying both says the same thing twice.
-  it("keeps the subgroup and drops the standalone when both are returned", () => {
-    const result = parseClassifyResponse(
-      JSON.stringify({
-        practiceAreas: ["Antitrust and Competition", "Governmental--Antitrust and Competition"],
-        industries: [],
-      }),
-    );
-    expect(result.practiceAreas).toEqual(["Governmental--Antitrust and Competition"]);
-  });
-
-  it("matches across the & / and spelling difference", () => {
-    // The standalone is "White Collar Defense and Investigations"; the
-    // subgroup is "...Defense & Investigations".
+describe("parseClassifyResponse — retired subgroup tags", () => {
+  // Antitrust and White Collar were once offered both standalone and inside
+  // Governmental; the subgroups were merged into the standalones (migration
+  // 0010). A model echoing an old name must not re-create an orphaned tag.
+  it("drops the retired Governmental subgroup forms", () => {
     const result = parseClassifyResponse(
       JSON.stringify({
         practiceAreas: [
-          "White Collar Defense and Investigations",
+          "Governmental--Antitrust and Competition",
           "Governmental--White Collar Defense & Investigations",
+          "White Collar Defense and Investigations",
         ],
         industries: [],
       }),
     );
-    expect(result.practiceAreas).toEqual(["Governmental--White Collar Defense & Investigations"]);
-  });
-
-  it("keeps the standalone when no subgroup version was returned", () => {
-    const result = parseClassifyResponse(
-      JSON.stringify({ practiceAreas: ["Antitrust and Competition"], industries: [] }),
-    );
-    expect(result.practiceAreas).toEqual(["Antitrust and Competition"]);
+    expect(result.practiceAreas).toEqual(["White Collar Defense and Investigations"]);
   });
 
   it("leaves unrelated areas alone", () => {

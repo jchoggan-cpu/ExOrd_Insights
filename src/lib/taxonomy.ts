@@ -77,30 +77,3 @@ export const INDUSTRIES: string[] = industriesData;
 // Previously the model invented its own tags; validating against this list
 // instead keeps the column filterable.
 export const SUBJECT_AREAS: string[] = subjectAreasData;
-
-/** Case- and punctuation-insensitive form, so "&" and "and" compare equal. */
-function comparableName(name: string): string {
-  return name.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, " ").trim();
-}
-
-/**
- * Standalone practice areas that are ALSO a subgroup of another area, mapped
- * to that subgroup's tag.
- *
- * Sheppard lists Antitrust and White Collar both in their own right and
- * inside Governmental. A row carrying both says the same thing twice and
- * makes either filter return the same set, so the firm's rule is that the
- * subgroup wins when the matter is government-facing and the standalone is
- * used otherwise — never both. Derived from the config rather than hardcoded,
- * so adding a subgroup that collides is handled automatically.
- */
-export const STANDALONE_AREAS_DUPLICATED_AS_SUBPRACTICE: ReadonlyMap<string, string> = new Map(
-  PRACTICE_AREAS_WITH_SUBPRACTICES.flatMap((parent) =>
-    (parent.subPractices ?? [])
-      .filter((sub) => sub.criteria)
-      .flatMap((sub) => {
-        const standalone = PRACTICE_AREA_NAMES.find((name) => comparableName(name) === comparableName(sub.name));
-        return standalone ? [[standalone, subPracticeTag(parent.name, sub.name)] as [string, string]] : [];
-      }),
-  ),
-);

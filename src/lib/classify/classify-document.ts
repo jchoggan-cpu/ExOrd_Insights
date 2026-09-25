@@ -3,7 +3,6 @@ import { extractTextBlock } from "@/lib/ai-model";
 import {
   INDUSTRIES,
   PRACTICE_AREA_TAGS,
-  STANDALONE_AREAS_DUPLICATED_AS_SUBPRACTICE,
   parentPracticeOf,
 } from "@/lib/taxonomy";
 import { toTokenUsage, type TokenUsage } from "@/lib/usage/pricing";
@@ -97,7 +96,7 @@ export function parseClassifyResponse(rawText: string): ClassifyResult {
   }
 
   return {
-    practiceAreas: normalizePracticeAreas(onlyFromList(value.practiceAreas, PRACTICE_AREA_TAGS)),
+    practiceAreas: dropRedundantParents(onlyFromList(value.practiceAreas, PRACTICE_AREA_TAGS)),
     industries: onlyFromList(value.industries, INDUSTRIES),
   };
 }
@@ -114,29 +113,6 @@ function dropRedundantParents(tags: string[]): string[] {
     tags.filter((tag) => parentPracticeOf(tag) !== tag).map((tag) => parentPracticeOf(tag)),
   );
   return tags.filter((tag) => !parentsNamedBySubgroup.has(tag));
-}
-
-/**
- * Drops a standalone practice area when the same practice is already present
- * as a subgroup — "Antitrust and Competition" alongside
- * "Governmental--Antitrust and Competition".
- *
- * The subgroup wins because choosing it is the more specific judgement: the
- * model has said this is the government-facing form of that practice. The
- * prompt asks for one or the other and the model returned both anyway, which
- * is why this is enforced here rather than left to instructions.
- */
-function dropStandaloneDuplicatedAsSubPractice(tags: string[]): string[] {
-  const present = new Set(tags);
-  return tags.filter((tag) => {
-    const asSubPractice = STANDALONE_AREAS_DUPLICATED_AS_SUBPRACTICE.get(tag);
-    return !asSubPractice || !present.has(asSubPractice);
-  });
-}
-
-/** Every rule that decides which of two overlapping tags a row keeps. */
-function normalizePracticeAreas(tags: string[]): string[] {
-  return dropStandaloneDuplicatedAsSubPractice(dropRedundantParents(tags));
 }
 
 export interface ClassifyOutcome {

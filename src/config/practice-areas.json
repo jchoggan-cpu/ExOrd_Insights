@@ -1,7 +1,7 @@
 [
   {
     "name": "Antitrust and Competition",
-    "criteria": "changes merger review, competition policy, or antitrust enforcement priorities at the FTC or DOJ, or targets market concentration in a named sector."
+    "criteria": "changes merger review, competition policy, or antitrust enforcement priorities at the FTC, DOJ or state attorneys general, directs cartel or price-fixing investigations, or targets market concentration in a named sector."
   },
   {
     "name": "Appellate",
@@ -32,10 +32,6 @@
     "criteria": "sets conditions on federal contracts, grants, or funding, restructures an agency, or changes procurement, lobbying, or administrative procedure.",
     "subPractices": [
       {
-        "name": "Antitrust and Competition",
-        "criteria": "federal antitrust enforcement — cartel investigations, merger review before the DOJ, FTC or state attorneys general, or competition policy set by government action. Use the standalone Antitrust and Competition area instead when the matter is private competition litigation rather than government enforcement."
-      },
-      {
         "name": "Congressional Investigations",
         "criteria": "congressional subpoenas, hearings, testimony, document demands, or legislative oversight directed at private parties or agencies."
       },
@@ -62,10 +58,6 @@
       {
         "name": "Public Policy and Government Affairs",
         "criteria": "the structure and machinery of government itself — creating, reorganizing or directing agencies, rulemaking and administrative procedure, federal workforce policy, lobbying, or intergovernmental relations."
-      },
-      {
-        "name": "White Collar Defense & Investigations",
-        "criteria": "federal enforcement against companies or individuals — DOJ, SEC or CFPB investigations, FCPA, False Claims Act, fraud, or securities enforcement. Use the standalone White Collar Defense and Investigations area instead when the matter is not government-facing."
       }
     ]
   },
@@ -137,6 +129,6 @@
   },
   {
     "name": "White Collar Defense and Investigations",
-    "criteria": "directs criminal or civil enforcement, investigations, prosecutions, debarment, or the suspension of security clearances."
+    "criteria": "directs criminal or civil enforcement, investigations, prosecutions, debarment, or the suspension of security clearances — including DOJ, SEC or CFPB enforcement, FCPA, the False Claims Act, fraud, or securities enforcement."
   }
 ]

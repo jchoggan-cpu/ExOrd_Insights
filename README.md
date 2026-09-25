@@ -749,7 +749,7 @@ The three fixed lists the AI must choose from live in:
 
 - `src/config/practice-areas.json` — each entry carries a one-line `criteria` string
   telling the model when that group should be selected. `Governmental` additionally
-  carries `subPractices`, the firm's nine subgroups, each with its own criteria
+  carries `subPractices`, the firm's subgroups, each with its own criteria
 - `src/config/industries.json`
 - `src/config/subject-areas.json` — the 26 topics derived from the values the firm
   actually used across the 340 hand-curated rows of the original spreadsheet
@@ -770,9 +770,13 @@ by a double hyphen. Two consequences, both load-bearing:
   filter until `0008` fixed it.
 - Which form wins when the model returns both is enforced in
   `src/lib/classify/classify-document.ts`, not in the prompt. A bare parent alongside
-  one of its own subgroups is dropped, and a standalone area duplicated as a subgroup
-  loses to the subgroup. The pilot proved the model returns both forms even when
-  explicitly asked not to.
+  one of its own subgroups is dropped. The pilot proved the model returns both forms
+  even when explicitly asked not to.
+- **No practice may be listed both standalone and as a subgroup.** Antitrust and
+  White Collar once were, which split each practice's rows across two filter options
+  (White Collar: 74 and 14). Migration `0010` merged the subgroups into the
+  standalones — the only form the nightly summarizer can write, since it accepts
+  top-level names only — and `taxonomy.test.ts` fails if a duplicate is re-added.
 
 ## Practice-area and industry tagging
 

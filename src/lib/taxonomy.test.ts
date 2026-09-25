@@ -73,3 +73,20 @@ describe("PRACTICE_AREA_TAGS", () => {
     expect(new Set(PRACTICE_AREA_TAGS).size).toBe(PRACTICE_AREA_TAGS.length);
   });
 });
+
+describe("practice-area config", () => {
+  /** Case- and punctuation-insensitive, so "&" and "and" compare equal. */
+  function comparable(name: string): string {
+    return name.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, " ").trim();
+  }
+
+  it("never lists one practice both standalone and as a subgroup", () => {
+    // Two tags for one practice split its rows across two filter options —
+    // 74 and 14 rows for White Collar before migration 0010 merged them.
+    const standalone = new Set(PRACTICE_AREA_NAMES.map(comparable));
+    const duplicated = PRACTICE_AREAS.flatMap((area) => area.subPractices ?? [])
+      .filter((sub) => sub.criteria && standalone.has(comparable(sub.name)))
+      .map((sub) => sub.name);
+    expect(duplicated).toEqual([]);
+  });
+});
